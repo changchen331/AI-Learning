@@ -33,7 +33,7 @@ class DiyModel:
         self.b2 = b2
 
     def forward(self, x):
-        # x: 2 * 3, w1.T: 3 * 5   = 2*5  b1: 1 * 5
+        # x: 2 * 3, w1.T: 3 * 5 = 2 * 5  b1: 1 * 5
         hidden = np.dot(x, self.w1.T) + self.b1  # 1*5
         y_pred = np.dot(hidden, self.w2.T) + self.b2  # 1*2
         return y_pred
@@ -64,8 +64,8 @@ torch_x = torch.FloatTensor(x)
 y_pred = torch_model.forward(torch_x)
 print("torch模型预测结果：", y_pred)
 
-# #把torch模型权重拿过来自己实现计算过程
+# 把torch模型权重拿过来自己实现计算过程
 diy_model = DiyModel(torch_model_w1, torch_model_b1, torch_model_w2, torch_model_b2)
-# #用自己的模型来预测
+# 用自己的模型来预测
 y_pred_diy = diy_model.forward(x)
 print("diy模型预测结果：", y_pred_diy)

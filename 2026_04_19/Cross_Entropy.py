@@ -22,6 +22,7 @@ def to_one_hot(vector, shape):
     return response
 
 
+# 计算交叉熵损失
 def cross_entropy_loss(logits, labels):
     batch, clas = logits.shape
     logits = softmax(logits)

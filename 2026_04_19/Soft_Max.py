@@ -29,6 +29,5 @@ if __name__ == '__main__':
 
     mine_softmax = softmax(xs.numpy())
     mine_softmax_print = [f"{y:.4f}" for y in mine_softmax]
-    print(f"Mine_1: {mine_softmax_print}")
-    print(f"Mine_2: {mine_softmax}")
+    print(f"Mine: {mine_softmax_print}")
     print(f"Sum = {sum(mine_softmax)}")
