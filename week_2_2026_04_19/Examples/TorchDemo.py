@@ -104,7 +104,7 @@ def main():
         acc = evaluate(model)  # 测试本轮模型结果
         log.append([acc, float(np.mean(watch_loss))])
     # 保存模型
-    torch.save(model.state_dict(), "model.bin")
+    # torch.save(model.state_dict(), "model.bin")
     # 画图
     print(log)
     plt.plot(range(len(log)), [l[0] for l in log], label="acc")  # 画acc曲线
