@@ -86,7 +86,7 @@ def train_model(model, train_xs, train_ys, valid_xs, valid_ys, print_or_not=Fals
         if mean_loss < 5 * 1e-3:
             break
     # 训练完成
-    torch.save(model.state_dict(), "./model.pth")  # 保存模型
+    torch.save(model.state_dict(), "model.pth")  # 保存模型
     print("=" * 4 * length)
     # 画图（可选）
     if print_or_not:
@@ -157,6 +157,6 @@ if __name__ == '__main__':
 
         # 测试模型
         mine_model = TorchModel(input_size, hidden_size, output_size)
-        mine_model.load_state_dict(torch.load("./model.pth"))
+        mine_model.load_state_dict(torch.load("model.pth"))
         predict(mine_model, Test_xs)
         evaluate_model(mine_model, Test_xs, Test_ys)

@@ -48,7 +48,7 @@ def deep_learning(w1=1, w2=1, w3=1, w4=1):
 
             # 梯度下降
             if count == batch_size:
-                # 参数更新
+                # 参数更新（SGD）
                 w1 -= lr * (grad_w1 / batch_size)
                 w2 -= lr * (grad_w2 / batch_size)
                 w3 -= lr * (grad_w3 / batch_size)
