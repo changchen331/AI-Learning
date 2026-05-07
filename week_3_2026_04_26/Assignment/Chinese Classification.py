@@ -13,7 +13,7 @@ SEED = 31
 random.seed(SEED)
 torch.manual_seed(SEED)
 
-LENGTH = 30
+LENGTH = 50
 
 TARGET = "原神"  # TARGET 在哪就是第几类
 
@@ -135,40 +135,52 @@ def train(model, train_loader, valid_loader):
             total_loss += loss.item()
         avg_loss = total_loss / len(train_loader)
         val_acc = evaluate(model, valid_loader)
-        print(f"Epoch {ep + 1}/{EPOCH}: Loss={avg_loss:.4f} - Val_Acc={val_acc:.2f}")
+        print(f"Epoch {ep + 1}/{EPOCH}: Loss={avg_loss:.4f} - Val_Acc={val_acc * 100:.2f}%")
         print('-' * LENGTH * 2)
         if avg_loss < 5 * 1e-3:
             break
-
+    # 训练完成
+    torch.save(model.state_dict(), "model.pth")  # 保存模型
     print(f"最终验证准确率：{evaluate(model, valid_loader):.4f}")
 
 
 # 计算分数
 def evaluate(model, data_loader):
     model.eval()
-    softmax = nn.Softmax(dim=1)
     correct = 0
     total = 0
     with torch.no_grad():
         for x, y in data_loader:
-            logits = softmax(model(x))
+            logits = torch.softmax(model(x), dim=1)
             for y_p, y_t in zip(logits, y):
                 pred = y_p.argmax(dim=0)
                 true = y_t
-                correct += (pred == true)
+                if pred == true:
+                    correct += 1
                 total += 1
     accuracy = correct / total
-    print(f"正确分类个数: {correct}/{total}个 - 正确率: {accuracy * 100:.2f}%")
+    # print(f"正确分类个数: {correct}/{total}个 - 正确率: {accuracy * 100:.2f}%")
     return accuracy
+
+
+# 模型测试
+def test(model, data_loader):
+    model.eval()
+    with torch.no_grad():
+        for xs, ys in data_loader:
+            yps = torch.softmax(model(xs), dim=1)
+            for x, yp, y in zip(xs, yps, ys):
+                prob = [f"{y * 100:.2f}%" for y in yp]
+                pred = yp.argmax(dim=0)
+                print(f"输入: {x.detach().numpy()} - 概率: {prob} - "
+                      f"预测: {pred} - 答案: {y.detach().numpy()}")
 
 
 if __name__ == '__main__':
     # 构建词表
     print("=" * LENGTH, " 生成数据 ", "=" * LENGTH)
     Vocab = build_vocab()
-    print(f"Vocabulary: {Vocab}")
     Data = build_data(Vocab)
-    print(f"Data: {Data}")
     print(f"样本数: {len(Data)}, 词表大小: {len(Vocab)}")
 
     # 构建数据集
@@ -176,33 +188,43 @@ if __name__ == '__main__':
     split_train = int(len(Data) * TRAIN_RATIO)
     split_valid = split_train + int(len(Data) * VALID_RATIO)
     split_test = split_train + split_valid
-    # 训练集
-    train_data = Data[:split_train]
-    train_dataset = MyDataset(train_data, Vocab)
-    Train_loader = DataLoader(train_dataset, BATCH_SIZE, shuffle=True)
-    print(f"Train x:{train_dataset.x}")
-    print(f"Train y:{train_dataset.y}")
-    print("-" * LENGTH * 2)
-    # 验证集
-    valid_data = Data[split_train:split_valid]
-    valid_dataset = MyDataset(valid_data, Vocab)
-    Valid_loader = DataLoader(MyDataset(valid_data, Vocab), BATCH_SIZE, shuffle=True)
-    print(f"Valid x:{valid_dataset.x}")
-    print(f"Valid y:{valid_dataset.y}")
-    print("-" * LENGTH * 2)
-    # 测试集
-    test_data = Data[split_valid:]
-    test_dataset = MyDataset(test_data, Vocab)
-    Test_loader = DataLoader(MyDataset(test_data, Vocab), BATCH_SIZE)
-    print(f"Test x:{test_dataset.x}")
-    print(f"Test y:{test_dataset.y}")
 
-    # 模型初始化
-    Mine_model = CnClassRNN(len(Vocab))
-
-    # 模型训练
-    print("=" * LENGTH, " 模型训练 ", "=" * LENGTH)
-    train(Mine_model, Train_loader, Valid_loader)
-    # 模型测试
-    print("=" * LENGTH, " 模型测试 ", "=" * LENGTH)
-    evaluate(Mine_model, Test_loader)
+    mode = 1
+    if mode == 0:
+        # 构建训练集
+        train_data = Data[:split_train]
+        train_dataset = MyDataset(train_data, Vocab)
+        Train_loader = DataLoader(train_dataset, BATCH_SIZE, shuffle=True)
+        print(f"Train x:\n{train_dataset.x}")
+        print(f"Train y:\n{train_dataset.y}")
+        print(f"Train size: {len(train_dataset)}")
+        print("-" * LENGTH * 2)
+        # 构建验证集
+        valid_data = Data[split_train:split_valid]
+        valid_dataset = MyDataset(valid_data, Vocab)
+        Valid_loader = DataLoader(MyDataset(valid_data, Vocab), BATCH_SIZE, shuffle=True)
+        print(f"Valid x:\n{valid_dataset.x}")
+        print(f"Valid y:\n{valid_dataset.y}")
+        print(f"Valid size: {len(valid_dataset)}")
+        print("-" * LENGTH * 2)
+        # 模型初始化
+        Mine_model = CnClassRNN(len(Vocab))
+        # 模型训练
+        print("=" * LENGTH, " 模型训练 ", "=" * LENGTH)
+        train(Mine_model, Train_loader, Valid_loader)
+    else:
+        # 构建测试集
+        test_data = Data[split_valid:]
+        test_dataset = MyDataset(test_data, Vocab)
+        Test_loader = DataLoader(MyDataset(test_data, Vocab), BATCH_SIZE)
+        print(f"Test x:\n{test_dataset.x}")
+        print(f"Test y:\n{test_dataset.y}")
+        print(f"Test size: {len(test_dataset)}")
+        # 模型初始化
+        Mine_model = CnClassRNN(len(Vocab))
+        Mine_model.load_state_dict(torch.load("model.pth"))
+        # 模型测试
+        print("=" * LENGTH, " 模型测试 ", "=" * LENGTH)
+        test(Mine_model, Test_loader)
+        acc = evaluate(Mine_model, Test_loader)
+        print(f"正确率: {acc * 100:.2f}%")
