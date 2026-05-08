@@ -135,7 +135,7 @@ def train(model, train_loader, valid_loader):
             total_loss += loss.item()
         avg_loss = total_loss / len(train_loader)
         val_acc = evaluate(model, valid_loader)
-        print(f"Epoch {ep + 1}/{EPOCH}: Loss={avg_loss:.4f} - Val_Acc={val_acc * 100:.2f}%")
+        print(f"Epoch {(ep + 1):2d}/{EPOCH}: Loss={avg_loss:.4f} - Val_Acc={val_acc * 100:.2f}%")
         print('-' * LENGTH * 2)
         if avg_loss < 5 * 1e-3:
             break
