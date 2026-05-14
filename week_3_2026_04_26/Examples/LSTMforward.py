@@ -11,10 +11,10 @@ import torch.nn as nn
 LSTM门控公式（PyTorch约定顺序：i, f, g, o）:
   i_t = sigmoid(W_ii * x_t + b_ii + W_hi * h_{t-1} + b_hi)   输入门
   f_t = sigmoid(W_if * x_t + b_if + W_hf * h_{t-1} + b_hf)   遗忘门
-  g_t =    tanh(W_ig * x_t + b_ig + W_hg * h_{t-1} + b_hg)   候选记忆
   o_t = sigmoid(W_io * x_t + b_io + W_ho * h_{t-1} + b_ho)   输出门
+  g_t =    tanh(W_ig * x_t + b_ig + W_hg * h_{t-1} + b_hg)   候选记忆
   c_t = f_t ⊙ c_{t-1} + i_t ⊙ g_t                            细胞状态
-  h_t = o_t ⊙ tanh(c_t)                                       隐藏状态
+  h_t = o_t ⊙ tanh(c_t)                                      隐藏状态
 """
 
 

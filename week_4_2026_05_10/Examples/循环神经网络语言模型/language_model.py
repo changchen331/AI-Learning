@@ -110,10 +110,11 @@ def main():
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--val_ratio", type=float, default=0.05)
     parser.add_argument("--corpus", default="*.txt")
-    parser.add_argument("--save", default="best_model.pt")
+    parser.add_argument("--save", default="best_model.pth")
     args = parser.parse_args()
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda")
     print(f"device: {device}  model: {args.model.upper()}")
 
     # 数据准备

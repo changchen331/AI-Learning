@@ -75,8 +75,7 @@ class TorchBiRNN(nn.Module):
 # ─────────────────────────────────────────────────────────────────────────────
 class DiyBiRNN:
     def __init__(self, weight_ih_fwd, weight_hh_fwd, bias_ih_fwd, bias_hh_fwd,
-                 weight_ih_bwd, weight_hh_bwd, bias_ih_bwd, bias_hh_bwd,
-                 hidden_size):
+                 weight_ih_bwd, weight_hh_bwd, bias_ih_bwd, bias_hh_bwd, hidden_size):
         self.fwd = DiyRNN(weight_ih_fwd, weight_hh_fwd,
                           bias_ih_fwd, bias_hh_fwd, hidden_size)
         self.bwd = DiyRNN(weight_ih_bwd, weight_hh_bwd,
