@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8"/>
+    <title>DeepSeek 流式 / 非流式 Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: #f6f7f9;
+            color: #222;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #fff;
+            padding: 12px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        header h1 {
+            font-size: 16px;
+            margin: 0;
+            flex: 1;
+        }
+
+        .mode-switch {
+            display: flex;
+            background: #eef0f3;
+            border-radius: 999px;
+            padding: 3px;
+        }
+
+        .mode-switch button {
+            border: none;
+            background: transparent;
+            padding: 6px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .mode-switch button.active {
+            background: #4d6bfe;
+            color: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .msg {
+            display: flex;
+            gap: 10px;
+            max-width: 85%;
+        }
+
+        .msg.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .bubble {
+            padding: 10px 14px;
+            border-radius: 12px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .msg.user .bubble {
+            background: #4d6bfe;
+            color: #fff;
+        }
+
+        .msg.assistant .bubble {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+        }
+
+        .meta {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .meta .tag {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: #eef0f3;
+            color: #555;
+            margin-right: 6px;
+        }
+
+        .meta .tag.stream {
+            background: #e7f0ff;
+            color: #2f54eb;
+        }
+
+        .meta .tag.nostream {
+            background: #fff3e0;
+            color: #d97706;
+        }
+
+        .meta .tag.think {
+            background: #f0ebff;
+            color: #6d28d9;
+        }
+
+        .meta .tag.nothink {
+            background: #e8f5e9;
+            color: #15803d;
+        }
+
+        .reasoning {
+            background: #faf7ff;
+            border-left: 3px solid #a78bfa;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #5b21b6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.6;
+            font-style: italic;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .reasoning-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #7c3aed;
+            margin-bottom: 4px;
+            cursor: pointer;
+            user-select: none;
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        .reasoning-body.collapsed {
+            display: none;
+        }
+
+        .reasoning-header .arrow {
+            transition: transform 0.2s;
+        }
+
+        .reasoning-header.collapsed .arrow {
+            transform: rotate(-90deg);
+        }
+
+        .cursor::after {
+            content: "▋";
+            display: inline-block;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+            color: #999;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        footer {
+            padding: 12px 24px;
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .input-box {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            gap: 8px;
+        }
+
+        textarea {
+            flex: 1;
+            resize: none;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 14px;
+            font-family: inherit;
+            min-height: 44px;
+            max-height: 160px;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #4d6bfe;
+        }
+
+        button.send {
+            background: #4d6bfe;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0 18px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        button.send:disabled {
+            background: #9aa8d8;
+            cursor: not-allowed;
+        }
+
+        .hint {
+            font-size: 11px;
+            color: #999;
+            max-width: 900px;
+            margin: 6px auto 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>DeepSeek 聊天 Demo</h1>
+    <span id="modeLabel" style="font-size:12px;color:#666;">流式 · 非思考</span>
+    <div class="mode-switch" title="是否流式">
+        <button id="btnStream" class="active">流式</button>
+        <button id="btnNoStream">非流式</button>
+    </div>
+    <div class="mode-switch" title="是否开启深度思考">
+        <button id="btnNoThink" class="active">非思考</button>
+        <button id="btnThink">思考</button>
+    </div>
+</header>
+
+<div id="chat"></div>
+
+<footer>
+    <div class="input-box">
+        <textarea id="input" placeholder="输入你的问题，Enter 发送，Shift+Enter 换行"></textarea>
+        <button id="send" class="send">发送</button>
+    </div>
+    <div class="hint">提示：统一使用 deepseek-v4-flash；流式 vs
+        非流式对比输出方式；思考模式下紫色方块里是模型的思考链，正常回答在下方气泡。
+    </div>
+</footer>
+
+<script>
+    let useStream = true;
+    let useThink = false;
+    const history = []; // {role, content}  (不保存 reasoning，避免发回 API)
+
+    const chatEl = document.getElementById("chat");
+    const inputEl = document.getElementById("input");
+    const sendBtn = document.getElementById("send");
+    const btnStream = document.getElementById("btnStream");
+    const btnNoStream = document.getElementById("btnNoStream");
+    const btnThink = document.getElementById("btnThink");
+    const btnNoThink = document.getElementById("btnNoThink");
+    const modeLabel = document.getElementById("modeLabel");
+
+    function refreshModeLabel() {
+        modeLabel.textContent =
+            (useStream ? "流式" : "非流式") + " · " + (useThink ? "思考" : "非思考");
+    }
+
+    function setStreamMode(stream) {
+        useStream = stream;
+        btnStream.classList.toggle("active", stream);
+        btnNoStream.classList.toggle("active", !stream);
+        refreshModeLabel();
+    }
+
+    function setThinkMode(think) {
+        useThink = think;
+        btnThink.classList.toggle("active", think);
+        btnNoThink.classList.toggle("active", !think);
+        refreshModeLabel();
+    }
+
+    btnStream.onclick = () => setStreamMode(true);
+    btnNoStream.onclick = () => setStreamMode(false);
+    btnThink.onclick = () => setThinkMode(true);
+    btnNoThink.onclick = () => setThinkMode(false);
+
+    function addMessage(role, content, modeTag, thinkTag) {
+        const wrap = document.createElement("div");
+        wrap.className = "msg " + role;
+        const box = document.createElement("div");
+
+        let reasoningEl = null;
+        let reasoningBody = null;
+        if (role === "assistant" && thinkTag) {
+            reasoningEl = document.createElement("div");
+            reasoningEl.className = "reasoning";
+            reasoningEl.style.display = "none"; // 等首个 token 再显示
+            const header = document.createElement("div");
+            header.className = "reasoning-header";
+            header.innerHTML = '<span class="arrow">▾</span><span>🧠 思考过程</span><span class="think-timer" style="color:#999;font-weight:normal;"></span>';
+            reasoningBody = document.createElement("div");
+            reasoningBody.className = "reasoning-body";
+            header.onclick = () => {
+                reasoningBody.classList.toggle("collapsed");
+                header.classList.toggle("collapsed");
+            };
+            reasoningEl.appendChild(header);
+            reasoningEl.appendChild(reasoningBody);
+            box.appendChild(reasoningEl);
+        }
+
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.textContent = content;
+        box.appendChild(bubble);
+
+        if (role === "assistant") {
+            const meta = document.createElement("div");
+            meta.className = "meta";
+            const tag1 = document.createElement("span");
+            tag1.className = "tag " + (modeTag === "stream" ? "stream" : "nostream");
+            tag1.textContent = modeTag === "stream" ? "流式" : "非流式";
+            meta.appendChild(tag1);
+            const tag2 = document.createElement("span");
+            tag2.className = "tag " + (thinkTag ? "think" : "nothink");
+            tag2.textContent = thinkTag ? "思考" : "非思考";
+            meta.appendChild(tag2);
+            const time = document.createElement("span");
+            time.className = "timer";
+            time.textContent = "等待中...";
+            meta.appendChild(time);
+            box.appendChild(meta);
+        }
+
+        wrap.appendChild(box);
+        chatEl.appendChild(wrap);
+        chatEl.scrollTop = chatEl.scrollHeight;
+        return {
+            bubble,
+            timerEl: box.querySelector(".timer"),
+            reasoningEl,
+            reasoningBody,
+            thinkTimerEl: reasoningEl ? reasoningEl.querySelector(".think-timer") : null,
+        };
+    }
+
+    async function sendNonStream(messages, ui, think) {
+        const {bubble, timerEl, reasoningEl, reasoningBody, thinkTimerEl} = ui;
+        const t0 = performance.now();
+        const resp = await fetch("/api/chat", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({messages, think}),
+        });
+        const data = await resp.json();
+        const t1 = performance.now();
+        if (data.error) {
+            bubble.textContent = "❌ " + data.error;
+            timerEl.textContent = "失败";
+            return null;
+        }
+        if (think && data.reasoning && reasoningEl) {
+            reasoningEl.style.display = "block";
+            reasoningBody.textContent = data.reasoning;
+            if (thinkTimerEl) thinkTimerEl.textContent = "";
+        }
+        bubble.textContent = data.content;
+        timerEl.textContent = `一次性返回 · 用时 ${((t1 - t0) / 1000).toFixed(2)}s`;
+        return data.content;
+    }
+
+    async function sendStream(messages, ui, think) {
+        const {bubble, timerEl, reasoningEl, reasoningBody, thinkTimerEl} = ui;
+        const t0 = performance.now();
+        let firstReasoningAt = null;
+        let firstContentAt = null;
+        let fullContent = "";
+        let fullReasoning = "";
+
+        const resp = await fetch("/api/chat/stream", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({messages, think}),
+        });
+
+        if (!resp.ok || !resp.body) {
+            bubble.textContent = "❌ 请求失败: " + resp.status;
+            timerEl.textContent = "失败";
+            return null;
+        }
+
+        bubble.classList.add("cursor");
+
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+            const {value, done} = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, {stream: true});
+
+            let idx;
+            while ((idx = buffer.indexOf("\n\n")) !== -1) {
+                const chunk = buffer.slice(0, idx).trim();
+                buffer = buffer.slice(idx + 2);
+                if (!chunk.startsWith("data:")) continue;
+                const payload = chunk.slice(5).trim();
+                if (payload === "[DONE]") {
+                    buffer = "";
+                    break;
+                }
+                try {
+                    const obj = JSON.parse(payload);
+                    if (obj.error) {
+                        bubble.classList.remove("cursor");
+                        bubble.textContent = "❌ " + obj.error;
+                        timerEl.textContent = "失败";
+                        return null;
+                    }
+                    if (obj.reasoning && reasoningEl) {
+                        if (firstReasoningAt === null) {
+                            firstReasoningAt = performance.now();
+                            reasoningEl.style.display = "block";
+                        }
+                        fullReasoning += obj.reasoning;
+                        reasoningBody.textContent = fullReasoning;
+                        if (thinkTimerEl) {
+                            const rt = ((performance.now() - t0) / 1000).toFixed(2);
+                            thinkTimerEl.textContent = ` · 思考中 ${rt}s`;
+                        }
+                        reasoningBody.scrollTop = reasoningBody.scrollHeight;
+                    }
+                    if (obj.content) {
+                        if (firstContentAt === null) {
+                            firstContentAt = performance.now();
+                            if (thinkTimerEl && firstReasoningAt !== null) {
+                                const rt = ((firstContentAt - firstReasoningAt) / 1000).toFixed(2);
+                                thinkTimerEl.textContent = ` · 思考完成 ${rt}s`;
+                            }
+                        }
+                        fullContent += obj.content;
+                        bubble.textContent = fullContent;
+                        const elapsed = ((performance.now() - t0) / 1000).toFixed(2);
+                        const ttft = ((firstContentAt - t0) / 1000).toFixed(2);
+                        timerEl.textContent = `流式输出中 · 正文首字 ${ttft}s · 已用 ${elapsed}s`;
+                        chatEl.scrollTop = chatEl.scrollHeight;
+                    }
+                } catch (e) {
+                    console.error("parse error", e, payload);
+                }
+            }
+        }
+
+        bubble.classList.remove("cursor");
+        const total = ((performance.now() - t0) / 1000).toFixed(2);
+        const ttft = firstContentAt ? ((firstContentAt - t0) / 1000).toFixed(2) : "-";
+        timerEl.textContent = `流式完成 · 正文首字 ${ttft}s · 总耗时 ${total}s`;
+        return fullContent;
+    }
+
+    async function onSend() {
+        const text = inputEl.value.trim();
+        if (!text) return;
+        inputEl.value = "";
+        sendBtn.disabled = true;
+
+        addMessage("user", text);
+        history.push({role: "user", content: text});
+
+        const modeTag = useStream ? "stream" : "nostream";
+        const ui = addMessage("assistant", "", modeTag, useThink);
+
+        try {
+            const reply = useStream
+                ? await sendStream(history, ui, useThink)
+                : await sendNonStream(history, ui, useThink);
+            if (reply) history.push({role: "assistant", content: reply});
+        } catch (e) {
+            ui.bubble.textContent = "❌ " + e.message;
+            ui.timerEl.textContent = "失败";
+        } finally {
+            sendBtn.disabled = false;
+            inputEl.focus();
+        }
+    }
+
+    sendBtn.onclick = onSend;
+    inputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            onSend();
+        }
+    });
+</script>
+</body>
+</html>

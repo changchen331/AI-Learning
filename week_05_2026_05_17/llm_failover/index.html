@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Failover 演示</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f0f2f5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background: #1e1e2e;
+            color: white;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        header .icon {
+            font-size: 20px;
+        }
+
+        header h1 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        header .sub {
+            font-size: 11px;
+            opacity: 0.55;
+            margin-top: 2px;
+        }
+
+        .main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 308px;
+            gap: 14px;
+            padding: 14px;
+            min-height: 0;
+        }
+
+        /* ── Chat Panel ───────────────────────────────────────────── */
+        .chat-panel {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .msg {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .msg.user {
+            align-items: flex-end;
+        }
+
+        .msg.ai {
+            align-items: flex-start;
+        }
+
+        .bubble {
+            max-width: 72%;
+            padding: 11px 15px;
+            border-radius: 14px;
+            line-height: 1.65;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .msg.user .bubble {
+            background: #4f46e5;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg.ai .bubble {
+            background: #f3f4f6;
+            color: #1f2937;
+            border-bottom-left-radius: 4px;
+        }
+
+        .bubble.thinking {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        .error-bubble {
+            max-width: 72%;
+            padding: 11px 15px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #dc2626;
+            line-height: 1.5;
+        }
+
+        .meta {
+            margin-top: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .provider-badge {
+            font-size: 11px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .provider-badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            flex-shrink: 0;
+        }
+
+        .failover-log {
+            font-size: 11px;
+            color: #f59e0b;
+        }
+
+        .input-area {
+            padding: 12px 14px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            flex-shrink: 0;
+        }
+
+        .input-area textarea {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 10px;
+            resize: none;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            line-height: 1.5;
+            transition: border-color 0.2s;
+        }
+
+        .input-area textarea:focus {
+            border-color: #4f46e5;
+        }
+
+        .send-btn {
+            padding: 10px 18px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            background: #4338ca;
+        }
+
+        .send-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* ── Provider Panel ───────────────────────────────────────── */
+        .provider-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+        }
+
+        .panel-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .provider-card {
+            background: white;
+            border-radius: 12px;
+            padding: 13px 14px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.06);
+            border-left: 3px solid #10b981;
+            transition: border-color 0.3s;
+        }
+
+        .provider-card.state-open {
+            border-left-color: #ef4444;
+        }
+
+        .provider-card.state-half-open {
+            border-left-color: #f59e0b;
+        }
+
+        .provider-card.state-maintenance {
+            border-left-color: #9ca3af;
+        }
+
+        .provider-card.state-no-key {
+            border-left-color: #fb923c;
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .card-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .card-model {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
+
+        /* Status pill */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .pill-closed {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .pill-open {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .pill-half-open {
+            background: #fefce8;
+            color: #a16207;
+        }
+
+        .pill-maintenance {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .pill-no-key {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        /* Failure progress bar */
+        .failure-track {
+            height: 3px;
+            background: #fee2e2;
+            border-radius: 2px;
+            margin-bottom: 10px;
+        }
+
+        .failure-fill {
+            height: 100%;
+            background: #ef4444;
+            border-radius: 2px;
+            transition: width 0.4s;
+        }
+
+        /* Recovery countdown */
+        .recovery-info {
+            font-size: 11px;
+            color: #dc2626;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Buttons */
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+
+        .card-actions .btn-restore {
+            grid-column: 1 / -1;
+        }
+
+        .btn-maint, .btn-trip, .btn-restore {
+            padding: 6px 0;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid;
+            transition: background 0.15s;
+        }
+
+        .btn-maint {
+            background: #f3f4f6;
+            color: #4b5563;
+            border-color: #e5e7eb;
+        }
+
+        .btn-maint:hover:not(:disabled) {
+            background: #e5e7eb;
+        }
+
+        .btn-trip {
+            background: #fef2f2;
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+
+        .btn-trip:hover:not(:disabled) {
+            background: #fee2e2;
+        }
+
+        .btn-restore {
+            background: #f0fdf4;
+            color: #15803d;
+            border-color: #bbf7d0;
+        }
+
+        .btn-restore:hover:not(:disabled) {
+            background: #dcfce7;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 9px;
+            background: #f9fafb;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.15s;
+        }
+
+        .reset-btn:hover {
+            background: #f3f4f6;
+        }
+
+        /* Legend */
+        .legend {
+            font-size: 11px;
+            color: #9ca3af;
+            line-height: 1.7;
+            background: white;
+            border-radius: 10px;
+            padding: 11px 12px;
+        }
+
+        .legend strong {
+            color: #6b7280;
+        }
+
+        .legend-row {
+            display: flex;
+            gap: 6px;
+            align-items: baseline;
+        }
+
+        .legend-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="icon">⚡</div>
+    <div>
+        <h1>LLM API 自动切换演示</h1>
+        <div class="sub">多 Provider 故障转移 · 断路器模式 · 主动健康探针</div>
+    </div>
+</header>
+
+<div class="main">
+
+    <!-- 聊天面板 -->
+    <div class="chat-panel">
+        <div class="messages" id="messages">
+            <div class="msg ai">
+                <div class="bubble">
+                    你好！这是 <strong>LLM 故障转移（Failover）</strong> 演示。
+
+                    <strong>工作原理：</strong>
+                    • 后台维护 Provider 优先级链（百炼 → DeepSeek）
+                    • 每个 Provider 有独立的<strong>断路器</strong>，追踪健康状态
+                    • 发消息时从第一个 Provider 尝试，不可用则自动切换
+
+                    <strong>三种不可用状态（右侧可模拟）：</strong>
+                    • 🔧 维护中 — 手动下线，立即跳过
+                    • 🔴 断路器 OPEN — 累积错误后自动断路，冷却后探针恢复
+                    • 🟡 HALF_OPEN — 冷却时间到，正在发探针试探是否恢复
+
+                    点击右侧按钮体验各种场景 👉
+                </div>
+                <div class="meta">
+                    <div class="provider-badge"><span class="dot"></span>系统提示</div>
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <textarea id="input" rows="2" placeholder="输入问题，Ctrl+Enter 发送..."></textarea>
+            <button class="send-btn" id="sendBtn">发 送</button>
+        </div>
+    </div>
+
+    <!-- Provider 状态面板 -->
+    <div class="provider-panel">
+        <div class="panel-title">🔌 Provider 状态</div>
+        <div id="providers"></div>
+        <div class="divider"></div>
+        <button class="reset-btn" id="resetBtn">↺ 全部恢复</button>
+        <div class="legend">
+            <div class="legend-row"><span class="legend-dot"
+                                          style="background:#10b981"></span><span><strong>CLOSED</strong> — 正常，放行所有请求</span>
+            </div>
+            <div class="legend-row"><span class="legend-dot"
+                                          style="background:#ef4444"></span><span><strong>OPEN</strong> — 断路，快速失败；冷却后自动探针</span>
+            </div>
+            <div class="legend-row"><span class="legend-dot"
+                                          style="background:#f59e0b"></span><span><strong>HALF_OPEN</strong> — 探针通过则恢复，失败则重新断路</span>
+            </div>
+            <div class="legend-row"><span class="legend-dot"
+                                          style="background:#9ca3af"></span><span><strong>维护中</strong> — 人工下线，不影响断路器</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let chatHistory = [];
+
+    // ── Provider 渲染 ──────────────────────────────────────────────
+    async function loadProviders() {
+        const res = await fetch('/providers');
+        const providers = await res.json();
+        renderProviders(providers);
+    }
+
+    function renderProviders(providers) {
+        const container = document.getElementById('providers');
+        container.innerHTML = providers.map(p => {
+            // 确定显示状态
+            let pillClass, pillText, cardClass;
+            if (p.simulated_fail) {
+                pillClass = 'pill-maintenance';
+                pillText = '🔧 维护中';
+                cardClass = 'state-maintenance';
+            } else if (p.circuit_state === 'OPEN') {
+                pillClass = 'pill-open';
+                pillText = p.recovery_in > 0 ? `🔴 断路 ${p.recovery_in}s` : '🔴 断路';
+                cardClass = 'state-open';
+            } else if (p.circuit_state === 'HALF_OPEN') {
+                pillClass = 'pill-half-open';
+                pillText = '🟡 探针中';
+                cardClass = 'state-half-open';
+            } else if (!p.has_key) {
+                pillClass = 'pill-no-key';
+                pillText = '⚠️ 无 Key';
+                cardClass = 'state-no-key';
+            } else {
+                pillClass = 'pill-closed';
+                pillText = '🟢 正常';
+                cardClass = '';
+            }
+
+            // 失败进度条
+            const ratio = Math.min(p.failure_count / p.failure_threshold, 1);
+            const failureBar = p.failure_count > 0
+                ? `<div class="failure-track"><div class="failure-fill" style="width:${ratio * 100}%"></div></div>`
+                : '';
+
+            // 恢复倒计时
+            const recoveryInfo = (p.circuit_state === 'OPEN' && p.recovery_in > 0)
+                ? `<div class="recovery-info">⏱ 后台探针将在 ${p.recovery_in}s 后发出</div>`
+                : '';
+
+            // 按钮禁用逻辑
+            const maintDisabled = p.simulated_fail ? 'disabled' : '';
+            const tripDisabled = (p.circuit_state !== 'CLOSED' || p.simulated_fail) ? 'disabled' : '';
+            const restoreDisabled = (p.available && !p.simulated_fail && p.circuit_state === 'CLOSED') ? 'disabled' : '';
+
+            return `
+        <div class="provider-card ${cardClass}">
+          <div class="card-top">
+            <div>
+              <div class="card-name">${esc(p.name)}</div>
+              <div class="card-model">${esc(p.model)}</div>
+            </div>
+            <div class="status-pill ${pillClass}">${pillText}</div>
+          </div>
+          ${failureBar}
+          ${recoveryInfo}
+          <div class="card-actions">
+            <button class="btn-maint" onclick="simulateFail('${p.id}')" ${maintDisabled}
+              title="模拟人工维护下线，立即跳过，不影响断路器状态">
+              🔧 维护
+            </button>
+            <button class="btn-trip" onclick="tripCircuit('${p.id}')" ${tripDisabled}
+              title="模拟连续 API 失败后断路器跳闸，会在冷却后自动探针恢复">
+              ⚡ 断路器
+            </button>
+            <button class="btn-restore" onclick="restoreProvider('${p.id}')" ${restoreDisabled}>
+              ↩ 恢复
+            </button>
+          </div>
+        </div>
+      `;
+        }).join('');
+    }
+
+    async function simulateFail(id) {
+        await fetch(`/providers/${id}/simulate-fail`, {method: 'POST'});
+        await loadProviders();
+    }
+
+    async function tripCircuit(id) {
+        await fetch(`/providers/${id}/trip-circuit`, {method: 'POST'});
+        await loadProviders();
+    }
+
+    async function restoreProvider(id) {
+        await fetch(`/providers/${id}/restore`, {method: 'POST'});
+        await loadProviders();
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', async () => {
+        await fetch('/providers/reset', {method: 'POST'});
+        await loadProviders();
+    });
+
+    // ── Chat ────────────────────────────────────────────────────────
+    document.getElementById('input').addEventListener('keydown', e => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
+    async function sendMessage() {
+        const input = document.getElementById('input');
+        const msg = input.value.trim();
+        if (!msg) return;
+        input.value = '';
+        setLoading(true);
+
+        appendUserMsg(msg);
+        const thinkingEl = appendThinking();
+        chatHistory.push({role: 'user', content: msg});
+
+        try {
+            const res = await fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: msg, history: chatHistory.slice(0, -1)}),
+            });
+            thinkingEl.remove();
+            if (res.ok) {
+                const data = await res.json();
+                appendAIMsg(data);
+                chatHistory.push({role: 'assistant', content: data.answer});
+            } else {
+                const err = await res.json();
+                appendErrorMsg(err);
+                chatHistory.pop();
+            }
+        } catch (e) {
+            thinkingEl.remove();
+            appendErrorMsg({error: '网络错误：' + e.message});
+            chatHistory.pop();
+        }
+
+        setLoading(false);
+        await loadProviders();
+    }
+
+    function setLoading(on) {
+        document.getElementById('sendBtn').disabled = on;
+    }
+
+    function appendUserMsg(content) {
+        addToChat(`<div class="msg user"><div class="bubble">${esc(content)}</div></div>`);
+    }
+
+    function appendAIMsg(data) {
+        let failoverHtml = '';
+        if (data.tried && data.tried.length > 0) {
+            const path = data.tried.map(t =>
+                `<span style="opacity:.7">${esc(t.provider)}</span><span style="color:#d1d5db;margin:0 3px">›</span>`
+            ).join('');
+            failoverHtml = `<div class="failover-log">⚡ ${path}<strong>${esc(data.provider)}</strong></div>`;
+        }
+        addToChat(`
+      <div class="msg ai">
+        <div class="bubble">${esc(data.answer)}</div>
+        <div class="meta">
+          <div class="provider-badge"><span class="dot"></span>由 ${esc(data.provider)} 回答</div>
+          ${failoverHtml}
+        </div>
+      </div>
+    `);
+    }
+
+    function appendErrorMsg(err) {
+        let detail = '';
+        if (err.tried && err.tried.length > 0) {
+            detail = '<br><small style="opacity:.7">已尝试: ' +
+                err.tried.map(t => `${esc(t.provider)}（${esc(t.reason)}）`).join(' → ') + '</small>';
+        }
+        addToChat(`<div class="msg ai"><div class="error-bubble">❌ ${esc(err.error || '未知错误')}${detail}</div></div>`);
+    }
+
+    function appendThinking() {
+        const div = document.createElement('div');
+        div.innerHTML = '<div class="msg ai"><div class="bubble thinking">正在思考…</div></div>';
+        const el = div.firstElementChild;
+        document.getElementById('messages').appendChild(el);
+        scrollToBottom();
+        return el;
+    }
+
+    function addToChat(html) {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        document.getElementById('messages').appendChild(div.firstElementChild);
+        scrollToBottom();
+    }
+
+    function scrollToBottom() {
+        const m = document.getElementById('messages');
+        m.scrollTop = m.scrollHeight;
+    }
+
+    function esc(text) {
+        const d = document.createElement('div');
+        d.textContent = String(text ?? '');
+        return d.innerHTML;
+    }
+
+    // 每 5s 刷新一次，确保 OPEN 状态倒计时实时更新
+    setInterval(loadProviders, 5000);
+    loadProviders();
+</script>
+</body>
+</html>
