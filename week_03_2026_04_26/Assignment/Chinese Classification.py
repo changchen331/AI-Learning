@@ -200,7 +200,7 @@ if __name__ == '__main__':
         # 构建验证集
         valid_data = Data[split_train:split_valid]
         valid_dataset = MyDataset(valid_data, Vocab)
-        Valid_loader = DataLoader(MyDataset(valid_data, Vocab), BATCH_SIZE, shuffle=True)
+        Valid_loader = DataLoader(valid_dataset, BATCH_SIZE, shuffle=True)
         print(f"Valid x:\n{valid_dataset.x}")
         print(f"Valid y:\n{valid_dataset.y}")
         print(f"Valid size: {len(valid_dataset)}")
@@ -214,7 +214,7 @@ if __name__ == '__main__':
         # 构建测试集
         test_data = Data[split_valid:]
         test_dataset = MyDataset(test_data, Vocab)
-        Test_loader = DataLoader(MyDataset(test_data, Vocab), BATCH_SIZE)
+        Test_loader = DataLoader(test_dataset, BATCH_SIZE)
         print(f"Test x:\n{test_dataset.x}")
         print(f"Test y:\n{test_dataset.y}")
         print(f"Test size: {len(test_dataset)}")
