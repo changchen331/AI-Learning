@@ -136,7 +136,6 @@ class BertTransformerBlock:
         x = x.swapaxes(1, 0)  # output shape = [num_attention_heads, max_len, attention_head_size]
         return x
 
-
     # 前馈网络的计算
     def feed_forward(self, x,
                      intermediate_weight,  # intermediate_size, hidden_size
@@ -151,13 +150,11 @@ class BertTransformerBlock:
         x = np.dot(x, output_weight.T) + output_bias
         return x
 
-
     # 归一化层
     def layer_norm(self, x, w, b):
         x = (x - np.mean(x, axis=1, keepdims=True)) / np.std(x, axis=1, keepdims=True)
         x = x * w + b
         return x
-
 
     def forward(self, x):
         x = self.embedding_forward(x)

@@ -1,12 +1,13 @@
-"""
-中文分类任务
-对一个任意包含“原神”字的五个字的文本，“原神”在第几位，就属于第几类
-"""
 import random
 
 import torch
 from torch import nn
 from torch.utils.data import Dataset, DataLoader
+
+"""
+中文分类任务
+对一个任意包含“原神”字的五个字的文本，“原神”在第几位，就属于第几类
+"""
 
 # 初始化
 SEED = 31
