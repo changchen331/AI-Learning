@@ -16,7 +16,6 @@ from torch.utils.data import Dataset, DataLoader
 
 
 # ─────────────────────────── 数据 ───────────────────────────
-
 def load_corpus(pattern="*.txt"):
     texts = []
     for path in glob.glob(pattern):
@@ -39,7 +38,7 @@ class CharDataset(Dataset):
         self.data = torch.tensor(ids, dtype=torch.long)
 
     def __len__(self):
-        return max(0, len(self.data) - self.seq_len)
+        return max(0, len(self.data) - self.seq_len)  # 需要生成的 Token 的数量
 
     def __getitem__(self, idx):
         x = self.data[idx: idx + self.seq_len]
@@ -48,7 +47,6 @@ class CharDataset(Dataset):
 
 
 # ─────────────────────────── 模型 ───────────────────────────
-
 class LM(nn.Module):
     def __init__(self, vocab_size, embed_dim, hidden_dim, num_layers, model_type, dropout):
         super().__init__()
@@ -71,7 +69,6 @@ class LM(nn.Module):
 
 
 # ─────────────────────────── 训练 / 评估 ───────────────────────────
-
 def run_epoch(model, loader, criterion, optimizer, device, train=True):
     model.train(train)
     total_loss = 0.0
@@ -83,9 +80,9 @@ def run_epoch(model, loader, criterion, optimizer, device, train=True):
         loss = criterion(logits.reshape(-1, logits.size(-1)), y.reshape(-1))
 
         if train:
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+            optimizer.zero_grad()  # 梯度清零
+            loss.backward()  # 计算梯度
+            optimizer.step()  # 更新权重
 
         total_loss += loss.item() * y.numel()
         total_tokens += y.numel()
@@ -96,7 +93,6 @@ def run_epoch(model, loader, criterion, optimizer, device, train=True):
 
 
 # ─────────────────────────── 主函数 ───────────────────────────
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="lstm", choices=["rnn", "lstm"])
@@ -113,8 +109,7 @@ def main():
     parser.add_argument("--save", default="best_model.pth")
     args = parser.parse_args()
 
-    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    device = torch.device("cuda")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"device: {device}  model: {args.model.upper()}")
 
     # 数据准备
