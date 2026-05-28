@@ -2,12 +2,12 @@ from pathlib import Path
 
 LENGTH = 30
 
-DATA_PATH = Path("./data")
+DATA_PATH = Path("../data")
 
 
-def load_data(datapath=DATA_PATH):
+def load_data(data_path=DATA_PATH):
     texts = []
-    for filepath in datapath.glob("*.txt"):
+    for filepath in data_path.glob("*.txt"):
         with open(filepath, encoding="utf-8") as f:
             texts.append(f.read())
     return "".join(texts)
