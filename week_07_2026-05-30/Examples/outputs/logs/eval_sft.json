@@ -1,0 +1,2602 @@
+{
+  "metrics": {
+    "precision": 0.6816143497757847,
+    "recall": 0.6785714285714286,
+    "f1": 0.6800894854586129,
+    "tp": 152,
+    "pred_total": 223,
+    "gold_total": 224
+  },
+  "n_samples": 100,
+  "parse_fail": 0,
+  "detail": [
+    {
+      "text": "在day4去完马达巴之后，前往尼泊山看先知摩西的纪念馆，耶稣和门徒经常出现的加利利湖，",
+      "gold": [
+        {
+          "text": "门徒",
+          "type": "position"
+        },
+        {
+          "text": "耶稣",
+          "type": "name"
+        },
+        {
+          "text": "先知摩西的纪念馆",
+          "type": "scene"
+        },
+        {
+          "text": "加利利湖",
+          "type": "scene"
+        },
+        {
+          "text": "尼泊山",
+          "type": "scene"
+        },
+        {
+          "text": "马达巴",
+          "type": "scene"
+        }
+      ],
+      "pred": [
+        {
+          "text": "加利利湖",
+          "type": "address"
+        },
+        {
+          "text": "尼泊山",
+          "type": "address"
+        },
+        {
+          "text": "耶稣",
+          "type": "name"
+        },
+        {
+          "text": "马达巴",
+          "type": "address"
+        },
+        {
+          "text": "摩西",
+          "type": "name"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"尼泊山\", \"type\": \"address\"}, {\"text\": \"加利利湖\", \"type\": \"address\"}, {\"text\": \"马达巴\", \"type\": \"address\"}, {\"text\": \"摩西\", \"type\": \"name\"}, {\"text\": \"耶稣\", \"type\": \"name\"}]}"
+    },
+    {
+      "text": "玩dota，你会发现人会变的沉稳而又大菊观玩imba，你会发现人都会变成救世主",
+      "gold": [
+        {
+          "text": "dota",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "dota",
+          "type": "game"
+        },
+        {
+          "text": "imba",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"dota\", \"type\": \"game\"}, {\"text\": \"imba\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "此次共有314件书画作品上拍。陆俨少1977年作品《雁荡瀑布》就将以80万起拍。“",
+      "gold": [
+        {
+          "text": "陆俨少",
+          "type": "name"
+        },
+        {
+          "text": "《雁荡瀑布》",
+          "type": "book"
+        }
+      ],
+      "pred": [
+        {
+          "text": "陆俨",
+          "type": "name"
+        },
+        {
+          "text": "《雁荡瀑布》",
+          "type": "book"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《雁荡瀑布》\", \"type\": \"book\"}, {\"text\": \"陆俨\", \"type\": \"name\"}]}"
+    },
+    {
+      "text": "《仙剑三》海报抢先曝光设计独特(图)",
+      "gold": [
+        {
+          "text": "《仙剑三》",
+          "type": "movie"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《仙剑三》",
+          "type": "movie"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《仙剑三》\", \"type\": \"movie\"}]}"
+    },
+    {
+      "text": "老挝家具协会会长育亭·维沙蓬先生介绍说：“很多人说，老挝现在没木头了，事实上，",
+      "gold": [
+        {
+          "text": "育亭·维沙蓬",
+          "type": "name"
+        },
+        {
+          "text": "会长",
+          "type": "position"
+        },
+        {
+          "text": "老挝家具协会",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "会长",
+          "type": "position"
+        },
+        {
+          "text": "育亭·维沙蓬",
+          "type": "name"
+        },
+        {
+          "text": "老挝",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"老挝\", \"type\": \"address\"}, {\"text\": \"育亭·维沙蓬\", \"type\": \"name\"}, {\"text\": \"会长\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "想要在人仙魔三界混杂的西游世界里，构筑属于自己的温馨小窝吗？《逍遥传说》",
+      "gold": [
+        {
+          "text": "《逍遥传说》",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《逍遥传说》",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《逍遥传说》\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "事实上，不仅是深发展，各家银行都不同程度地存在隐忧。东兴证券研究表明，",
+      "gold": [
+        {
+          "text": "东兴证券",
+          "type": "company"
+        },
+        {
+          "text": "深发展",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "东兴证券",
+          "type": "company"
+        },
+        {
+          "text": "深发展",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"深发展\", \"type\": \"company\"}, {\"text\": \"东兴证券\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "也只是一款最多时只有400人同时在线的网络游戏。而在由久游网引进中国之后，《劲舞团》",
+      "gold": [
+        {
+          "text": "《劲舞团》",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "久游网",
+          "type": "company"
+        },
+        {
+          "text": "《劲舞团》",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《劲舞团》\", \"type\": \"game\"}, {\"text\": \"久游网\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "市规划委、市住建委联合发布，今年计划新开工各种政策性住房850万平方米，",
+      "gold": [
+        {
+          "text": "市住建委",
+          "type": "government"
+        },
+        {
+          "text": "市规划委",
+          "type": "government"
+        }
+      ],
+      "pred": [
+        {
+          "text": "市住建委",
+          "type": "government"
+        },
+        {
+          "text": "市规划委",
+          "type": "government"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"市规划委\", \"type\": \"government\"}, {\"text\": \"市住建委\", \"type\": \"government\"}]}"
+    },
+    {
+      "text": "尤文已经提前两轮出线，哪怕本轮落败，只要最后一轮主场拿下博里索夫，也能够确保小组第一。",
+      "gold": [
+        {
+          "text": "博里索夫",
+          "type": "organization"
+        },
+        {
+          "text": "尤文",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "博里索夫",
+          "type": "organization"
+        },
+        {
+          "text": "尤文",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"尤文\", \"type\": \"organization\"}, {\"text\": \"博里索夫\", \"type\": \"organization\"}]}"
+    },
+    {
+      "text": "爱情左灯右行》的制片人孙健君一边祝贺陆毅一边开玩笑道：“电影还没上映，",
+      "gold": [
+        {
+          "text": "制片人",
+          "type": "position"
+        },
+        {
+          "text": "陆毅",
+          "type": "name"
+        },
+        {
+          "text": "爱情左灯右行》",
+          "type": "movie"
+        },
+        {
+          "text": "孙健君",
+          "type": "name"
+        }
+      ],
+      "pred": [
+        {
+          "text": "制片人",
+          "type": "position"
+        },
+        {
+          "text": "陆毅",
+          "type": "name"
+        },
+        {
+          "text": "爱情左灯右行》",
+          "type": "movie"
+        },
+        {
+          "text": "孙健君",
+          "type": "name"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"爱情左灯右行》\", \"type\": \"movie\"}, {\"text\": \"孙健君\", \"type\": \"name\"}, {\"text\": \"陆毅\", \"type\": \"name\"}, {\"text\": \"制片人\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "这6人中，4人落户在?口区长丰街道办事处长丰村。17日，记者采访了各相关部门，探访“6连号”",
+      "gold": [
+        {
+          "text": "长丰街道办事处长丰村",
+          "type": "address"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "记者",
+          "type": "position"
+        },
+        {
+          "text": "口区长丰街道办事处长丰村",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"口区长丰街道办事处长丰村\", \"type\": \"address\"}, {\"text\": \"记者\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "最早华贸中心开始建成的时候，那个位置大家也不是很认可，",
+      "gold": [
+        {
+          "text": "华贸中心",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "华贸中心",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"华贸中心\", \"type\": \"address\"}]}"
+    },
+    {
+      "text": "下午的行程从马久邑出发，行程为马久邑-富美邑-磻溪-古生-海舌-沙村-喜洲，",
+      "gold": [
+        {
+          "text": "富美邑",
+          "type": "scene"
+        },
+        {
+          "text": "磻溪",
+          "type": "scene"
+        },
+        {
+          "text": "喜洲",
+          "type": "scene"
+        },
+        {
+          "text": "马久邑",
+          "type": "scene"
+        },
+        {
+          "text": "沙村",
+          "type": "scene"
+        },
+        {
+          "text": "古生",
+          "type": "scene"
+        },
+        {
+          "text": "海舌",
+          "type": "scene"
+        },
+        {
+          "text": "马久邑",
+          "type": "scene"
+        }
+      ],
+      "pred": [
+        {
+          "text": "古生",
+          "type": "address"
+        },
+        {
+          "text": "富美邑",
+          "type": "address"
+        },
+        {
+          "text": "磻溪",
+          "type": "address"
+        },
+        {
+          "text": "喜洲",
+          "type": "address"
+        },
+        {
+          "text": "沙村",
+          "type": "address"
+        },
+        {
+          "text": "马久邑",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"马久邑\", \"type\": \"address\"}, {\"text\": \"富美邑\", \"type\": \"address\"}, {\"text\": \"磻溪\", \"type\": \"address\"}, {\"text\": \"古生\", \"type\": \"address\"}, {\"text\": \"沙村\", \"type\": \"address\"}, {\"text\": \"喜洲\", \"type\": \"address\"}]}"
+    },
+    {
+      "text": "韩亚银行自在中国设立分公司之初就密切关注中国的高端客户。在北京金融大街17号韩亚银行营业部，",
+      "gold": [
+        {
+          "text": "韩亚银行",
+          "type": "company"
+        },
+        {
+          "text": "北京金融大街17号韩亚银行营业部",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "韩亚银行",
+          "type": "company"
+        },
+        {
+          "text": "北京金融大街17号韩亚银行营业部",
+          "type": "address"
+        },
+        {
+          "text": "中国",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"北京金融大街17号韩亚银行营业部\", \"type\": \"address\"}, {\"text\": \"中国\", \"type\": \"address\"}, {\"text\": \"韩亚银行\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "但最后在办公室的交战中，太阳神还是全军覆没，橘子熊不但以7：4拿下SF的胜利，",
+      "gold": [
+        {
+          "text": "太阳神",
+          "type": "organization"
+        },
+        {
+          "text": "办公室",
+          "type": "address"
+        },
+        {
+          "text": "橘子熊",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "SF",
+          "type": "organization"
+        },
+        {
+          "text": "太阳神",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"SF\", \"type\": \"organization\"}, {\"text\": \"太阳神\", \"type\": \"organization\"}]}"
+    },
+    {
+      "text": "中国境内进藏共有八条线路之多，最具代表性的有川藏线,滇藏线,青藏线,新藏线，每条线都有不同的特点。",
+      "gold": [
+        {
+          "text": "新藏线",
+          "type": "address"
+        },
+        {
+          "text": "川藏线",
+          "type": "address"
+        },
+        {
+          "text": "滇藏线",
+          "type": "address"
+        },
+        {
+          "text": "青藏线",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "新藏线",
+          "type": "address"
+        },
+        {
+          "text": "川藏线",
+          "type": "address"
+        },
+        {
+          "text": "滇藏线",
+          "type": "address"
+        },
+        {
+          "text": "青藏线",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"川藏线\", \"type\": \"address\"}, {\"text\": \"滇藏线\", \"type\": \"address\"}, {\"text\": \"青藏线\", \"type\": \"address\"}, {\"text\": \"新藏线\", \"type\": \"address\"}]}"
+    },
+    {
+      "text": "而目前银行最主要的催收方式是聘请律师走法律诉讼的途径。沈力军分析说，聘用律师走诉讼途径也很不现实，",
+      "gold": [
+        {
+          "text": "沈力军",
+          "type": "name"
+        },
+        {
+          "text": "律师",
+          "type": "position"
+        },
+        {
+          "text": "律师",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "沈力军",
+          "type": "name"
+        },
+        {
+          "text": "律师",
+          "type": "position"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"沈力军\", \"type\": \"name\"}, {\"text\": \"律师\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "桑普多vs卡塔尼推荐：3",
+      "gold": [
+        {
+          "text": "桑普多",
+          "type": "organization"
+        },
+        {
+          "text": "卡塔尼",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "桑普多",
+          "type": "organization"
+        },
+        {
+          "text": "卡塔尼",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"桑普多\", \"type\": \"organization\"}, {\"text\": \"卡塔尼\", \"type\": \"organization\"}]}"
+    },
+    {
+      "text": "主角米勒在游戏开始被日军俘虏，并且亲眼看着队友被残忍地杀害，就当厄运即将降临之时，",
+      "gold": [
+        {
+          "text": "日军",
+          "type": "government"
+        },
+        {
+          "text": "米勒",
+          "type": "name"
+        }
+      ],
+      "pred": [
+        {
+          "text": "日军",
+          "type": "government"
+        },
+        {
+          "text": "米勒",
+          "type": "name"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"日军\", \"type\": \"government\"}, {\"text\": \"米勒\", \"type\": \"name\"}]}"
+    },
+    {
+      "text": "周边交通：地铁2号线人民广场或南京东路站。公交123、123区、14、167、20、",
+      "gold": [
+        {
+          "text": "地铁2号线人民广场",
+          "type": "address"
+        },
+        {
+          "text": "南京东路站",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "地铁2号线人民广场",
+          "type": "address"
+        },
+        {
+          "text": "南京东路站",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"地铁2号线人民广场\", \"type\": \"address\"}, {\"text\": \"南京东路站\", \"type\": \"address\"}]}"
+    },
+    {
+      "text": "而Scrabulous开发者本身则并未采取行动。",
+      "gold": [
+        {
+          "text": "Scrabulous开发者",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "开发者",
+          "type": "position"
+        },
+        {
+          "text": "Scrabulous",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"Scrabulous\", \"type\": \"game\"}, {\"text\": \"开发者\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "估计监管部门担心此种情况再次发生，预期中信银行的实盘做空业务，",
+      "gold": [
+        {
+          "text": "中信银行",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "中信银行",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"中信银行\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "阿克斯胡斯城堡“阿克斯胡斯”是奥斯陆一个邻郡的名字，但对于旅游者来说，",
+      "gold": [
+        {
+          "text": "奥斯陆",
+          "type": "scene"
+        },
+        {
+          "text": "阿克斯胡斯城堡",
+          "type": "scene"
+        }
+      ],
+      "pred": [
+        {
+          "text": "奥斯陆",
+          "type": "scene"
+        },
+        {
+          "text": "阿克斯胡斯城堡",
+          "type": "scene"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"阿克斯胡斯城堡\", \"type\": \"scene\"}, {\"text\": \"奥斯陆\", \"type\": \"scene\"}]}"
+    },
+    {
+      "text": "影片上映后大获成功，斯图尔特塑造的慈祥刚毅的老年女性形象征服了观众，获得奥斯卡最佳女配角奖提名，",
+      "gold": [
+        {
+          "text": "斯图尔特",
+          "type": "name"
+        }
+      ],
+      "pred": [
+        {
+          "text": "慈祥刚毅",
+          "type": "name"
+        },
+        {
+          "text": "奥斯卡",
+          "type": "organization"
+        },
+        {
+          "text": "斯图尔特",
+          "type": "name"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"奥斯卡\", \"type\": \"organization\"}, {\"text\": \"斯图尔特\", \"type\": \"name\"}, {\"text\": \"慈祥刚毅\", \"type\": \"name\"}, {\"text\": \"老女人\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "美国空军报告9月13日在阿富汗西部地区损失了一架hq-9“死神”无人攻击机。但报告没有披露的真相是，",
+      "gold": [
+        {
+          "text": "阿富汗西部地区",
+          "type": "address"
+        },
+        {
+          "text": "美国空军",
+          "type": "government"
+        }
+      ],
+      "pred": [
+        {
+          "text": "阿富汗西部地区",
+          "type": "address"
+        },
+        {
+          "text": "美国空军",
+          "type": "government"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"阿富汗西部地区\", \"type\": \"address\"}, {\"text\": \"美国空军\", \"type\": \"government\"}]}"
+    },
+    {
+      "text": "《轻率漠视重力》体验高空坠体的刺激",
+      "gold": [
+        {
+          "text": "《轻率漠视重力》",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《轻率漠视重力》",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《轻率漠视重力》\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "还记得2008年5月上市的《吸血鬼故事1》吗？这是一款动画风格的冒险游戏，",
+      "gold": [
+        {
+          "text": "《吸血鬼故事1》",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《吸血鬼故事1》",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《吸血鬼故事1》\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "价格高昂的大钻和翡翠消费为何如此火？通灵珠宝总裁沈东军认为，这与原料稀缺有直接关系。“",
+      "gold": [
+        {
+          "text": "总裁",
+          "type": "position"
+        },
+        {
+          "text": "通灵珠宝",
+          "type": "company"
+        },
+        {
+          "text": "沈东军",
+          "type": "name"
+        }
+      ],
+      "pred": [
+        {
+          "text": "总裁",
+          "type": "position"
+        },
+        {
+          "text": "通灵珠宝",
+          "type": "company"
+        },
+        {
+          "text": "沈东军",
+          "type": "name"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"通灵珠宝\", \"type\": \"company\"}, {\"text\": \"沈东军\", \"type\": \"name\"}, {\"text\": \"总裁\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "为了让读者更加了解这种方式该如何使用，本刊记者特别对几种常用的第三方支付还款，如“银联在线”、“",
+      "gold": [
+        {
+          "text": "银联",
+          "type": "company"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "银联在线",
+          "type": "company"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"银联在线\", \"type\": \"company\"}, {\"text\": \"记者\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "“先进村委会”等。顺义区政府网站显示，雒某曾获2008年度顺义区优秀共产党员。（记者贾鹏陈博）",
+      "gold": [
+        {
+          "text": "顺义区政府",
+          "type": "government"
+        },
+        {
+          "text": "陈博",
+          "type": "name"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        },
+        {
+          "text": "贾鹏",
+          "type": "name"
+        },
+        {
+          "text": "共产党员",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "顺义区政府",
+          "type": "government"
+        },
+        {
+          "text": "顺义区",
+          "type": "address"
+        },
+        {
+          "text": "雒某",
+          "type": "name"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"顺义区政府\", \"type\": \"government\"}, {\"text\": \"顺义区\", \"type\": \"address\"}, {\"text\": \"雒某\", \"type\": \"name\"}, {\"text\": \"记者\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "今年的惊悚片《保持通话》放弃了好莱坞动作大片如云的暑假档，选择在中秋档开画，并与将在9月底上映的《",
+      "gold": [
+        {
+          "text": "《保持通话》",
+          "type": "movie"
+        }
+      ],
+      "pred": [
+        {
+          "text": "好莱坞",
+          "type": "address"
+        },
+        {
+          "text": "《保持通话》",
+          "type": "movie"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"好莱坞\", \"type\": \"address\"}, {\"text\": \"《保持通话》\", \"type\": \"movie\"}]}"
+    },
+    {
+      "text": "嘉宾：中信地产营销管理部副经理梁丽红",
+      "gold": [
+        {
+          "text": "梁丽红",
+          "type": "name"
+        },
+        {
+          "text": "中信地产",
+          "type": "company"
+        },
+        {
+          "text": "副经理",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "梁丽红",
+          "type": "name"
+        },
+        {
+          "text": "中信地产",
+          "type": "company"
+        },
+        {
+          "text": "副经理",
+          "type": "position"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"梁丽红\", \"type\": \"name\"}, {\"text\": \"中信地产\", \"type\": \"company\"}, {\"text\": \"副经理\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "昨天，该事件有了最新进展，“上海经贸学院”的注册管理部门虹口区教育局宣布，这一事件定性为“",
+      "gold": [
+        {
+          "text": "上海经贸学院",
+          "type": "organization"
+        },
+        {
+          "text": "虹口区教育局",
+          "type": "government"
+        }
+      ],
+      "pred": [
+        {
+          "text": "虹口区教育局",
+          "type": "organization"
+        },
+        {
+          "text": "上海经贸学院",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"上海经贸学院\", \"type\": \"organization\"}, {\"text\": \"虹口区教育局\", \"type\": \"organization\"}]}"
+    },
+    {
+      "text": "地址：北京市朝阳区朝外大街吉祥里208号民建中央239室",
+      "gold": [
+        {
+          "text": "北京市朝阳区朝外大街吉祥里208号民建中央239室",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "北京市朝阳区朝外大街吉祥里208号民建中央239室",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"北京市朝阳区朝外大街吉祥里208号民建中央239室\", \"type\": \"address\"}]}"
+    },
+    {
+      "text": "昨日，本报报道了兴业银行的一款理财产品，将股市风险输入银行客户，可能导致持有人血本无归的严重后果。",
+      "gold": [
+        {
+          "text": "兴业银行",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "兴业银行",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"兴业银行\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "上季还在主场终结了当时切尔西的连续18轮英超不败的战绩，在斯坦福桥球场也奉献了一场4：4的经典之作。",
+      "gold": [
+        {
+          "text": "英超",
+          "type": "organization"
+        },
+        {
+          "text": "斯坦福桥球场",
+          "type": "address"
+        },
+        {
+          "text": "切尔西",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "斯坦福桥球场",
+          "type": "organization"
+        },
+        {
+          "text": "切尔西",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"切尔西\", \"type\": \"organization\"}, {\"text\": \"斯坦福桥球场\", \"type\": \"organization\"}]}"
+    },
+    {
+      "text": "吉他英雄》和《魔兽世界》这两款游戏能够推动今年利润的增长。",
+      "gold": [
+        {
+          "text": "《魔兽世界》",
+          "type": "game"
+        },
+        {
+          "text": "吉他英雄》",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《魔兽世界》",
+          "type": "game"
+        },
+        {
+          "text": "吉他英雄》",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"吉他英雄》\", \"type\": \"game\"}, {\"text\": \"《魔兽世界》\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "事实也的确如此。每一季，佳士得都会特地为中国市场推出一系列十九世纪的钟表。不足为奇的是，",
+      "gold": [
+        {
+          "text": "佳士",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "佳士得",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"佳士得\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "戒》也未能与之匹敌，连周杰伦（听歌）的《不能说的秘密》也一并成为其登顶步伐下的“垫脚石”。",
+      "gold": [
+        {
+          "text": "周杰伦",
+          "type": "name"
+        },
+        {
+          "text": "戒》",
+          "type": "movie"
+        },
+        {
+          "text": "《不能说的秘密》",
+          "type": "movie"
+        }
+      ],
+      "pred": [
+        {
+          "text": "周杰伦",
+          "type": "name"
+        },
+        {
+          "text": "戒》",
+          "type": "movie"
+        },
+        {
+          "text": "《不能说的秘密》",
+          "type": "movie"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"戒》\", \"type\": \"movie\"}, {\"text\": \"《不能说的秘密》\", \"type\": \"movie\"}, {\"text\": \"周杰伦\", \"type\": \"name\"}]}"
+    },
+    {
+      "text": "首先关门大吉的，是THQ旗下的BigHugeGames工作室，他们曾是《国家崛起(",
+      "gold": [
+        {
+          "text": "THQ",
+          "type": "company"
+        },
+        {
+          "text": "《国家崛起(",
+          "type": "game"
+        },
+        {
+          "text": "BigHugeGames工作室",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《国家崛起",
+          "type": "game"
+        },
+        {
+          "text": "THQ",
+          "type": "company"
+        },
+        {
+          "text": "BigHugeGames工作室",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《国家崛起\", \"type\": \"game\"}, {\"text\": \"THQ\", \"type\": \"company\"}, {\"text\": \"BigHugeGames工作室\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "为DotA冠军颁奖的嘉宾是来自中华人民共和国新闻出版总署科技与数字出版司副司长宋建新先生，",
+      "gold": [
+        {
+          "text": "副司长",
+          "type": "position"
+        },
+        {
+          "text": "DotA",
+          "type": "game"
+        },
+        {
+          "text": "宋建新",
+          "type": "name"
+        },
+        {
+          "text": "中华人民共和国新闻出版总署科技与数字出版司",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "副司长",
+          "type": "position"
+        },
+        {
+          "text": "DotA",
+          "type": "game"
+        },
+        {
+          "text": "宋建新",
+          "type": "name"
+        },
+        {
+          "text": "中华人民共和国新闻出版总署科技与数字出版司",
+          "type": "government"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"DotA\", \"type\": \"game\"}, {\"text\": \"中华人民共和国新闻出版总署科技与数字出版司\", \"type\": \"government\"}, {\"text\": \"宋建新\", \"type\": \"name\"}, {\"text\": \"副司长\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "而哈文则去了天津电视台。每次做完节目，李咏就马不停蹄地往天津赶，朋友和同事们有事要找李咏，",
+      "gold": [
+        {
+          "text": "哈文",
+          "type": "name"
+        },
+        {
+          "text": "李咏",
+          "type": "name"
+        },
+        {
+          "text": "天津电视台",
+          "type": "organization"
+        },
+        {
+          "text": "李咏",
+          "type": "name"
+        },
+        {
+          "text": "天津",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "哈文",
+          "type": "name"
+        },
+        {
+          "text": "天津电视台",
+          "type": "organization"
+        },
+        {
+          "text": "李咏",
+          "type": "name"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"天津电视台\", \"type\": \"organization\"}, {\"text\": \"哈文\", \"type\": \"name\"}, {\"text\": \"李咏\", \"type\": \"name\"}]}"
+    },
+    {
+      "text": "姜山：回过头来说本期吧，本期意甲入围场次从实力而言，很多都是主弱客强，像尤文、",
+      "gold": [
+        {
+          "text": "姜山",
+          "type": "name"
+        },
+        {
+          "text": "尤文",
+          "type": "organization"
+        },
+        {
+          "text": "意甲",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "姜山",
+          "type": "name"
+        },
+        {
+          "text": "尤文",
+          "type": "organization"
+        },
+        {
+          "text": "意甲",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"意甲\", \"type\": \"organization\"}, {\"text\": \"尤文\", \"type\": \"organization\"}, {\"text\": \"姜山\", \"type\": \"name\"}]}"
+    },
+    {
+      "text": "G联赛2011第一赛季星际争霸2项目开赛以来，深受广大选手与观众的关注与支持，",
+      "gold": [
+        {
+          "text": "星际争霸2",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "选手",
+          "type": "position"
+        },
+        {
+          "text": "星际争霸2",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"星际争霸2\", \"type\": \"game\"}, {\"text\": \"选手\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "□本报记者张胜男",
+      "gold": [
+        {
+          "text": "张胜男",
+          "type": "name"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "张胜男",
+          "type": "name"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"张胜男\", \"type\": \"name\"}, {\"text\": \"记者\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "集结了中国顶尖的团队与选手，包括DotA、星际II和CS分部。",
+      "gold": [
+        {
+          "text": "CS",
+          "type": "game"
+        },
+        {
+          "text": "DotA",
+          "type": "game"
+        },
+        {
+          "text": "星际II",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "CS分部",
+          "type": "game"
+        },
+        {
+          "text": "DotA",
+          "type": "game"
+        },
+        {
+          "text": "星际II",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"DotA\", \"type\": \"game\"}, {\"text\": \"星际II\", \"type\": \"game\"}, {\"text\": \"CS分部\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "就ok。可以直接到香港分行申请，李晨洋申请时，在香港柜台存入一笔港币，其中包括50港币的年费。",
+      "gold": [
+        {
+          "text": "香港分行",
+          "type": "company"
+        },
+        {
+          "text": "李晨洋",
+          "type": "name"
+        }
+      ],
+      "pred": [
+        {
+          "text": "香港分行",
+          "type": "company"
+        },
+        {
+          "text": "李晨洋",
+          "type": "name"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"香港分行\", \"type\": \"company\"}, {\"text\": \"李晨洋\", \"type\": \"name\"}]}"
+    },
+    {
+      "text": "施罗普郡地方政府要求政府工作人员巡视所辖的telfordtown公园，",
+      "gold": [
+        {
+          "text": "施罗普郡地方政府",
+          "type": "government"
+        },
+        {
+          "text": "telfordtown公园",
+          "type": "scene"
+        }
+      ],
+      "pred": [
+        {
+          "text": "施罗普郡地方政府",
+          "type": "government"
+        },
+        {
+          "text": "telfordtown公园",
+          "type": "scene"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"施罗普郡地方政府\", \"type\": \"government\"}, {\"text\": \"telfordtown公园\", \"type\": \"scene\"}]}"
+    },
+    {
+      "text": "南京正大秋拍宫廷御制明代黄花梨交椅在京拍出6150万元，被业界称为今年秋拍“第一把交椅”。",
+      "gold": [
+        {
+          "text": "南京正大",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "南京",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"南京\", \"type\": \"address\"}, {\"text\": \"秋拍\", \"type\": \"event\"}]}"
+    },
+    {
+      "text": "只是深吸一口，就让人畅快无比，回味无穷。一道血光朝着紫霞山山脚疾驰而去，速度宛如流星一般。",
+      "gold": [
+        {
+          "text": "紫霞山",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "紫霞山",
+          "type": "scene"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"紫霞山\", \"type\": \"scene\"}]}"
+    },
+    {
+      "text": "并且他忠诚于战队，直至战队解散，在欧美魔兽争霸3逐渐消亡之后，",
+      "gold": [
+        {
+          "text": "魔兽争霸3",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "魔兽争霸3",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"魔兽争霸3\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "楼市成交量萎缩的背景下，民生银行资产质量面临的压力加大。”",
+      "gold": [
+        {
+          "text": "民生银行",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "民生银行",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"民生银行\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "主持人张向东：一睁眼，一闭眼50年过去了，我们看海渔广场还是不是地标，刚才田申申小姐说金角银边，",
+      "gold": [
+        {
+          "text": "海渔广场",
+          "type": "scene"
+        },
+        {
+          "text": "张向东",
+          "type": "name"
+        },
+        {
+          "text": "田申申",
+          "type": "name"
+        },
+        {
+          "text": "主持人",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "张向东",
+          "type": "name"
+        },
+        {
+          "text": "海渔广场",
+          "type": "address"
+        },
+        {
+          "text": "田申申",
+          "type": "name"
+        },
+        {
+          "text": "主持人",
+          "type": "position"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"海渔广场\", \"type\": \"address\"}, {\"text\": \"张向东\", \"type\": \"name\"}, {\"text\": \"田申申\", \"type\": \"name\"}, {\"text\": \"主持人\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "interwetten相同赔率下近3个赛季意甲主队6胜3平。",
+      "gold": [
+        {
+          "text": "interwetten",
+          "type": "company"
+        },
+        {
+          "text": "意甲",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "interwetten",
+          "type": "company"
+        },
+        {
+          "text": "意甲",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"意甲\", \"type\": \"organization\"}, {\"text\": \"interwetten\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "旁边那位是北京国华置业有限公司公关部经理赵加、他旁边的是思源经纪策划总计杜硕先生，",
+      "gold": [
+        {
+          "text": "杜硕",
+          "type": "name"
+        },
+        {
+          "text": "公关部经理",
+          "type": "position"
+        },
+        {
+          "text": "北京国华置业有限公司",
+          "type": "company"
+        },
+        {
+          "text": "赵加",
+          "type": "name"
+        },
+        {
+          "text": "思源经纪",
+          "type": "company"
+        },
+        {
+          "text": "策划总计",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "杜硕",
+          "type": "name"
+        },
+        {
+          "text": "总",
+          "type": "position"
+        },
+        {
+          "text": "北京国华置业有限公司",
+          "type": "company"
+        },
+        {
+          "text": "公关部",
+          "type": "position"
+        },
+        {
+          "text": "经理",
+          "type": "position"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"北京国华置业有限公司\", \"type\": \"company\"}, {\"text\": \"公关部\", \"type\": \"position\"}, {\"text\": \"经理\", \"type\": \"position\"}, {\"text\": \"杜硕\", \"type\": \"name\"}, {\"text\": \"总\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "中国内地邮票由原来国家邮政局改成由现在的中国邮政集团公司印制发行，从此政企分开，",
+      "gold": [
+        {
+          "text": "中国邮政集团公司",
+          "type": "company"
+        },
+        {
+          "text": "国家邮政局",
+          "type": "government"
+        }
+      ],
+      "pred": [
+        {
+          "text": "中国邮政集团公司",
+          "type": "company"
+        },
+        {
+          "text": "中国内地邮票",
+          "type": "book"
+        },
+        {
+          "text": "国家邮政局",
+          "type": "government"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"中国内地邮票\", \"type\": \"book\"}, {\"text\": \"国家邮政局\", \"type\": \"government\"}, {\"text\": \"中国邮政集团公司\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "得经验升级，拿一把钓竿，在《梦幻红楼Flash》中站着也能升级！",
+      "gold": [
+        {
+          "text": "《梦幻红楼Flash》",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《梦幻红楼Flash》",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《梦幻红楼Flash》\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "战锤Online》(WarhammerOnline)首席设计师马克·雅各布(Mark",
+      "gold": [
+        {
+          "text": "首席设计师",
+          "type": "position"
+        },
+        {
+          "text": "Mark",
+          "type": "name"
+        },
+        {
+          "text": "马克·雅各布",
+          "type": "name"
+        },
+        {
+          "text": "战锤Online》",
+          "type": "game"
+        },
+        {
+          "text": "WarhammerOnline",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "马克·雅各布",
+          "type": "name"
+        },
+        {
+          "text": "战锤Online》",
+          "type": "game"
+        },
+        {
+          "text": "WarhammerOnline",
+          "type": "game"
+        },
+        {
+          "text": "首席设计师",
+          "type": "position"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"战锤Online》\", \"type\": \"game\"}, {\"text\": \"WarhammerOnline\", \"type\": \"game\"}, {\"text\": \"马克·雅各布\", \"type\": \"name\"}, {\"text\": \"首席设计师\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "上个主场1比1逼平米兰更令人刮目相看。罗马德比战胜拉齐奥，结束了3场不胜的尴尬境地。",
+      "gold": [
+        {
+          "text": "拉齐奥",
+          "type": "organization"
+        },
+        {
+          "text": "米兰",
+          "type": "organization"
+        },
+        {
+          "text": "罗马",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "罗马德比",
+          "type": "organization"
+        },
+        {
+          "text": "拉齐奥",
+          "type": "organization"
+        },
+        {
+          "text": "平米兰",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"罗马德比\", \"type\": \"organization\"}, {\"text\": \"拉齐奥\", \"type\": \"organization\"}, {\"text\": \"平米兰\", \"type\": \"organization\"}]}"
+    },
+    {
+      "text": "而据普益财富不完全统计，本周全国17家商业银行共发行了44款理财产品，发行数继续保持低位。",
+      "gold": [
+        {
+          "text": "商业银行",
+          "type": "company"
+        },
+        {
+          "text": "普益财富",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "普益财富",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"普益财富\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "荷兰饱受伤病困扰的事实并没有改变，上周他们能够以2比0轻取冰岛，一是得益于主场作战，",
+      "gold": [
+        {
+          "text": "荷兰",
+          "type": "organization"
+        },
+        {
+          "text": "冰岛",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "荷兰",
+          "type": "organization"
+        },
+        {
+          "text": "冰岛",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"荷兰\", \"type\": \"organization\"}, {\"text\": \"冰岛\", \"type\": \"organization\"}]}"
+    },
+    {
+      "text": "建设部住宅建设及产业现代化技术专家委员会专家委员、",
+      "gold": [
+        {
+          "text": "专家",
+          "type": "position"
+        },
+        {
+          "text": "建设部住宅建设及产业现代化技术专家委员会",
+          "type": "government"
+        }
+      ],
+      "pred": [
+        {
+          "text": "专家委员",
+          "type": "position"
+        },
+        {
+          "text": "建设部住宅建设及产业现代化技术专家委员会",
+          "type": "government"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"建设部住宅建设及产业现代化技术专家委员会\", \"type\": \"government\"}, {\"text\": \"专家委员\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "登别位于北海道的西南部，与北海道著名的工业城市室兰市、",
+      "gold": [
+        {
+          "text": "室兰市",
+          "type": "address"
+        },
+        {
+          "text": "北海道",
+          "type": "address"
+        },
+        {
+          "text": "北海道的西南部",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "室兰市",
+          "type": "address"
+        },
+        {
+          "text": "北海道",
+          "type": "address"
+        },
+        {
+          "text": "登别",
+          "type": "scene"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"北海道\", \"type\": \"address\"}, {\"text\": \"室兰市\", \"type\": \"address\"}, {\"text\": \"登别\", \"type\": \"scene\"}]}"
+    },
+    {
+      "text": "并与世界各地的许多大型银行进行了会谈。但从未与中国工商银行进行过谈判。到目前为止，",
+      "gold": [
+        {
+          "text": "中国工商银行",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "中国工商银行",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"中国工商银行\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "PlayStationInformer》就紧接着公布了《古墓丽影(Tomb",
+      "gold": [
+        {
+          "text": "(Tomb",
+          "type": "game"
+        },
+        {
+          "text": "古墓丽影",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《古墓丽影(Tomb",
+          "type": "book"
+        },
+        {
+          "text": "PlayStationInformer》",
+          "type": "book"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"PlayStationInformer》\", \"type\": \"book\"}, {\"text\": \"《古墓丽影(Tomb\", \"type\": \"book\"}]}"
+    },
+    {
+      "text": "西江千户苗寨可谓黔东南州旅行的主要目的地，贵阳到西江车程较远，不建议参加当天往返的一日游，",
+      "gold": [
+        {
+          "text": "西江",
+          "type": "scene"
+        },
+        {
+          "text": "贵阳",
+          "type": "address"
+        },
+        {
+          "text": "西江千户苗寨",
+          "type": "scene"
+        },
+        {
+          "text": "黔东南州",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "贵阳",
+          "type": "address"
+        },
+        {
+          "text": "黔东南州",
+          "type": "address"
+        },
+        {
+          "text": "西江",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"贵阳\", \"type\": \"address\"}, {\"text\": \"西江\", \"type\": \"address\"}, {\"text\": \"黔东南州\", \"type\": \"address\"}, {\"text\": \"西江苗寨\", \"type\": \"scene\"}]}"
+    },
+    {
+      "text": "招行银行储户一次性还房贷被索违约金",
+      "gold": [
+        {
+          "text": "招行",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "招行银行",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"招行银行\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "游戏由THQ旗下的KAOSSTUDIOS开发，故事由经典战争电影《现代启示录(",
+      "gold": [
+        {
+          "text": "THQ",
+          "type": "company"
+        },
+        {
+          "text": "《现代启示录(",
+          "type": "game"
+        },
+        {
+          "text": "KAOSSTUDIOS",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "THQ",
+          "type": "company"
+        },
+        {
+          "text": "KAOSSTUDIOS",
+          "type": "company"
+        },
+        {
+          "text": "《现代启示录",
+          "type": "movie"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《现代启示录\", \"type\": \"movie\"}, {\"text\": \"THQ\", \"type\": \"company\"}, {\"text\": \"KAOSSTUDIOS\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "当天接受记者采访的几位专家表示，外资银行“下乡”部分出于企业社会责任的考虑，",
+      "gold": [
+        {
+          "text": "专家",
+          "type": "position"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "专家",
+          "type": "position"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"记者\", \"type\": \"position\"}, {\"text\": \"专家\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "除北京银行发行23款，交通银行发行17款产品之外，大部分银行发行理财产品数相对较少，",
+      "gold": [
+        {
+          "text": "交通银行",
+          "type": "company"
+        },
+        {
+          "text": "北京银行",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "交通银行",
+          "type": "company"
+        },
+        {
+          "text": "北京银行",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"北京银行\", \"type\": \"company\"}, {\"text\": \"交通银行\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "15日下午，记者前往青山区房产管理局一楼，看到大厅内有多家房产中介公司。",
+      "gold": [
+        {
+          "text": "记者",
+          "type": "position"
+        },
+        {
+          "text": "青山区房产管理局",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "记者",
+          "type": "position"
+        },
+        {
+          "text": "青山区房产管理局",
+          "type": "government"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"青山区房产管理局\", \"type\": \"government\"}, {\"text\": \"记者\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "实际上这已经是《时间之轮》第二次游戏化了，第一次是在1999年，由GT",
+      "gold": [
+        {
+          "text": "《时间之轮》",
+          "type": "book"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《时间之轮》",
+          "type": "game"
+        },
+        {
+          "text": "GT",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《时间之轮》\", \"type\": \"game\"}, {\"text\": \"GT\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "这让花旗集团管理层意识到安抚人心的重要性。",
+      "gold": [
+        {
+          "text": "花旗集团",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "花旗集团",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"花旗集团\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "黑暗之心》也是《战线》的灵感所在，或者说，它才是《现代启示录》与《战线》的共同的灵感来源。",
+      "gold": [
+        {
+          "text": "黑暗之心》",
+          "type": "book"
+        },
+        {
+          "text": "《战线》",
+          "type": "book"
+        },
+        {
+          "text": "《现代启示录》",
+          "type": "book"
+        },
+        {
+          "text": "《战线》",
+          "type": "book"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《现代启示录》",
+          "type": "movie"
+        },
+        {
+          "text": "《战线》",
+          "type": "movie"
+        },
+        {
+          "text": "黑暗之心》",
+          "type": "movie"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"黑暗之心》\", \"type\": \"movie\"}, {\"text\": \"《战线》\", \"type\": \"movie\"}, {\"text\": \"《现代启示录》\", \"type\": \"movie\"}]}"
+    },
+    {
+      "text": "上海木材行业协会红木专业委员会副会长贾德界表示，目前红木家具价格不会大幅下跌，“",
+      "gold": [
+        {
+          "text": "贾德界",
+          "type": "name"
+        },
+        {
+          "text": "上海木材行业协会红木专业委员会副会长",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "副会长",
+          "type": "position"
+        },
+        {
+          "text": "上海木材行业协会红木专业委员会",
+          "type": "organization"
+        },
+        {
+          "text": "贾德界",
+          "type": "name"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"上海木材行业协会红木专业委员会\", \"type\": \"organization\"}, {\"text\": \"贾德界\", \"type\": \"name\"}, {\"text\": \"副会长\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "ssp同赔率下，英超主队2胜2平1负，均认为主队不败的概率较大。看来，在欧赔和亚盘存在矛盾的同时，",
+      "gold": [
+        {
+          "text": "ssp",
+          "type": "company"
+        },
+        {
+          "text": "英超",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "ssp",
+          "type": "company"
+        },
+        {
+          "text": "英超",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"英超\", \"type\": \"organization\"}, {\"text\": \"ssp\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "香港旺角电脑中心的经销商也确认智冠采取了“月卡收费模式”来发售星际争霸2，并表示：“",
+      "gold": [
+        {
+          "text": "香港旺角电脑中心",
+          "type": "address"
+        },
+        {
+          "text": "星际争霸2",
+          "type": "game"
+        },
+        {
+          "text": "智冠",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "星际争霸2",
+          "type": "game"
+        },
+        {
+          "text": "香港旺角电脑中心",
+          "type": "company"
+        },
+        {
+          "text": "智冠",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"星际争霸2\", \"type\": \"game\"}, {\"text\": \"香港旺角电脑中心\", \"type\": \"company\"}, {\"text\": \"智冠\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "自国务院扩大内需、刺激经济十大措施出台后，不少银行迅速与铁路、基建等国家重点支持项目签署合作协议。",
+      "gold": [
+        {
+          "text": "国务院",
+          "type": "government"
+        }
+      ],
+      "pred": [
+        {
+          "text": "国务院",
+          "type": "government"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"国务院\", \"type\": \"government\"}]}"
+    },
+    {
+      "text": "原作品：毁灭战士",
+      "gold": [
+        {
+          "text": "毁灭战士",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "毁灭战士",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"毁灭战士\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "按照原定计划，花旗集团将在2009年第一季度在湖北省赤壁市开设另一家贷款公司。",
+      "gold": [
+        {
+          "text": "花旗集团",
+          "type": "company"
+        },
+        {
+          "text": "湖北省赤壁市",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "花旗集团",
+          "type": "company"
+        },
+        {
+          "text": "湖北省赤壁市",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"湖北省赤壁市\", \"type\": \"address\"}, {\"text\": \"花旗集团\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "终于到了《黑暗物质：黄金罗盘》（thegoldencompass）的首映周，也许是因为涉嫌“",
+      "gold": [
+        {
+          "text": "《黑暗物质：黄金罗盘》",
+          "type": "movie"
+        },
+        {
+          "text": "（thegoldencompass）",
+          "type": "movie"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《黑暗物质：黄金罗盘》",
+          "type": "movie"
+        },
+        {
+          "text": "thegoldencompass",
+          "type": "movie"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《黑暗物质：黄金罗盘》\", \"type\": \"movie\"}, {\"text\": \"thegoldencompass\", \"type\": \"movie\"}]}"
+    },
+    {
+      "text": "改革开放30年带来比较明显的变化则是中行对于国内业务竞争关注的越来越多。",
+      "gold": [
+        {
+          "text": "中行",
+          "type": "company"
+        }
+      ],
+      "pred": [
+        {
+          "text": "中行",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"中行\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "三蛋的承诺坚守魔兽3到最后的TH000",
+      "gold": [
+        {
+          "text": "魔兽3",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "魔兽3",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"魔兽3\", \"type\": \"game\"}, {\"text\": \"TH000\", \"type\": \"number\"}]}"
+    },
+    {
+      "text": "直升飞机观光地与自由女神像相距不远，因此可以放在同一天游玩，",
+      "gold": [
+        {
+          "text": "自由女神像",
+          "type": "scene"
+        },
+        {
+          "text": "直升飞机观光地",
+          "type": "scene"
+        }
+      ],
+      "pred": [
+        {
+          "text": "自由女神像",
+          "type": "scene"
+        },
+        {
+          "text": "直升飞机观光地",
+          "type": "scene"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"自由女神像\", \"type\": \"scene\"}, {\"text\": \"直升飞机观光地\", \"type\": \"scene\"}]}"
+    },
+    {
+      "text": "谁在李家沟呢撒东塬微帮信息交流群00:04【46条】龙行天下:【链接】董家河日噔群昨天【5条】付【",
+      "gold": [
+        {
+          "text": "李家沟",
+          "type": "scene"
+        },
+        {
+          "text": "龙行天下",
+          "type": "movie"
+        },
+        {
+          "text": "东塬",
+          "type": "address"
+        },
+        {
+          "text": "董家河",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "李家沟",
+          "type": "address"
+        },
+        {
+          "text": "龙行天下",
+          "type": "company"
+        },
+        {
+          "text": "撒东塬微帮信息交流群",
+          "type": "organization"
+        },
+        {
+          "text": "付",
+          "type": "name"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"李家沟\", \"type\": \"address\"}, {\"text\": \"撒东塬微帮信息交流群\", \"type\": \"organization\"}, {\"text\": \"龙行天下\", \"type\": \"company\"}, {\"text\": \"付\", \"type\": \"name\"}]}"
+    },
+    {
+      "text": "贝蒂斯vs西班牙人",
+      "gold": [
+        {
+          "text": "西班牙人",
+          "type": "organization"
+        },
+        {
+          "text": "贝蒂斯",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "西班牙人",
+          "type": "organization"
+        },
+        {
+          "text": "贝蒂斯",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"贝蒂斯\", \"type\": \"organization\"}, {\"text\": \"西班牙人\", \"type\": \"organization\"}]}"
+    },
+    {
+      "text": "多为单人车，根据车况30-50元/天，几大住宿区域都有，比如四川的泸沽湖镇走婚桥岔路口、博树村、",
+      "gold": [
+        {
+          "text": "泸沽湖镇走婚桥岔路口",
+          "type": "address"
+        },
+        {
+          "text": "四川",
+          "type": "address"
+        },
+        {
+          "text": "博树村",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "四川的泸沽湖镇走婚桥岔路口",
+          "type": "address"
+        },
+        {
+          "text": "博树村",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"四川的泸沽湖镇走婚桥岔路口\", \"type\": \"address\"}, {\"text\": \"博树村\", \"type\": \"address\"}]}"
+    },
+    {
+      "text": "泡泡1000评论商城狄仁杰Q版徽章钥匙扣购买49.969狄仁杰之异虫谜案简介热度4489",
+      "gold": [
+        {
+          "text": "狄仁杰",
+          "type": "name"
+        },
+        {
+          "text": "狄仁杰之异虫谜案",
+          "type": "movie"
+        }
+      ],
+      "pred": [
+        {
+          "text": "狄仁杰",
+          "type": "name"
+        },
+        {
+          "text": "泡泡1000",
+          "type": "company"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"狄仁杰\", \"type\": \"name\"}, {\"text\": \"泡泡1000\", \"type\": \"company\"}]}"
+    },
+    {
+      "text": "4.邱礼涛新片《我不卖身，只卖子宫》开镜",
+      "gold": [
+        {
+          "text": "邱礼涛",
+          "type": "name"
+        },
+        {
+          "text": "《我不卖身，只卖子宫》",
+          "type": "movie"
+        }
+      ],
+      "pred": [
+        {
+          "text": "邱礼涛",
+          "type": "name"
+        },
+        {
+          "text": "《我不卖身，只卖子宫》",
+          "type": "movie"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《我不卖身，只卖子宫》\", \"type\": \"movie\"}, {\"text\": \"邱礼涛\", \"type\": \"name\"}]}"
+    },
+    {
+      "text": "中国社科院金融研究所副研究员尹中立对本报记者表示，“从6月份开始，人民币兑美元的价格一直稳定在6.",
+      "gold": [
+        {
+          "text": "中国社科院金融研究所",
+          "type": "organization"
+        },
+        {
+          "text": "尹中立",
+          "type": "name"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        },
+        {
+          "text": "副研究员",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "尹中立",
+          "type": "name"
+        },
+        {
+          "text": "记者",
+          "type": "position"
+        },
+        {
+          "text": "副研究员",
+          "type": "position"
+        },
+        {
+          "text": "中国社科院金融研究所",
+          "type": "government"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"中国社科院金融研究所\", \"type\": \"government\"}, {\"text\": \"尹中立\", \"type\": \"name\"}, {\"text\": \"副研究员\", \"type\": \"position\"}, {\"text\": \"记者\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "我知道了星际争霸还可以这么玩，我知道了电子竞技还可以这么精彩。",
+      "gold": [
+        {
+          "text": "星际争霸",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "电子竞技",
+          "type": "game"
+        },
+        {
+          "text": "星际争霸",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"星际争霸\", \"type\": \"game\"}, {\"text\": \"电子竞技\", \"type\": \"game\"}]}"
+    },
+    {
+      "text": "半球高水盘于客军不利。本场澳彩标盘的平局赔率低于切沃vs罗马一战，足彩推荐平胆，单选1。",
+      "gold": [
+        {
+          "text": "切沃",
+          "type": "organization"
+        },
+        {
+          "text": "罗马",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "切沃",
+          "type": "organization"
+        },
+        {
+          "text": "澳彩",
+          "type": "organization"
+        },
+        {
+          "text": "罗马",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"澳彩\", \"type\": \"organization\"}, {\"text\": \"切沃\", \"type\": \"organization\"}, {\"text\": \"罗马\", \"type\": \"organization\"}]}"
+    },
+    {
+      "text": "另外意大利的PlayGeneration杂志也刚刚给出了92%的高分。",
+      "gold": [
+        {
+          "text": "PlayGeneration",
+          "type": "book"
+        }
+      ],
+      "pred": [
+        {
+          "text": "PlayGeneration",
+          "type": "book"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"PlayGeneration\", \"type\": \"book\"}]}"
+    },
+    {
+      "text": "差异指数火线：切沃受注降盘搏胆拉齐奥盘浅防冷",
+      "gold": [
+        {
+          "text": "切沃",
+          "type": "organization"
+        },
+        {
+          "text": "拉齐奥",
+          "type": "organization"
+        }
+      ],
+      "pred": [
+        {
+          "text": "切沃",
+          "type": "organization"
+        },
+        {
+          "text": "拉齐奥",
+          "type": "organization"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"切沃\", \"type\": \"organization\"}, {\"text\": \"拉齐奥\", \"type\": \"organization\"}]}"
+    },
+    {
+      "text": "周一得到的最新消息是奥尔堡医务主管博瓦德（henrikbogvad）最终确认，中后卫彼詹普（",
+      "gold": [
+        {
+          "text": "彼詹普",
+          "type": "name"
+        },
+        {
+          "text": "博瓦德",
+          "type": "name"
+        },
+        {
+          "text": "奥尔堡医务主管",
+          "type": "position"
+        },
+        {
+          "text": "henrikbogvad",
+          "type": "name"
+        },
+        {
+          "text": "中后卫",
+          "type": "position"
+        }
+      ],
+      "pred": [
+        {
+          "text": "主管",
+          "type": "position"
+        },
+        {
+          "text": "博瓦德",
+          "type": "name"
+        },
+        {
+          "text": "henrikbogvad",
+          "type": "name"
+        },
+        {
+          "text": "奥尔堡",
+          "type": "organization"
+        },
+        {
+          "text": "中后卫",
+          "type": "position"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"奥尔堡\", \"type\": \"organization\"}, {\"text\": \"博瓦德\", \"type\": \"name\"}, {\"text\": \"henrikbogvad\", \"type\": \"name\"}, {\"text\": \"主管\", \"type\": \"position\"}, {\"text\": \"中后卫\", \"type\": \"position\"}]}"
+    },
+    {
+      "text": "《女人不坏》四大看点：都市里的百味人生（图）",
+      "gold": [
+        {
+          "text": "《女人不坏》",
+          "type": "movie"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《女人不坏》",
+          "type": "movie"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《女人不坏》\", \"type\": \"movie\"}]}"
+    },
+    {
+      "text": "在XiXi心中对于魔兽的热情从来就没有终止过。",
+      "gold": [
+        {
+          "text": "XiXi",
+          "type": "name"
+        },
+        {
+          "text": "魔兽",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "XiXi",
+          "type": "name"
+        },
+        {
+          "text": "魔兽",
+          "type": "game"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"魔兽\", \"type\": \"game\"}, {\"text\": \"XiXi\", \"type\": \"name\"}]}"
+    },
+    {
+      "text": "日本女人永远不会原谅你！”）往往奠定胜局。所以，成功效法《明日之后》“集所有灾难元素于一身”",
+      "gold": [
+        {
+          "text": "《明日之后》",
+          "type": "game"
+        }
+      ],
+      "pred": [
+        {
+          "text": "《明日之后》",
+          "type": "game"
+        },
+        {
+          "text": "日本",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"《明日之后》\", \"type\": \"game\"}, {\"text\": \"日本\", \"type\": \"address\"}]}"
+    },
+    {
+      "text": "央视新址火灾系业主单位非法燃放烟花所致",
+      "gold": [
+        {
+          "text": "央视新址",
+          "type": "address"
+        }
+      ],
+      "pred": [
+        {
+          "text": "央视新址",
+          "type": "address"
+        }
+      ],
+      "raw_output": "{\"entities\": [{\"text\": \"央视新址\", \"type\": \"address\"}]}"
+    }
+  ]
+}
