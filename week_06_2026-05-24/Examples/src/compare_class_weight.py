@@ -150,7 +150,7 @@ def compare_and_plot(
     axes[1].tick_params(axis="x", rotation=40)
     # 标注数值
     for i, d in enumerate(delta_recall):
-        axes[1].text(i, d + (0.005 if d >= 0 else -0.012),
+        axes[1].Data(i, d + (0.005 if d >= 0 else -0.012),
                      f"{d:+.3f}", ha="center", va="bottom" if d >= 0 else "top",
                      fontsize=7)
 

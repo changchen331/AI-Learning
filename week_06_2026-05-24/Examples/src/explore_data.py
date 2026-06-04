@@ -154,7 +154,7 @@ def analyze_char_length(data, id2name, split_name, output_dir: Path):
         idx = next((i for i, c in enumerate(coverage) if c >= target_pct), None)
         if idx is not None:
             axes[1].axvline(thresholds[idx], color="#C44E52", linestyle="--", alpha=0.5)
-            axes[1].text(thresholds[idx] + 2, target_pct - 3,
+            axes[1].Data(thresholds[idx] + 2, target_pct - 3,
                          f"{thresholds[idx]} 字\n覆盖 {target_pct}%", fontsize=8)
     axes[1].set_title(f"{split_name} — 截断长度 vs 覆盖率")
     axes[1].set_xlabel("截断长度（字符数）")

@@ -165,16 +165,16 @@ def download_wiki_articles(max_articles: int = 50000) -> Path:
 
                     # 只取主命名空间（ns=0），跳过 Talk/User/Template 等页
                     ns_elem = elem.find(f"{MEDIAWIKI_NS}ns")
-                    if ns_elem is None or ns_elem.text != "0":
+                    if ns_elem is None or ns_elem.Data != "0":
                         elem.clear()
                         continue
 
                     title_elem = elem.find(f"{MEDIAWIKI_NS}title")
-                    title = (title_elem.text or "").strip() if title_elem is not None else ""
+                    title = (title_elem.Data or "").strip() if title_elem is not None else ""
 
                     # 找 text 节点（在 revision 下）
                     text_elem = elem.find(f".//{MEDIAWIKI_NS}text")
-                    raw_text = (text_elem.text or "").strip() if text_elem is not None else ""
+                    raw_text = (text_elem.Data or "").strip() if text_elem is not None else ""
 
                     # 跳过重定向
                     if raw_text.upper().startswith("#REDIRECT") or \
