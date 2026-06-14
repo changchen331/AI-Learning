@@ -132,7 +132,7 @@ def main():
     parser.add_argument("--batch_size", type=int, default=128)
     parser.add_argument("--embed_dim", type=int, default=128)
     parser.add_argument("--hidden_dim", type=int, default=256)
-    parser.add_argument("--num_layers", type=int, default=3)
+    parser.add_argument("--num_layers", type=int, default=2)
     parser.add_argument("--dropout", type=float, default=0.3)
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--corpus", default="../data")

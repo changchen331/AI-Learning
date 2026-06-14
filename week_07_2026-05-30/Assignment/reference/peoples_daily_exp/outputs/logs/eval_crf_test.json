@@ -1,0 +1,13 @@
+{
+  "model": "BERT+CRF",
+  "split": "test",
+  "precision": 0.941474,
+  "recall": 0.950067,
+  "f1": 0.945751,
+  "illegal_stats": {
+    "illegal_start": 0,
+    "illegal_transition": 84,
+    "total_seqs": 4636,
+    "total_illegal": 84
+  }
+}
