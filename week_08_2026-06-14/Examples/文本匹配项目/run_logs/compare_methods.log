@@ -1,0 +1,39 @@
+设备: cuda  评估集: validation
+
+=======================================================
+加载 biencoder_cosine ...
+Loading weights:   0%|          | 0/71 [00:00<?, ?it/s]Loading weights: 100%|██████████| 71/71 [00:00<00:00, 6005.52it/s]
+模型: BiEncoder (pool=mean, layers=4)
+参数量: 45.6M  (BERT 骨干: 45.6M)
+
+=======================================================
+加载 biencoder_triplet ...
+Loading weights:   0%|          | 0/71 [00:00<?, ?it/s]Loading weights: 100%|██████████| 71/71 [00:00<00:00, 4733.15it/s]
+模型: BiEncoder (pool=mean, layers=4)
+参数量: 45.6M  (BERT 骨干: 45.6M)
+
+=======================================================
+加载 crossencoder ...
+Loading weights:   0%|          | 0/71 [00:00<?, ?it/s]Loading weights: 100%|██████████| 71/71 [00:00<00:00, 5806.34it/s]
+模型: CrossEncoder (layers=4)
+参数量: 45.6M  (BERT 骨干: 45.6M)
+
+=================================================================
+方法                              Accuracy  F1(weighted)            额外信息
+-----------------------------------------------------------------
+  biencoder_cosine                0.6735        0.6765  threshold=0.51
+  biencoder_triplet               0.6664        0.6599  threshold=0.81
+  crossencoder                    0.6905        0.6750          argmax
+
+─────────────────────────────────────────────────────────────────
+结论速览：
+  最高 Accuracy : crossencoder (0.6905)
+  最高 F1       : biencoder_cosine  (0.6765)
+
+  Cosine vs Triplet (Δ):
+    Accuracy: -0.0072  F1: -0.0166
+    → CosineEmbeddingLoss 更优，AFQMC 数据量下直接对标签优化更稳定
+
+对比日志 → D:\badou\八斗课程\week8 文本匹配问题\文本匹配项目\outputs\logs\method_comparison.json
+  图表已保存 → D:\badou\八斗课程\week8 文本匹配问题\文本匹配项目\outputs\figures\method_comparison_bar.png
+  图表已保存 → D:\badou\八斗课程\week8 文本匹配问题\文本匹配项目\outputs\figures\biencoder_sim_distributions.png

@@ -1,0 +1,1409 @@
+{
+  "accuracy": 0.64,
+  "f1_weighted": 0.6534827264239028,
+  "f1_pos": 0.5555555555555556,
+  "n_samples": 200,
+  "parse_fail": 0,
+  "detail": [
+    {
+      "sentence1": "我想将花呗上的手机号更换",
+      "sentence2": "换手机号了花呗怎么改",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗在沃尔玛可以用吗",
+      "sentence2": "用花呗可以付现给好友么",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我花呗给我封了，还什么时候能正常使用",
+      "sentence2": "能查我什么时候用的花呗吗？这个",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我用花呗支付了一订单，花呗显示已付款但是淘宝显示未付款",
+      "sentence2": "花呗显示付款了，淘宝显示没付款怎么回事",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗能用于共享单车吗",
+      "sentence2": "花呗能用几次共享单车",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗什么时候进行不定期评估",
+      "sentence2": "借呗一般多久进行评估",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "如果我的淘宝要换绑手机号 现在的花呗能一同换到新手机号上吗",
+      "sentence2": "花呗手机号码能换吗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "可以提升蚂蚁花呗的临时额度嘛",
+      "sentence2": "花呗如何提升额度",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "查询一下花呗多少额度",
+      "sentence2": "花呗最大能到多少额度",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "淘宝怎么不能用花呗吗",
+      "sentence2": "花呗可以用于淘宝吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗分期免息兑换",
+      "sentence2": "在哪可以积分换花呗免息",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "为什么花呗里还有额度 却不支持付款",
+      "sentence2": "有花呗，有可用额度，为什么不能用",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗能发红包吗",
+      "sentence2": "花呗里面钱可以发红包吗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗不刷脸给可以",
+      "sentence2": "花呗刷脸怎么不成功",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗申请分期付款后可以先还一半吗",
+      "sentence2": "花呗可以在还款日之前一半一半还吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "能不能帮我女朋友还花呗",
+      "sentence2": "怎么才能让朋友帮忙还花呗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我是借呗，里面开具证明金额余额，是什么意思",
+      "sentence2": "蚂蚁借呗证明怎么开电子，证明",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "这个花呗安全么",
+      "sentence2": "花呗安全没有通过",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗借款二十四小时未到帐怎么办",
+      "sentence2": "借呗借款到银行卡没到帐怎么办",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "是点我借呗额度翻倍",
+      "sentence2": "怎样翻倍借呗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "蚂蚁花呗能修改还款日期嘛",
+      "sentence2": "花呗还款日期能不能到月中",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "打开花呗提示邮箱登陆",
+      "sentence2": "花呗为什么要我用邮箱登陆",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗借款到期还不上还能不能分期",
+      "sentence2": "借呗能分三期么",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的花呗 怎么绑定不了银行卡",
+      "sentence2": "花呗银行卡绑定不行",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我关了花呗怎么进不去了",
+      "sentence2": "我怎么换一个手机，我这个花呗怎么打不开呀",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗***，分期可以用多少",
+      "sentence2": "花呗欠多少钱可以分期还款",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗取消自动还花呗",
+      "sentence2": "可否取消花呗自动还款，改自行还款",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "什么情况下可以用借呗",
+      "sentence2": "我为什么不可以使用蚂蚁借呗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗如何提升额度",
+      "sentence2": "花呗不涨额度",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "什么能用花呗",
+      "sentence2": "我的花呗是否能用",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗还款我怎么还没有到帐",
+      "sentence2": "花呗还款几时到帐",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗还款绑定银行卡更改",
+      "sentence2": "花呗绑定的银行卡能换别的银行卡吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗借***个月后还可以吗",
+      "sentence2": "借呗还款期只有***和***个月这两个吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗 为什么要刷脸认证",
+      "sentence2": "花呗不能刷脸认证",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我还需要哪些条件，才能满足借呗",
+      "sentence2": "借呗怎么才算满足条件",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "逾期已处理了，花呗什么时候可以使用",
+      "sentence2": "花呗冻结之后什么时候能使用",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "打电话可以开通借呗不",
+      "sentence2": "关闭网商贷就可以开通蚂蚁借呗了吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗还款会自动从银行卡里扣吗",
+      "sentence2": "这花呗还款是自动还款的吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗免息券在哪儿领",
+      "sentence2": "花呗分期免息券如何得到",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我的借呗今天是还款日，系统提示说是在余额宝自动扣款的，我余额宝里面有钱，为什么到现在还没有扣款",
+      "sentence2": "你们这个，，我在余额宝里面有钱，为什么他不会自动扣吗，怎么还没扣款，蚂蚁借呗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗，怎么用着就没额度了",
+      "sentence2": "借呗开始有额度，借过一次之后怎么没有了",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗能延后还",
+      "sentence2": "蚂蚁借呗没用能还吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的花呗为什么一直不能用",
+      "sentence2": "我为什么花呗不能使用",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我的花呗已经还完了吧",
+      "sentence2": "我的花呗上个月已经全部还清",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "什么样的产品是带有花呗标示的",
+      "sentence2": "如何看是否是带有花呗标识的商品",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "就花呗被停一年多",
+      "sentence2": "我的花呗被冻结一年多了",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我淘宝退货 还款退给花呗了 没有看到退款记录",
+      "sentence2": "我的花呗购物帐单，退款已退到蚂蚁花呗，为什么还款记录，还有那笔账单",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "支付宝已经付款，为什么还要花呗还款",
+      "sentence2": "为什么我的花呗已还清了，然后又有***元要还",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的转账超限额只能还信用卡不能还花呗么",
+      "sentence2": "为什么我开通了信用卡花呗付款，用花呗跟信用卡付不了",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁花呗还完了以后怎么不能用了",
+      "sentence2": "花呗逾期已经还了无法使用怎么办",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗有密码的吗",
+      "sentence2": "借呗提额要直付密码吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "刚开始的时候可以用花呗给游戏充值，可是前天为什么就不能用花呗充值了",
+      "sentence2": "怎么花呗不能充值游戏点券",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "提前花呗分期还款",
+      "sentence2": "花呗分期后怎么提前还清",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我有蚂蚁戒备的窗口，怎么不能用来借呗",
+      "sentence2": "支付宝上怎么没有蚂蚁借呗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "为什么我的借呗利息那么高 借同样的钱利息却比他们的高了一倍",
+      "sentence2": "为什么借呗的利息不一样，有人千分之三有人千分之四",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗要是***千元这个月还不了有多少利息",
+      "sentence2": "花呗下月还有利息吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗额度申请材料审核要多久",
+      "sentence2": "借呗多久自动审核",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "信用卡或花呗收款，需要付手续费吗",
+      "sentence2": "信用卡支付和花呗支付是收费的吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "网商贷和蚂蚁借呗有啥区别",
+      "sentence2": "借呗和网商贷一样不",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的花呗额度查询",
+      "sentence2": "设置花呗消费额度",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "逾期一次借呗还能借款吗",
+      "sentence2": "我的借呗关了还能再开吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗消费后分期了，下一毕消费还能分期吗",
+      "sentence2": "花呗分期后未还完还可以分期吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗按时还款跟芝麻信用有关系吗",
+      "sentence2": "多少芝麻信用申请花呗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁花呗是不能用在app充值了",
+      "sentence2": "为什么蚂蚁花呗不能缴水电费了",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗还款后怎么没有恢复可用额度",
+      "sentence2": "恢复使用借呗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "线下大型超市可以用花呗吗",
+      "sentence2": "花呗线下可以吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我手机丢了，收不到借呗的还款验证码",
+      "sentence2": "我手机被偷了，换了新手机，找不到蚂蚁借呗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的花呗这个月账单我想办分期",
+      "sentence2": "我是这个月九号还花呗，提前今天还了",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗给了为什么没有信用额度",
+      "sentence2": "我今天申请了借呗的额度。为什么失败了",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗自动扣款还款失败",
+      "sentence2": "余额有钱花呗还自动扣款失败",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "可以用花呗吗",
+      "sentence2": "用花呗不行吗",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗可以推迟一天还款",
+      "sentence2": "花呗可以推迟还款期吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗负额度最高可为多少",
+      "sentence2": "花呗最高多少钱",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗首收商家的手续费吗",
+      "sentence2": "开通商家服务后用花呗是要手续费吗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "选择花呗分期可以使用购物津贴吗",
+      "sentence2": "花呗分期的商品可以用购物津贴么",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗逾期，还了可以恢复吗",
+      "sentence2": "花呗逾期后还清了可以在使用吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "该怎么设置花呗付钱",
+      "sentence2": "怎么修改花呗支付密码",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的支付宝怎么没有蚂蚁借呗和花呗额度",
+      "sentence2": "为什么我支付宝上有花呗额度，但是不能在淘宝上用",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "多少芝麻分能使用花呗",
+      "sentence2": "多少信用积分才能使用花呗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗封了嘛",
+      "sentence2": "蚂蚁借呗开了为啥给我关了",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗分期还可提额吗",
+      "sentence2": "花呗分期还了就借不了吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "密付可以花呗扣款吗",
+      "sentence2": "还花呗，可以用密付吗",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗可以还一点吗",
+      "sentence2": "蚂蚁借呗的钱可以转到余额吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "怎么找不到花呗还款地方",
+      "sentence2": "怎么还款花贝",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "为什么花呗已经绑定了银行卡，还是不能用呀",
+      "sentence2": "我已经绑定银行卡了，为什么我一进蚂蚁花呗界面，它显示我提示我绑定银行卡",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "为什么开通不了花呗收款",
+      "sentence2": "为什么我无发开通蚂蚁借呗与花呗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗退款成功了，为什么下个月的还款金额还是没少",
+      "sentence2": "为什么退款了以后 花呗还显示要还款",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "借呗现在不能分***期吗",
+      "sentence2": "借呗分以分期***年还吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗额度是怎么提升的",
+      "sentence2": "蚂蚁花呗额度什么提升",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗分期后为还款还能分期吗",
+      "sentence2": "花呗账单分期后可以继续分期吗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "分期金额怎么算",
+      "sentence2": "***花呗分***期怎么算",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗扫码不行是怎么回事",
+      "sentence2": "我的花呗怎么扫码沒可以支付",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "用花呗买了个美团，没用退款了，钱去哪了",
+      "sentence2": "花呗买东西没发货然后花呗还了，退款的钱去那里了",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗分期后 不能按时还款怎么办",
+      "sentence2": "花呗的钱分期后不能还全部钱吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗什么时候能还款",
+      "sentence2": "花呗还款日哪天",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "借呗还款为什么还没扣款",
+      "sentence2": "为啥借呗今天***:***没有扣款",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "提前还款的利息和分期每月还款的利息一样么",
+      "sentence2": "卖家的分期付款和花呗的分期付款的利息是一样的吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我是不是要还花呗钱",
+      "sentence2": "花呗怎么要我还钱",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我这边没有借呗额度查询选项",
+      "sentence2": "有蚂蚁借呗怎么会没信用额度",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "怎么充值超***，花呗用不了",
+      "sentence2": "花呗怎么个用法",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗的学历信息填错了",
+      "sentence2": "我蚂蚁花呗资料填错了",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "新的支付宝多久可以开通花呗",
+      "sentence2": "花呗逾期多久能继续开通",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "用支付宝付款，为什么会产生花呗账单",
+      "sentence2": "我没有借花呗，为什么产生账单",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的花呗之前已经还过款了，为什么现在提示还未还款",
+      "sentence2": "我怎么找不到花呗的最低还款按钮了",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我要开通收款花呗怎么开通",
+      "sentence2": "个体经营开通花呗收款店面照片",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗，我银行卡已经显示还款了，但是花呗没有显示，这是为什么",
+      "sentence2": "还款时，银行卡也扣钱，但是花呗账单没有销账，仍是还款钱金额。账单没有更新",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗自动会扣款吗",
+      "sentence2": "花呗会提前自动扣款吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我的花呗收款已开通，为什么不能收款",
+      "sentence2": "怎么样开通花呗支付收款",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我***号用的花呗是下个月***号还还是当月***号还",
+      "sentence2": "这个月月底用的花呗，下个月***号就得还了吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗还现什么时候到帐",
+      "sentence2": "花呗收款，什么时间到账？到了哪里了",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗临时额度到时间了以后会怎样",
+      "sentence2": "花呗境外临时额度什么意思",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "密付用的是花呗吗",
+      "sentence2": "情圈可以使用花呗吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗被冻结了多久可以解冻",
+      "sentence2": "怎样解花呗冻结吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "支付宝里找不到花呗",
+      "sentence2": "怎么找不到花呗页面",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "为何我无法申请开通花呗信用卡收款",
+      "sentence2": "支付宝开通信用卡花呗收款不符合条件怎么回事",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗额度可以提高芝麻信用吗",
+      "sentence2": "怎样做可以提升花呗额度",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗为什么从四万变成五千",
+      "sentence2": "我的蚂蚁借呗额度从***变到***了，为什么",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗每月九号早上扣款还是晚上",
+      "sentence2": "花呗自动还款都是几点自动扣",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "淘宝帐号换了新的支付宝，为何开通不了花呗",
+      "sentence2": "淘宝app的花呗为什么没有开通",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗！怎样提升额度",
+      "sentence2": "花呗额度怎么能提高",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "密付怎么不会用花呗",
+      "sentence2": "密付可以用花呗付款么",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我用花呗买了火车票，然后退票了，退到花呗，但是花呗没有回水",
+      "sentence2": "用花呗买了火车票后来又退票了钱没有推给我",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "怎么还花呗分期",
+      "sentence2": "我们想开通花呗分期",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "赠品不能设置用花呗付款",
+      "sentence2": "怎么不能花呗分期付款",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "用花呗充值成功的话费能退吗",
+      "sentence2": "花呗重置话费能不能退款",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我的支付宝原来是用老公的手机号码注册的，他不知道自己又注册了一个，已实名认证，所以我原来的也打不开了，花呗还要还款怎么办",
+      "sentence2": "我有两个支付宝，一个使用一个不使用，不怎么使用的开通了花呗，使用的不能自己开通花呗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁花呗提醒我积分过期",
+      "sentence2": "怎样查看到期花呗积分",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我没有蚂蚁花呗",
+      "sentence2": "蚂蚁花呗条件",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "使用花呗购买的y币一直不到账，怎么退款",
+      "sentence2": "从花呗里面买的东西怎么退款",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "更换绑定的银行卡会影响花呗吗",
+      "sentence2": "蚂蚁借呗需要更换绑定的银行卡么",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "想取消花呗怎么办",
+      "sentence2": "花呗怎么取消订单",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的蚂蚁借呗是不是不可以用了",
+      "sentence2": "怎么用不了蚂蚁借呗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我的账号为什么开不了花呗收钱",
+      "sentence2": "为什么我的账户不能申请开通花呗二维码",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "卖家退的款怎么在花呗里",
+      "sentence2": "卖家退回了花呗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "商家如何提升花呗收款额度",
+      "sentence2": "商家收款怎么能用花呗收款",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗什么时候，还款",
+      "sentence2": "借呗是多久还款",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "淘宝退款***到花呗，为什么花呗显示下月剩余要还***",
+      "sentence2": "退款退到花呗.为什么还款数额不减",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗还可以透支",
+      "sentence2": "花呗透支怎么办",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "网商贷和借呗，只能有一个吗",
+      "sentence2": "网商贷和借呗有一样吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的借呗朋友可以帮忙还款吗",
+      "sentence2": "余额里的钱可以还借呗吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗新人百元礼包有什么",
+      "sentence2": "以花呗的新人礼包，里面有什么东西",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗分期货品退货了怎么办",
+      "sentence2": "提示花呗分期暂不可用怎么办",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗不能在自动在邮政卡扣款吗",
+      "sentence2": "花呗会自动从银行卡扣钱还款吗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "如果花呗刷脸失败咋办",
+      "sentence2": "我借呗刷脸为什么失败",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗分期购物后退货",
+      "sentence2": "查***月***日我的花呗分期购物",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗可是使用多少次提前还款",
+      "sentence2": "问什么我的蚂蚁借呗提前还款不用手续费",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "关闭花呗，关键账户能用吗",
+      "sentence2": "关闭花呗了另一个账户可使用吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "收款码支持花呗 信用卡吗",
+      "sentence2": "我是商家使用花呗收款需要扣手续费吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗到期延长",
+      "sentence2": "蚂蚁借呗可以还***期",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "为什么我的花呗和借呗都不能用",
+      "sentence2": "为什么我无法使用蚂蚁花呗和借呗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗不显示了，怎么办",
+      "sentence2": "花呗不显示页面了",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "使用花呗是否会短信提醒",
+      "sentence2": "使用花呗消费有短信提醒",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "借呗可以不让别人看到吗",
+      "sentence2": "怎么不让别人看到自己的借呗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "借呗和网商贷并存吗",
+      "sentence2": "有网商贷 是不是不可以有借呗",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗付款要密码吗",
+      "sentence2": "蚂蚁花呗付款要密码吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "借呗提额后还会降吗",
+      "sentence2": "长时间不用蚂蚁借呗额度会下降吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗电话号码",
+      "sentence2": "蚂蚁借呗的资讯电话",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗关闭还能开通么",
+      "sentence2": "我原有账号已经关闭现在想用新的账号开通花呗功能怎么开",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "开通蚂蚁花呗需要多少额度",
+      "sentence2": "花呗体验额度能多少钱",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "为啥会暂无借呗服务",
+      "sentence2": "借呗怎么老是暂无",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗分期后可用额度是多少",
+      "sentence2": "花呗分期后还有多少额度",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "今天能还花呗的款吗，本月的",
+      "sentence2": "花呗还款能在还款日当天还款吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗逾期一天会影响以后使用吗",
+      "sentence2": "蚂蚁借呗逾期一天，对信用影响大不",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "借呗还款怎么修改还款顺序",
+      "sentence2": "借呗怎么还款",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗什么时候可以还款",
+      "sentence2": "怎么查蚂蚁借呗什么时候还款",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗怎么还用不了",
+      "sentence2": "为什么我的蚂蚁花呗用不了了",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我的花呗的钱是怎么被扣的",
+      "sentence2": "余额被花呗扣款",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "我的借呗为什么只有六个月和十二个月",
+      "sentence2": "借呗只有***个月和***个月两种还款期么",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗手机号和支付宝手机号一样吗",
+      "sentence2": "网上银行和支付宝借呗一样么",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗借***月可以借后一周还完吗",
+      "sentence2": "借呗显示后可以申请通过吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗审核工作是由什么公司进行的",
+      "sentence2": "我刚还的花呗的订单是什么",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗可以可以按天还款吗",
+      "sentence2": "蚂蚁借呗按期还款如何在更改",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "借呗推辞两天还款能行吗",
+      "sentence2": "借呗延迟至明天还款可以吗",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "信用卡或花呗收款服务费是什么",
+      "sentence2": "支付宝花呗服务费费用",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "商品价格高于花呗配额",
+      "sentence2": "商品价格大于花呗的额度",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗付款后可以分期付款吗",
+      "sentence2": "我之前买的一部手机可以用花呗分期付款吗",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗切换手机号",
+      "sentence2": "我花呗里面的手机号",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "自己怎么提升借呗额度",
+      "sentence2": "借呗怎么能快速提高额度",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "怎么样用花呗缴纳水电费",
+      "sentence2": "我想交电费用别人的借呗交怎么交",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "怎么借呗老是不提额度",
+      "sentence2": "不要随便提高借呗的额度",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "如何用余额宝还蚂蚁花呗",
+      "sentence2": "花呗可以从余额宝扣嘛",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗，没绑定银行卡怎么还款",
+      "sentence2": "银行卡已经划扣，但是花呗还是显示没还上",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗提前还款之后没有额度了",
+      "sentence2": "借呗还款之后。还款额度没变",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "条件开通蚂蚁借呗",
+      "sentence2": "蚂蚁借呗好友邀请可以开通吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的蚂蚁借呗为什么开通不了",
+      "sentence2": "我不想要这个想开通借呗怎么开",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我问什么打不开花呗",
+      "sentence2": "打开不了花呗怎么办",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "蚂蚁借呗在还款日当天几点前还款不算逾期",
+      "sentence2": "蚂蚁借呗当天还就不算逾期吧",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗都四千了，借呗开不了",
+      "sentence2": "为什么我花呗可以开通 借呗开通不了",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我在淘宝消费***用花呗付款的，提前还款了，但是***块又退回了花呗，我的钱去哪里了",
+      "sentence2": "花呗的钱我还了以后做退款，钱退到哪里去了",
+      "label": 1,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "天猫花呗标志",
+      "sentence2": "花呗标识是什么标识",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "帮我看下有没有开通花呗",
+      "sentence2": "我开痛花呗了吗",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "我的花呗已还清，为啥芝麻分又降了",
+      "sentence2": "花呗按时还款为何芝麻分降低了",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "花呗 临时额度可以分期吗",
+      "sentence2": "花呗的临时额度分期付款了，临时额度到期了，还可以继续分期付款吗",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "商家开通花呗收款",
+      "sentence2": "商家没有开通花呗可以花呗收款吗",
+      "label": 0,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "为什么有的蚂蚁借呗利息比我的低",
+      "sentence2": "为什么我的借呗是万分之五 人家的是万分之四",
+      "label": 1,
+      "pred": 0,
+      "raw_output": "【不相似】"
+    },
+    {
+      "sentence1": "花呗关闭后能用其他账户开通吗",
+      "sentence2": "蚂蚁花呗关闭后还能开通吗",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "能不能月底再还支付宝里的借呗钱",
+      "sentence2": "蚂蚁借呗能不能到下个月还",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "但是为啥退回花呗去了",
+      "sentence2": "我银行卡的钱为什么退到花呗去了",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "旧账号不用了花呗没还完怎么办",
+      "sentence2": "怎么别的平台没还钱你们平台还不给用花呗了嘛",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    },
+    {
+      "sentence1": "可以申请主动开通借呗吗",
+      "sentence2": "主动申请借呗在那",
+      "label": 0,
+      "pred": 1,
+      "raw_output": "【相似】"
+    }
+  ]
+}

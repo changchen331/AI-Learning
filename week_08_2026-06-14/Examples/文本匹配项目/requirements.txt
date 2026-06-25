@@ -1,0 +1,9 @@
+torch
+transformers
+peft>=0.14.0
+scikit-learn
+matplotlib
+tqdm
+openai
+datasets
+requests
