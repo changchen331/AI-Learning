@@ -1,0 +1,22 @@
+# vLLM 部署演示项目依赖
+# 与 Qwen2-0.5B-Instruct + NVIDIA Driver 566.x (CUDA 12.7) 兼容
+
+# 核心推理引擎
+vllm==0.9.2
+torch==2.7.0
+transformers==4.52.4
+accelerate>=1.0.0          # transformers device_map="cuda" 需要
+
+# OpenAI 兼容客户端（调用 vLLM server）
+openai>=1.40.0
+
+# 约束解码 + Schema 验证
+jsonschema>=4.20.0
+
+# 吞吐对比需要
+matplotlib>=3.7.0
+numpy>=1.26.0
+
+# HTTP 测试
+requests>=2.31.0
+httpx>=0.25.0

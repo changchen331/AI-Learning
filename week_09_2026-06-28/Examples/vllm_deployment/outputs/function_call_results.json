@@ -1,0 +1,122 @@
+{
+  "stock": {
+    "n": 50,
+    "stats": {
+      "raw": {
+        "is_json": 43,
+        "has_required": 43,
+        "schema_valid": 30,
+        "total_latency": 21.82701349258423
+      },
+      "response_format": {
+        "is_json": 50,
+        "has_required": 50,
+        "schema_valid": 34,
+        "total_latency": 22.694302082061768
+      },
+      "guided_json": {
+        "is_json": 50,
+        "has_required": 50,
+        "schema_valid": 50,
+        "total_latency": 21.706003665924072
+      }
+    },
+    "fails": {
+      "raw": [
+        {
+          "user": "300750 宁德时代最高价",
+          "output": "{\"symbol\": \"300750\", \"market\": \"SH\", \"date\": \"2026-05-12\", \"fields\": [\"最高价\"], \"adjust\": \"none\"}",
+          "error": "schema: '最高价' is not one of ['open', 'close', 'high', 'low', 'volume']"
+        },
+        {
+          "user": "002594 比亚迪今天最低价",
+          "output": "{\"symbol\": \"002594\", \"market\": \"SH\", \"date\": \"2026-05-12\", \"fields\": [], \"adjust\": \"none\"}",
+          "error": "schema: [] should be non-empty"
+        },
+        {
+          "user": "000651 格力电器成交量",
+          "output": "{\"symbol\": \"000651\", \"market\": \"SH\", \"date\": \"2026-05-12\", \"fields\": [], \"adjust\": \"none\"}",
+          "error": "schema: [] should be non-empty"
+        }
+      ],
+      "response_format": [
+        {
+          "user": "300750 宁德时代最高价",
+          "output": "{\"symbol\": \"300750\", \"market\": \"SH\", \"date\": \"2026-05-12\", \"fields\": [\"最高价\"], \"adjust\": \"none\"}",
+          "error": "schema: '最高价' is not one of ['open', 'close', 'high', 'low', 'volume']"
+        },
+        {
+          "user": "002594 比亚迪今天最低价",
+          "output": "{\"symbol\": \"002594\", \"market\": \"SH\", \"date\": \"2026-05-12\", \"fields\": [], \"adjust\": \"none\"}",
+          "error": "schema: [] should be non-empty"
+        },
+        {
+          "user": "000651 格力电器成交量",
+          "output": "{\"symbol\": \"000651\", \"market\": \"SH\", \"date\": \"2026-05-12\", \"fields\": [], \"adjust\": \"none\"}",
+          "error": "schema: [] should be non-empty"
+        }
+      ],
+      "guided_json": []
+    }
+  },
+  "order": {
+    "n": 50,
+    "stats": {
+      "raw": {
+        "is_json": 48,
+        "has_required": 48,
+        "schema_valid": 21,
+        "total_latency": 28.86788272857666
+      },
+      "response_format": {
+        "is_json": 50,
+        "has_required": 50,
+        "schema_valid": 21,
+        "total_latency": 28.533818006515503
+      },
+      "guided_json": {
+        "is_json": 50,
+        "has_required": 50,
+        "schema_valid": 50,
+        "total_latency": 29.866769552230835
+      }
+    },
+    "fails": {
+      "raw": [
+        {
+          "user": "订 5 本《三体》，联系人 13711112222，快递，支付宝",
+          "output": "{\"product\": \"三体\", \"quantity\": 5, \"user_phone\": \"+13711112222\", \"delivery_date\": \"2026-05-14\", \"priority\": \"urgent\", \"payment_method\": \"alipay\"}",
+          "error": "schema: '+13711112222' does not match '^1[3-9]\\\\d{9}$'"
+        },
+        {
+          "user": "下单 iPhone 15 一台，13855556666 刷卡",
+          "output": "{\"product\": \"iPhone 15\", \"quantity\": 1, \"user_phone\": \"13855556666\", \"delivery_date\": \"2026-05-13\", \"priority\": \"urgent\", \"payment_method\": \"credit ca",
+          "error": "schema: 'credit card' is not one of ['alipay', 'wechat', 'card']"
+        },
+        {
+          "user": "订购 4 盒月饼，13766667777，急件",
+          "output": "{\"product\": \"月饼\", \"quantity\": 4, \"user_phone\": \"13766667777\", \"delivery_date\": \"2026-05-14\", \"priority\": \"urgent\", \"payment_method\": \"credit card\"}",
+          "error": "schema: 'credit card' is not one of ['alipay', 'wechat', 'card']"
+        }
+      ],
+      "response_format": [
+        {
+          "user": "订 5 本《三体》，联系人 13711112222，快递，支付宝",
+          "output": "{\"product\": \"三体\", \"quantity\": 5, \"user_phone\": \"+13711112222\", \"delivery_date\": \"2026-05-14\", \"priority\": \"urgent\", \"payment_method\": \"alipay\"}",
+          "error": "schema: '+13711112222' does not match '^1[3-9]\\\\d{9}$'"
+        },
+        {
+          "user": "下单 iPhone 15 一台，13855556666 刷卡",
+          "output": "{\"product\": \"iPhone 15\", \"quantity\": 1, \"user_phone\": \"13855556666\", \"delivery_date\": \"2026-05-13\", \"priority\": \"urgent\", \"payment_method\": \"credit ca",
+          "error": "schema: 'credit card' is not one of ['alipay', 'wechat', 'card']"
+        },
+        {
+          "user": "订购 4 盒月饼，13766667777，急件",
+          "output": "{\"product\": \"月饼\", \"quantity\": 4, \"user_phone\": \"13766667777\", \"delivery_date\": \"2026-05-14\", \"priority\": \"urgent\", \"payment_method\": \"credit card\"}",
+          "error": "schema: 'credit card' is not one of ['alipay', 'wechat', 'card']"
+        }
+      ],
+      "guided_json": []
+    }
+  }
+}
