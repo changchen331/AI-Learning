@@ -1,0 +1,152 @@
+[
+  {
+    "stock_code": "600519",
+    "plate": "sh",
+    "company_name": "贵州茅台",
+    "year": "2021",
+    "title": "贵州茅台2021年年度报告",
+    "filename": "600519_2021_贵州茅台_贵州茅台2021年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2022-03-31/1212755849.PDF",
+    "announce_id": "1212755849"
+  },
+  {
+    "stock_code": "600519",
+    "plate": "sh",
+    "company_name": "贵州茅台",
+    "year": "2022",
+    "title": "贵州茅台2022年年度报告",
+    "filename": "600519_2022_贵州茅台_贵州茅台2022年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2023-03-31/1216281757.PDF",
+    "announce_id": "1216281757"
+  },
+  {
+    "stock_code": "600519",
+    "plate": "sh",
+    "company_name": "贵州茅台",
+    "year": "2023",
+    "title": "贵州茅台2023年年度报告",
+    "filename": "600519_2023_贵州茅台_贵州茅台2023年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2024-04-03/1219506510.PDF",
+    "announce_id": "1219506510"
+  },
+  {
+    "stock_code": "000858",
+    "plate": "sz",
+    "company_name": "五粮液",
+    "year": "2021",
+    "title": "2021年年度报告",
+    "filename": "000858_2021_五粮液_2021年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2022-04-29/1213222211.PDF",
+    "announce_id": "1213222211"
+  },
+  {
+    "stock_code": "000858",
+    "plate": "sz",
+    "company_name": "五粮液",
+    "year": "2022",
+    "title": "2022年年度报告",
+    "filename": "000858_2022_五粮液_2022年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2023-04-29/1216689063.PDF",
+    "announce_id": "1216689063"
+  },
+  {
+    "stock_code": "000858",
+    "plate": "sz",
+    "company_name": "五粮液",
+    "year": "2023",
+    "title": "2023年年度报告",
+    "filename": "000858_2023_五粮液_2023年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2024-04-29/1219873658.PDF",
+    "announce_id": "1219873658"
+  },
+  {
+    "stock_code": "601318",
+    "plate": "sh",
+    "company_name": "中国平安",
+    "year": "2021",
+    "title": "中国平安2021年年度报告",
+    "filename": "601318_2021_中国平安_中国平安2021年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2022-03-18/1212609975.PDF",
+    "announce_id": "1212609975"
+  },
+  {
+    "stock_code": "601318",
+    "plate": "sh",
+    "company_name": "中国平安",
+    "year": "2022",
+    "title": "中国平安2022年年度报告",
+    "filename": "601318_2022_中国平安_中国平安2022年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2023-03-16/1216129433.PDF",
+    "announce_id": "1216129433"
+  },
+  {
+    "stock_code": "601318",
+    "plate": "sh",
+    "company_name": "中国平安",
+    "year": "2023",
+    "title": "中国平安2023年年度报告",
+    "filename": "601318_2023_中国平安_中国平安2023年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2024-03-22/1219376072.PDF",
+    "announce_id": "1219376072"
+  },
+  {
+    "stock_code": "300750",
+    "plate": "sz",
+    "company_name": "宁德时代",
+    "year": "2021",
+    "title": "2021年年度报告",
+    "filename": "300750_2021_宁德时代_2021年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
+    "announce_id": "1213027750"
+  },
+  {
+    "stock_code": "300750",
+    "plate": "sz",
+    "company_name": "宁德时代",
+    "year": "2022",
+    "title": "2022年年度报告",
+    "filename": "300750_2022_宁德时代_2022年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF",
+    "announce_id": "1216084559"
+  },
+  {
+    "stock_code": "300750",
+    "plate": "sz",
+    "company_name": "宁德时代",
+    "year": "2023",
+    "title": "2023年年度报告",
+    "filename": "300750_2023_宁德时代_2023年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+    "announce_id": "1219313047"
+  },
+  {
+    "stock_code": "002415",
+    "plate": "sz",
+    "company_name": "海康威视",
+    "year": "2021",
+    "title": "2021年年度报告",
+    "filename": "002415_2021_海康威视_2021年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2022-04-16/1212941495.PDF",
+    "announce_id": "1212941495"
+  },
+  {
+    "stock_code": "002415",
+    "plate": "sz",
+    "company_name": "海康威视",
+    "year": "2022",
+    "title": "2022年年度报告",
+    "filename": "002415_2022_海康威视_2022年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2023-04-15/1216417187.PDF",
+    "announce_id": "1216417187"
+  },
+  {
+    "stock_code": "002415",
+    "plate": "sz",
+    "company_name": "海康威视",
+    "year": "2023",
+    "title": "2023年年度报告",
+    "filename": "002415_2023_海康威视_2023年年度报告.pdf",
+    "source_url": "http://static.cninfo.com.cn/finalpage/2024-04-20/1219703072.PDF",
+    "announce_id": "1219703072"
+  }
+]
