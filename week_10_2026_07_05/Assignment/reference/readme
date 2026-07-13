@@ -1,0 +1,147 @@
+完整演示代码课上已有，这里再总结一些文件处理常用办法和第三方库
+RAG的第一个关键步骤是把各类格式的原始资料撰写为可以被检索的文本
+多使用现成的工具，减少这部分的麻烦
+
+
+# RAG 场景 Python 文件解析第三方库汇总
+
+按文件大类分类，标注适用场景、核心能力、RAG 使用优势，全部为向量知识库、文档问答常用解析库。
+
+## 一、文本类文件（TXT/MD/CSV/Excel/JSON/YAML）
+
+### 1. python-docx / docx2txt
+
+- 格式：`.docx` Word 文档（不支持旧版.doc）
+- 能力：提取正文、段落、表格、标题、图片说明
+- RAG 优势：结构化拆分章节，区分标题正文，适合知识库文档
+
+### 2. python-pptx
+
+- 格式：`.pptx` PPT 幻灯片
+- 能力：提取每页文本、表格、备注、形状文字
+- RAG 优势：按页面分块，适配 PPT 培训资料入库
+
+### 3. openpyxl / pandas
+
+- 格式：`.xlsx/.xls` Excel 表格、`.csv`
+- openpyxl：原生解析单元格、合并单元格、批注
+- pandas：批量转文本、行列拼接，快速转为问答文本片段
+- RAG 场景：报表、台账、业务数据表向量化
+
+### 4. python-markdown2 / mistune
+
+- 格式：`.md` Markdown
+- 能力：去除 markdown 语法符号，提取纯文本、区分标题层级
+- RAG 优势：保留 #一级 /## 二级标题结构，用于分层切片
+
+### 5. json / pyyaml
+
+- json 内置库、pyyaml 解析`.yaml/.yml`
+- 能力：序列化字典，递归提取所有文本 value
+- RAG 场景：配置文件、API 文档、结构化知识库
+
+## 二、PDF 文档（RAG 最核心文件）
+
+### 1. PyPDF2
+
+- 轻量纯 Python，无依赖，提取纯文本
+- 缺点：复杂排版、扫描件、多栏文档提取混乱
+- 适合：简单文字 PDF、批量快速预处理
+
+### 2. pdfplumber（RAG 首选）
+
+- 核心优势：精准提取文字坐标、表格、分栏、横线分隔内容
+- 支持提取表格转结构化文本，区分标题 / 正文 / 页脚
+- 可过滤水印、页眉页脚，输出干净文本块
+
+### 3. fitz (PyMuPDF)
+
+- 速度极快，渲染精度高，支持提取图片、字体、页面布局
+- 可输出带层级的文本块，支持扫描 PDF 配合 OCR 联用
+- 工业级 RAG 大批量文档常用
+
+### 4. pdfminer.six
+
+- 底层解析器，可自定义布局规则，适合高度定制化分块逻辑
+- 适合二次开发自定义文档切片器
+
+## 三、扫描件 / 图片类 PDF、图片文件（OCR 图文解析）
+
+### 1. pytesseract + PIL/Pillow
+
+- 底层调用 Tesseract OCR 引擎，解析图片、扫描 PDF
+- 支持多语言中文识别，低成本本地 OCR 方案
+
+### 2. paddleocr（百度开源，RAG 强推）
+
+- 开箱即用，内置中文模型，无需额外安装 Tesseract
+- 支持倾斜矫正、表格识别、多行文字合并
+- 输入：jpg/png/pdf 扫描件、截图
+
+### 3. layoutlm / doclayout-yolo
+
+- 文档布局检测：区分标题、段落、表格、图片、页眉
+- 配合 OCR 实现智能分块，大幅提升 RAG 检索精度
+
+## 四、电子书、富文本格式
+
+### 1. ebooklib / Calibre-python
+
+- 格式：`.epub/.mobi` 电子书
+- 提取章节、正文，按书籍章节自动分割文本块
+
+### 2. beautifulsoup4 + lxml
+
+- 格式：`.html/.htm` 网页存档、本地网页文档
+- 清除 js/css 标签，提取正文，过滤广告、导航栏
+- RAG 场景：离线网页知识库、帮助文档 html
+
+### 3. striprtf
+
+- 格式：`.rtf` 富文本文件
+- 去除 RTF 控制符，干净提取纯文本
+
+## 五、音视频字幕文件（语音 RAG）
+
+### 1. pysrt / webvtt-py
+
+- 格式：`.srt/.vtt` 字幕文件
+- 按时间轴提取字幕文本，分段入库做音视频问答
+
+### 2. ffmpeg + whisper（OpenAI）
+
+- 解析音视频 mp3/mp4/wav，语音转文字
+- RAG 场景：会议录音、课程视频知识库
+
+## 六、压缩包批量解析（多文件批量入库必备）
+
+### 1. zipfile /tarfile（内置）
+
+- 解压 zip/tar 压缩包，遍历内部所有文档
+
+### 2. unrar
+
+- 解析.rar 压缩包，批量读取内部 PDF/Word/MD
+
+## 七、一站式整合解析框架（RAG 工程直接用，封装上述底层库）
+
+不用自己组合各类解析库，开箱支持多格式：
+
+1. **LlamaIndex SimpleDirectoryReader**
+封装 pdf/docx/pptx/md/csv 等，自动调用对应解析器，直接输出 Document 文本块
+2. **LangChain DocumentLoaders**
+分格式加载器：PyPDFLoader、Docx2txtLoader、UnstructuredLoader
+3. **Unstructured.io (unstructured)**
+全能解析库，支持几十种文件格式，自动布局分块，自动 OCR 扫描件
+底层集成 pdfplumber、paddleocr、python-docx 等，企业级 RAG 主流方案
+
+# 选型速记（RAG 工程推荐优先级）
+
+1. 通用混合文档（PDF/Word/PPT/MD）：`unstructured` / LangChain 加载器
+2. 纯文字 PDF 高精度提取：`pdfplumber`
+3. 大批量高速 PDF：`PyMuPDF(fitz)`
+4. 扫描件 / 图片 OCR：`paddleocr`
+5. Excel 表格知识库：`openpyxl + pandas`
+6. 网页离线文档：`beautifulsoup4`
+7. 电子书 EPUB：`ebooklib`
+8. 语音视频转文本：`openai-whisper`

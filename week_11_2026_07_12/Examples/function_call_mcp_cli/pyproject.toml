@@ -1,0 +1,24 @@
+[project]
+name = "fincli"
+version = "0.1.0"
+description = "Function Call / MCP / CLI 三方式对比教学项目 —— fincli 命令行"
+requires-python = ">=3.10"
+dependencies = [
+    "openai>=1.0.0",
+    "faiss-cpu>=1.7.4",
+    "numpy>=1.24.0",
+    "httpx>=0.25.0",
+    "mcp>=1.0.0",
+]
+
+# 这一行把 mode_cli.cli.main:main 注册为 PATH 上的可执行命令 fincli
+# pip install -e . 之后，fincli 就和 git/ls 一样可在任意目录直接调用
+[project.scripts]
+fincli = "mode_cli.cli.main:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["src", "mode_cli", "mode_cli.cli"]

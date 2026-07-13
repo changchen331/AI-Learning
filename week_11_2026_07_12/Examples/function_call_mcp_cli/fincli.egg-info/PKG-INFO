@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: fincli
+Version: 0.1.0
+Summary: Function Call / MCP / CLI 三方式对比教学项目 —— fincli 命令行
+Requires-Python: >=3.10
+Requires-Dist: openai>=1.0.0
+Requires-Dist: faiss-cpu>=1.7.4
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: httpx>=0.25.0
+Requires-Dist: mcp>=1.0.0

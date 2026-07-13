@@ -1,0 +1,12 @@
+# LLM + Embedding（OpenAI 兼容接口，DeepSeek 默认 / DashScope 备选与 Embedding）
+openai>=1.0.0
+
+# 向量检索（复用 rag_annual_report 已建好的 FAISS 索引）
+faiss-cpu>=1.7.4
+numpy>=1.24.0
+
+# HTTP 请求（weather_backend.py 调用 Open-Meteo）
+httpx>=0.25.0
+
+# MCP SDK（仅方式二使用）
+mcp>=1.0.0
