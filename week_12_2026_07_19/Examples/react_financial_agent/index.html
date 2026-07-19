@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReAct Financial Agent — 教学演示</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #0f1117;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* ── 顶部 ── */
+        header {
+            background: #1a1d27;
+            border-bottom: 1px solid #2d3148;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #a78bfa;
+        }
+
+        header .subtitle {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* ── 主体布局 ── */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* ── 输入区 ── */
+        .input-card {
+            background: #1a1d27;
+            border: 1px solid #2d3148;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .mode-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .mode-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid #3d4163;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: #7c3aed;
+            border-color: #7c3aed;
+            color: #fff;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        textarea {
+            flex: 1;
+            background: #0f1117;
+            border: 1px solid #2d3148;
+            border-radius: 8px;
+            color: #e2e8f0;
+            padding: 10px 14px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 72px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            border-color: #7c3aed;
+        }
+
+        .send-btn {
+            padding: 0 24px;
+            background: #7c3aed;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            background: #6d28d9;
+        }
+
+        .send-btn:disabled {
+            background: #3d4163;
+            cursor: not-allowed;
+        }
+
+        /* ── 示例问题 ── */
+        .examples {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .example-chip {
+            background: #1e2235;
+            border: 1px solid #2d3148;
+            border-radius: 16px;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .example-chip:hover {
+            border-color: #7c3aed;
+            color: #a78bfa;
+        }
+
+        /* ── 状态栏 ── */
+        .status-bar {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            background: #1a1d27;
+            border: 1px solid #2d3148;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .status-bar.visible {
+            display: flex;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #3d4163;
+            border-top-color: #7c3aed;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── 步骤卡片 ── */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .step-card {
+            background: #1a1d27;
+            border: 1px solid #2d3148;
+            border-radius: 10px;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .step-badge {
+            background: #2d3148;
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .step-title {
+            font-size: 14px;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .step-toggle {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .step-body {
+            padding: 0 16px 14px;
+        }
+
+        /* 各区块颜色 */
+        .thought-block {
+            border-left: 3px solid #38bdf8;
+            padding-left: 12px;
+            margin-bottom: 10px;
+        }
+
+        .action-block {
+            border-left: 3px solid #fbbf24;
+            padding-left: 12px;
+            margin-bottom: 10px;
+        }
+
+        .obs-block {
+            border-left: 3px solid #34d399;
+            padding-left: 12px;
+        }
+
+        .final-block {
+            border-left: 3px solid #a78bfa;
+            padding-left: 12px;
+        }
+
+        .block-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .thought-block .block-label {
+            color: #38bdf8;
+        }
+
+        .action-block .block-label {
+            color: #fbbf24;
+        }
+
+        .obs-block .block-label {
+            color: #34d399;
+        }
+
+        .final-block .block-label {
+            color: #a78bfa;
+        }
+
+        .block-content {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .obs-block .block-content {
+            max-height: 220px;
+            overflow-y: auto;
+            background: #0d1017;
+            border-radius: 4px;
+            padding: 6px 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #3d4163 transparent;
+        }
+
+        .tool-pill {
+            display: inline-block;
+            background: #2d1f5e;
+            border: 1px solid #4c1d95;
+            border-radius: 4px;
+            padding: 1px 8px;
+            font-size: 12px;
+            color: #a78bfa;
+            font-family: monospace;
+            margin-bottom: 6px;
+        }
+
+        .args-code {
+            background: #0f1117;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* ── 最终答案卡 ── */
+        .final-card {
+            background: #1a1d27;
+            border: 1px solid #4c1d95;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 4px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .final-card h3 {
+            color: #a78bfa;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .final-card .answer-text {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+        }
+
+        .meta-row {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #475569;
+            display: flex;
+            gap: 16px;
+        }
+
+        /* ── FC 版 Thought 提示 ── */
+        .fc-thought-note {
+            font-size: 12px;
+            color: #475569;
+            font-style: italic;
+        }
+
+        /* ── 折叠状态 ── */
+        .step-body.collapsed {
+            display: none;
+        }
+
+        .step-toggle.open::before {
+            content: "▲";
+        }
+
+        .step-toggle:not(.open)::before {
+            content: "▼";
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <h1>⚡ ReAct Financial Agent</h1>
+        <div class="subtitle">Thought → Action → Observation 循环演示 | 数据来源：A股年报 + AkShare</div>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- 输入区 -->
+    <div class="input-card">
+        <div class="mode-toggle">
+            <span style="font-size:13px;color:#64748b;margin-right:4px;">实现方式：</span>
+            <button class="mode-btn active" data-mode="manual" onclick="setMode('manual',this)">
+                手写 Prompt 解析
+            </button>
+            <button class="mode-btn" data-mode="fc" onclick="setMode('fc',this)">
+                Function Calling
+            </button>
+        </div>
+        <div class="input-row">
+            <textarea id="question" placeholder="输入问题，例如：贵州茅台和五粮液2023年的毛利率哪家更高？"></textarea>
+            <button class="send-btn" id="sendBtn" onclick="sendQuery()">发 送</button>
+        </div>
+        <div class="examples">
+            <span style="font-size:12px;color:#475569;margin-right:4px;">示例：</span>
+            <span class="example-chip"
+                  onclick="setQuestion(this.textContent)">茅台和五粮液2023年毛利率差多少个百分点？</span>
+            <span class="example-chip"
+                  onclick="setQuestion(this.textContent)">宁德时代2021-2023年营收复合增长率是多少？</span>
+            <span class="example-chip"
+                  onclick="setQuestion(this.textContent)">贵州茅台过去一年（2023年全年）股价涨跌幅？</span>
+            <span class="example-chip"
+                  onclick="setQuestion(this.textContent)">海康威视2023年年报提到了哪些主要风险？</span>
+            <span class="example-chip" onclick="setQuestion(this.textContent)"
+                  title="边界演示">预测明年A股市场走势 ⚠️</span>
+        </div>
+    </div>
+
+    <!-- 状态栏 -->
+    <div class="status-bar" id="statusBar">
+        <div class="spinner"></div>
+        <span id="statusText">正在思考...</span>
+    </div>
+
+    <!-- 步骤 + 结果 -->
+    <div class="steps-container" id="stepsContainer"></div>
+
+</div>
+
+<script>
+    let currentMode = 'manual';
+    let isRunning = false;
+
+    function setMode(mode, btn) {
+        currentMode = mode;
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function setQuestion(text) {
+        document.getElementById('question').value = text;
+    }
+
+    function setStatus(text, visible) {
+        const bar = document.getElementById('statusBar');
+        document.getElementById('statusText').textContent = text;
+        bar.classList.toggle('visible', visible);
+    }
+
+    function setSendEnabled(enabled) {
+        const btn = document.getElementById('sendBtn');
+        btn.disabled = !enabled;
+        btn.textContent = enabled ? '发 送' : '运行中...';
+        isRunning = !enabled;
+    }
+
+    // ── 创建步骤卡片 ──────────────────────────────────────────────────────────
+    function createStepCard(stepData) {
+        const card = document.createElement('div');
+        card.className = 'step-card';
+
+        const isManual = (currentMode === 'manual');
+
+        // 标题
+        const header = document.createElement('div');
+        header.className = 'step-header';
+        header.innerHTML = `
+      <span class="step-badge">Step ${stepData.step}</span>
+      <span class="step-title">🔧 ${stepData.action}(${JSON.stringify(stepData.action_input || {})})</span>
+      <span class="step-toggle open"></span>
+    `;
+
+        const body = document.createElement('div');
+        body.className = 'step-body';
+
+        // Thought 块
+        if (isManual && stepData.thought) {
+            body.innerHTML += `
+        <div class="thought-block">
+          <div class="block-label">Thought</div>
+          <div class="block-content">${esc(stepData.thought)}</div>
+        </div>`;
+        } else if (!isManual) {
+            body.innerHTML += `
+        <div class="thought-block">
+          <div class="block-label">Thought</div>
+          <div class="fc-thought-note">Function Calling 版：模型内部推理，不可见</div>
+        </div>`;
+        }
+
+        // Action 块
+        body.innerHTML += `
+      <div class="action-block">
+        <div class="block-label">Action</div>
+        <span class="tool-pill">${esc(stepData.action)}</span>
+        <div class="args-code">${esc(JSON.stringify(stepData.action_input || {}, null, 2))}</div>
+      </div>`;
+
+        // Observation 块
+        body.innerHTML += `
+      <div class="obs-block">
+        <div class="block-label">Observation</div>
+        <div class="block-content">${esc((stepData.observation || '').replace(/\n{3,}/g, '\n\n').trim())}</div>
+      </div>`;
+
+        // 折叠逻辑
+        header.addEventListener('click', () => {
+            body.classList.toggle('collapsed');
+            header.querySelector('.step-toggle').classList.toggle('open');
+        });
+
+        card.appendChild(header);
+        card.appendChild(body);
+        return card;
+    }
+
+    function createFinalCard(stepData, totalSteps, elapsedS) {
+        const card = document.createElement('div');
+        card.className = 'final-card';
+        card.innerHTML = `
+      <h3>✅ Final Answer</h3>
+      <div class="answer-text">${esc(stepData.answer)}</div>
+      <div class="meta-row">
+        <span>共 ${totalSteps} 步</span>
+        <span>耗时 ~${elapsedS}s</span>
+        <span>实现：${currentMode === 'manual' ? '手写Prompt解析' : 'Function Calling'}</span>
+      </div>`;
+        return card;
+    }
+
+    function createErrorCard(msg) {
+        const card = document.createElement('div');
+        card.className = 'final-card';
+        card.style.borderColor = '#7f1d1d';
+        card.innerHTML = `<h3 style="color:#f87171">⚠️ ${esc(msg)}</h3>`;
+        return card;
+    }
+
+    function esc(s) {
+        return String(s)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // ── 主发送逻辑 ────────────────────────────────────────────────────────────
+    async function sendQuery() {
+        if (isRunning) return;
+        const question = document.getElementById('question').value.trim();
+        if (!question) return;
+
+        // 清空上次结果
+        document.getElementById('stepsContainer').innerHTML = '';
+        setSendEnabled(false);
+        setStatus('正在连接...', true);
+
+        const endpoint = `/query/${currentMode}`;
+        const startTime = Date.now();
+        let actionStepCount = 0;
+
+        try {
+            const resp = await fetch(endpoint, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({question, max_steps: 10}),
+            });
+
+            if (!resp.ok) {
+                throw new Error(`HTTP ${resp.status}`);
+            }
+
+            const reader = resp.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+
+            while (true) {
+                const {done, value} = await reader.read();
+                if (done) break;
+
+                buffer += decoder.decode(value, {stream: true});
+                const lines = buffer.split('\n');
+                buffer = lines.pop();   // 保留未完成的行
+
+                for (const line of lines) {
+                    if (!line.startsWith('data: ')) continue;
+                    let data;
+                    try {
+                        data = JSON.parse(line.slice(6));
+                    } catch {
+                        continue;
+                    }
+
+                    if (data.type === 'start') {
+                        setStatus(`🧠 思考中... (${currentMode === 'manual' ? '手写Prompt解析' : 'Function Calling'})`, true);
+
+                    } else if (data.type === 'action') {
+                        actionStepCount++;
+                        setStatus(`Step ${data.step}：正在调用 ${data.action}...`, true);
+                        const card = createStepCard(data);
+                        document.getElementById('stepsContainer').appendChild(card);
+                        card.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+
+                    } else if (data.type === 'final') {
+                        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+                        const card = createFinalCard(data, actionStepCount, elapsed);
+                        document.getElementById('stepsContainer').appendChild(card);
+                        card.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+                        setStatus('完成', false);
+
+                    } else if (data.type === 'max_steps' || data.type === 'error') {
+                        const card = createErrorCard(data.answer || data.observation || '未知错误');
+                        document.getElementById('stepsContainer').appendChild(card);
+                        setStatus('', false);
+
+                    } else if (data.type === 'done') {
+                        setStatus('', false);
+                    }
+                }
+            }
+        } catch (err) {
+            document.getElementById('stepsContainer').appendChild(createErrorCard(`请求失败: ${err.message}`));
+            setStatus('', false);
+        } finally {
+            setSendEnabled(true);
+        }
+    }
+
+    // 回车发送（Shift+Enter 换行）
+    document.getElementById('question').addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendQuery();
+        }
+    });
+</script>
+</body>
+</html>

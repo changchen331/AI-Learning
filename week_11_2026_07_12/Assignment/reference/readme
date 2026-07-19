@@ -1,0 +1,112 @@
+# 作业：把天气工具拆成两个 + agent loop
+
+本目录是 `function_call_mcp_cli` 的作业答案，**不修改任何原始代码**，所有内容都在
+`homework_split_weather/` 一个文件夹里完成。
+
+## 作业要求与本实现
+
+原始 `src/weather_backend.py` 的 `get_weather(city)` 内部串了两次 HTTP 请求：
+
+1. **Geocoding**：城市名 → 经纬度
+2. **Forecast**：经纬度 → 天气
+
+作业要把它拆成两个对模型暴露的独立工具，并让模型既能链式调用、也能单工具独立答：
+
+| 要求 | 实现 |
+| --- | --- |
+| 把两个接口拆成两个工具 | `geocode(city)`（城市→经纬度）+ `get_weather_by_coords(lat, lon)`（经纬度→天气） |
+| 循环链式调用（agent loop） | `run_agent.py` 的 `run()` 用 `while` 循环，模型可先 `geocode` 拿经纬度再 `get_weather_by_coords` 查天气 |
+| 单工具独立答"某地经纬度" | 问"北京的经纬度"→模型只调 `geocode` 即可 |
+| 单工具独立答"给经纬度直接查天气" | 问"经度116.4 纬度39.9 的天气"→模型只调 `get_weather_by_coords` |
+| 模型参考项目里的 deepseek 接口调用 | 复用 `mode_function_call/run_function_call.py` 的 `PROVIDERS`/`build_client` 写法（OpenAI 兼容协议，`openai` SDK，默认 `deepseek-chat`） |
+
+三种形态共用**同一个 agent loop**，差异完全由模型自己决定该调几次、调哪个——这就是 agent loop 的核心。
+
+## 文件说明
+
+```
+homework_split_weather/
+├── weather_tools.py   # 两个拆分后的工具（业务逻辑层，纯 httpx，与 LLM 无关）
+├── run_agent.py       # 工具 schema + agent loop + DeepSeek 调用入口
+└── README.md          # 本文件
+```
+
+- `weather_tools.py`：`geocode` 复用了原 backend 的"同名小村庄消歧"策略（裸"宁德"会命中
+  西藏那曲的一个村，所以低级行政点且没带"市/县/区"后缀时用 `city+"市"` 重查）。文末带一段
+  `__main__` 自测，手动演示一次"geocode → 拿经纬度 → get_weather_by_coords"的链式调用。
+- `run_agent.py`：
+  - `TOOLS_SCHEMA`：两个工具的 JSON Schema，`description` 写清楚"什么时候单用、什么时候链式"。
+  - `TOOL_DISPATCH`：工具名 → 后端函数 的派发表。
+  - `run()`：**真正的 agent loop**——`for step in range(1, MAX_STEPS+1)` 循环，每轮带上历史
+    `messages` 问模型；模型输出 `tool_calls` 就执行并回填，模型不再调工具就退出返回最终回答。
+  - 与原 `run_function_call.py` 的关键差别：原版是"一次 tool_call + 一次回填 + 最终回答"的
+    **单轮**；本作业是 **while 循环**，模型需要链式时能连续调多轮（`geocode` → `get_weather_by_coords`）。
+
+## 安装依赖
+
+```bash
+pip install openai httpx
+```
+
+> Open-Meteo 免费、无需 key；LLM 用 DeepSeek（OpenAI 兼容协议）。
+
+## 配置环境变量
+
+```bash
+# Windows (PowerShell)
+$env:DEEPSEEK_API_KEY="sk-xxx"
+# Windows (cmd)
+set DEEPSEEK_API_KEY=sk-xxx
+# Linux / macOS
+export DEEPSEEK_API_KEY=sk-xxx
+```
+
+也可切到 DashScope 的 `qwen-plus`（用 `DASHSCOPE_API_KEY`）：
+
+```bash
+$env:DASHSCOPE_API_KEY="sk-xxx"   # Windows PowerShell
+python homework_split_weather/run_agent.py --provider dashscope -q "北京的经纬度"
+```
+
+## 运行
+
+在 `function_call_mcp_cli/` 目录下执行：
+
+```bash
+# 1. 单个问题
+python homework_split_weather/run_agent.py -q "宁德今天的天气怎么样？"
+
+# 2. 内置示例（演示 链式 / 单工具 三种形态）
+python homework_split_weather/run_agent.py --demo
+
+# 3. 切换 LLM provider
+python homework_split_weather/run_agent.py --provider dashscope --demo
+```
+
+`--demo` 依次跑这三个问题，覆盖三种调用形态：
+
+| 问题 | 预期工具调用 | 形态 |
+| --- | --- | --- |
+| 宁德今天的天气怎么样？ | `geocode(宁德)` → `get_weather_by_coords(26.66, 119.52)` | 链式（loop 多轮） |
+| 北京的经纬度是多少？ | `geocode(北京)` | 单工具独立答 |
+| 经度116.4、纬度39.9 这个地方天气如何？ | `get_weather_by_coords(39.9, 116.4)` | 单工具独立答 |
+
+每轮会打印 `[tool step N] geocode(...)` / `↩ 结果预览`，最后给出最终回答和
+"工具调用 N 次，循环 M 轮，耗时 Xs" 的统计。
+
+## 仅测试后端工具（不调 LLM）
+
+```bash
+python homework_split_weather/weather_tools.py
+```
+
+会跑一遍自测：先 `geocode("宁德")` 打印经纬度，再用抠出来的经纬度调
+`get_weather_by_coords` 查天气，验证两个工具和链路本身没问题。
+
+## 与原始代码的关系
+
+- 不修改 `src/`、`mode_function_call/`、`mode_mcp/`、`mode_cli/` 任何原始文件。
+- `weather_tools.py` 从 `src/weather_backend.py` 提取出两个接口的逻辑，重写为两个独立函数
+  （消歧策略保留，输出格式按"工具结果"重排，方便模型消费与链式传递经纬度）。
+- `run_agent.py` 的 LLM 调用风格（`PROVIDERS` / `build_client` / DeepSeek OpenAI 兼容）
+  参考 `mode_function_call/run_function_call.py`，并把它的单轮回填升级为 while 循环 agent loop。
