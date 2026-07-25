@@ -1,0 +1,12 @@
+{
+  "word": "thrill",
+  "phonetic": "/θrɪl/",
+  "pos": "n. / v.",
+  "definition": "n. 兴奋，激动，震颤感；v. 使兴奋，使激动，使胆战心惊",
+  "examples": [
+    {"en": "She felt a sudden thrill of excitement as the roller coaster plunged downward.", "zh": "过山车俯冲而下时，她突然感到一阵兴奋的震颤。"},
+    {"en": "The crowd was thrilled by the acrobat's breathtaking performance.", "zh": "杂技演员惊心动魄的表演让观众兴奋不已。"},
+    {"en": "Winning the championship thrilled the young athlete beyond words.", "zh": "赢得冠军让这位年轻运动员激动得无法用言语表达。"}
+  ],
+  "synonyms": ["excitement", "euphoria", "exhilaration", "excite", "electrify", "stimulate"]
+}

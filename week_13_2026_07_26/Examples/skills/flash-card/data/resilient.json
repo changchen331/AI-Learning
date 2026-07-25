@@ -1,0 +1,21 @@
+{
+  "word": "resilient",
+  "phonetic": "/rɪˈzɪliənt/",
+  "pos": "adj.",
+  "definition": "能迅速从困难、挫折中恢复过来的；有韧性的，适应力强的",
+  "examples": [
+    {
+      "en": "She is a resilient child who bounces back quickly from setbacks.",
+      "zh": "她是个有韧性的孩子，遇到挫折能很快恢复过来。"
+    },
+    {
+      "en": "The economy proved remarkably resilient during the crisis.",
+      "zh": "在危机期间，经济表现出了惊人的韧性。"
+    },
+    {
+      "en": "A resilient mindset helps you cope with life's challenges.",
+      "zh": "一种有韧性的心态能帮你应对生活中的挑战。"
+    }
+  ],
+  "synonyms": ["tough", "flexible", "strong", "hardy", "buoyant", "springy"]
+}

@@ -1,0 +1,21 @@
+{
+  "word": "crazy",
+  "phonetic": "/ˈkreɪzi/",
+  "pos": "adj.",
+  "definition": "疯狂的；荒唐的；着迷的；极热衷的",
+  "examples": [
+    {
+      "en": "You must be crazy to go out in this storm!",
+      "zh": "你在这场暴风雨中出门一定是疯了！"
+    },
+    {
+      "en": "She is crazy about jazz music and collects old records.",
+      "zh": "她极其热衷于爵士乐，收藏了很多老唱片。"
+    },
+    {
+      "en": "It sounds crazy, but the plan actually worked.",
+      "zh": "听起来很荒唐，但这个计划居然奏效了。"
+    }
+  ],
+  "synonyms": ["mad", "insane", "wild", "absurd", "nuts", "eccentric"]
+}

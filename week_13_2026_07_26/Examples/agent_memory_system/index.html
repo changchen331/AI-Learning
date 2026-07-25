@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent 记忆系统 — 教学演示</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #22263a;
+            --border: #2d3248;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --accent: #6366f1;
+            --green: #22c55e;
+            --yellow: #eab308;
+            --cyan: #06b6d4;
+            --purple: #a855f7;
+            --red: #ef4444;
+            --layer-soul: #6366f1;
+            --layer-user: #06b6d4;
+            --layer-agents: #f59e0b;
+            --layer-memory: #22c55e;
+            --layer-faiss: #a855f7;
+            --layer2: #f97316;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── 顶栏 ── */
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
+        header h1 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 99px;
+            background: var(--surface2);
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+
+        .badge.online {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        header .spacer {
+            flex: 1;
+        }
+
+        header button {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all .15s;
+        }
+
+        header button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── 主体 ── */
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 0;
+            overflow: hidden;
+        }
+
+        /* ── 左侧聊天 ── */
+        .chat-panel {
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border);
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .msg {
+            display: flex;
+            gap: 10px;
+            max-width: 85%;
+        }
+
+        .msg.user {
+            flex-direction: row-reverse;
+            align-self: flex-end;
+        }
+
+        .msg .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .msg.user .avatar {
+            background: var(--accent);
+        }
+
+        .msg.assistant .avatar {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+        }
+
+        .msg .bubble {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .msg.user .bubble {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .msg.assistant .bubble {
+        }
+
+        .msg .bubble.streaming::after {
+            content: '▌';
+            animation: blink .7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1
+            }
+            50% {
+                opacity: 0
+            }
+        }
+
+        .chat-input-area {
+            padding: 16px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input-row textarea {
+            flex: 1;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            line-height: 1.5;
+            max-height: 120px;
+        }
+
+        .chat-input-row textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .send-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            align-self: flex-end;
+            transition: opacity .15s;
+        }
+
+        .send-btn:disabled {
+            opacity: .5;
+            cursor: default;
+        }
+
+        .input-hints {
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .example-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .example-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .example-btn:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        /* ── 右侧记忆面板 ── */
+        .memory-panel {
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: var(--bg);
+            min-height: 0;
+        }
+
+        .memory-panel::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .memory-panel::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        /* flex-shrink:0 是关键：让每个卡片保持自然高度，由面板整体滚动，不压缩卡片内容 */
+        .panel-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .panel-section .section-header {
+            padding: 9px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .panel-section.collapsed .section-header {
+            border-bottom: none;
+            border-radius: 10px;
+        }
+
+        .panel-section .section-header:hover {
+            background: var(--surface2);
+        }
+
+        .panel-section .section-header .chevron {
+            margin-left: auto;
+            transition: transform .2s;
+            font-size: 10px;
+        }
+
+        .panel-section.collapsed .section-header .chevron {
+            transform: rotate(-90deg);
+        }
+
+        .panel-section .section-body {
+            padding: 10px 14px;
+        }
+
+        .panel-section.collapsed .section-body {
+            display: none;
+        }
+
+        /* 四层指示灯 */
+        .layers-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .layer-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            transition: all .2s;
+        }
+
+        .layer-row.active {
+            border-color: var(--border);
+            background: var(--surface2);
+        }
+
+        .layer-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            flex-shrink: 0;
+            transition: all .3s;
+        }
+
+        .layer-dot.lit {
+            box-shadow: 0 0 6px currentColor;
+        }
+
+        .layer-row .layer-label {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .layer-row .layer-chars {
+            margin-left: auto;
+            font-size: 11px;
+            color: var(--muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* 语义检索结果 */
+        .semantic-result {
+            padding: 7px 10px;
+            border-radius: 6px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+
+        .semantic-result .sr-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 3px;
+        }
+
+        .sr-cat {
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 99px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .sr-score {
+            margin-left: auto;
+            font-size: 11px;
+            color: var(--green);
+        }
+
+        .semantic-result .sr-text {
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        /* Flush 面板 */
+        .flush-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: opacity .15s;
+        }
+
+        .flush-btn:disabled {
+            opacity: .5;
+            cursor: default;
+        }
+
+        .flush-progress {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .flush-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 12px;
+            opacity: .4;
+            transition: opacity .3s;
+        }
+
+        .flush-step.active {
+            opacity: 1;
+        }
+
+        .flush-step.done {
+            opacity: .7;
+        }
+
+        .flush-step .fstep-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .flush-step.done .fstep-icon {
+            background: var(--green);
+            border-color: var(--green);
+            color: #0f1117;
+        }
+
+        .flush-step.active .fstep-icon {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            animation: pulse .8s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1
+            }
+            50% {
+                opacity: .6
+            }
+        }
+
+        .flush-step .fstep-body .fstep-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .flush-step .fstep-body .fstep-detail {
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        /* 记忆查看器 */
+        .memory-viewer {
+            font-size: 11px;
+            color: var(--muted);
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 260px;
+            overflow-y: auto;
+            line-height: 1.5;
+            background: var(--surface2);
+            border-radius: 6px;
+            padding: 8px;
+        }
+
+        .memory-viewer::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .memory-viewer::-webkit-scrollbar-thumb {
+            background: var(--border);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: var(--muted);
+        }
+
+        .stat-value {
+            color: var(--text);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* 加载提示 */
+        .empty-hint {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 16px 0;
+        }
+
+        /* Heartbeat 消息气泡（定时任务主动推送）— 紧凑通知样式 */
+        .msg.heartbeat {
+            align-self: flex-start;
+            max-width: 72%;
+        }
+
+        .msg.heartbeat .avatar {
+            width: 22px;
+            height: 22px;
+            font-size: 11px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .msg.heartbeat .bubble {
+            background: var(--surface2);
+            border-left: 2px solid #a855f7;
+            border-top: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .hb-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 10px;
+            color: #a855f7;
+            margin-right: 6px;
+        }
+
+        .hb-time {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        /* 响应式 */
+        @media (max-width: 700px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+
+            .memory-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="width:28px;height:28px;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:50%;"></div>
+    <h1>Agent 记忆系统</h1>
+    <span class="badge online" id="statusBadge">● 运行中</span>
+    <span class="badge" id="modelBadge">—</span>
+    <span class="badge" id="entryCountBadge">记忆 0 条</span>
+    <div class="spacer"></div>
+    <button onclick="newSession()">新会话</button>
+    <button onclick="factoryReset()">出厂重置</button>
+</header>
+
+<main>
+    <!-- 左侧聊天 -->
+    <div class="chat-panel">
+        <div class="chat-messages" id="chatMessages">
+            <div style="text-align:center;padding:40px 0;">
+                <div style="font-size:36px;margin-bottom:12px;">🧠</div>
+                <div style="font-size:15px;font-weight:600;margin-bottom:6px;">Muse — 有记忆的 AI 助手</div>
+                <div style="font-size:13px;color:var(--muted);max-width:320px;margin:0 auto;line-height:1.6;">
+                    每次对话结束后触发 Memory Flush，下次对话时助手已记住你。<br>
+                    右侧面板实时展示四层记忆的工作过程。
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="chat-input-row">
+                <textarea id="inputBox" placeholder="输入消息，Enter 发送，Shift+Enter 换行" rows="2"
+                          onkeydown="handleKey(event)"></textarea>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">发送</button>
+            </div>
+            <div class="example-btns">
+                <span style="font-size:11px;color:var(--muted);align-self:center;">示例：</span>
+                <button class="example-btn" onclick="fillExample(this)">我叫小明，是一名前端工程师</button>
+                <button class="example-btn" onclick="fillExample(this)">我每天早上喝咖啡，不喝茶</button>
+                <button class="example-btn" onclick="fillExample(this)">我住在上海，最近在学 AI</button>
+                <button class="example-btn" onclick="fillExample(this)">请问明天会下雨吗？</button>
+                <button class="example-btn" onclick="fillExample(this)">你还记得我叫什么名字吗？</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右侧记忆面板 -->
+    <div class="memory-panel">
+
+        <!-- 四层记忆指示灯 -->
+        <div class="panel-section" id="layersSection">
+            <div class="section-header" onclick="toggleSection('layersSection')">
+                <span>⚡</span> 四层记忆加载
+                <span class="chevron">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="layers-grid" id="layersGrid">
+                    <div class="layer-row" id="layer-soul">
+                        <div class="layer-dot" style="background:var(--layer-soul);color:var(--layer-soul)"></div>
+                        <span class="layer-label">Layer 3a · SOUL.md 人格</span>
+                        <span class="layer-chars" id="chars-soul">—</span>
+                    </div>
+                    <div class="layer-row" id="layer-user_profile">
+                        <div class="layer-dot" style="background:var(--layer-user);color:var(--layer-user)"></div>
+                        <span class="layer-label">Layer 3b · USER.md 用户画像</span>
+                        <span class="layer-chars" id="chars-user_profile">—</span>
+                    </div>
+                    <div class="layer-row" id="layer-agents_manual">
+                        <div class="layer-dot" style="background:var(--layer-agents);color:var(--layer-agents)"></div>
+                        <span class="layer-label">Layer 3c · AGENTS.md 规范</span>
+                        <span class="layer-chars" id="chars-agents_manual">—</span>
+                    </div>
+                    <div class="layer-row" id="layer-long_term_memory">
+                        <div class="layer-dot" style="background:var(--layer-memory);color:var(--layer-memory)"></div>
+                        <span class="layer-label">Layer 3d · MEMORY.md 长期记忆</span>
+                        <span class="layer-chars" id="chars-long_term_memory">—</span>
+                    </div>
+                    <div class="layer-row" id="layer-faiss">
+                        <div class="layer-dot" style="background:var(--layer-faiss);color:var(--layer-faiss)"></div>
+                        <span class="layer-label">Layer 4 · FAISS 语义检索</span>
+                        <span class="layer-chars" id="chars-faiss">—</span>
+                    </div>
+                    <div class="layer-row" id="layer-layer2">
+                        <div class="layer-dot" style="background:var(--layer2);color:var(--layer2)"></div>
+                        <span class="layer-label">Layer 2 · SQLite 会话历史</span>
+                        <span class="layer-chars" id="chars-layer2">—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 语义检索结果 -->
+        <div class="panel-section" id="semanticSection">
+            <div class="section-header" onclick="toggleSection('semanticSection')">
+                <span>🔍</span> 语义检索结果
+                <span class="chevron">▼</span>
+            </div>
+            <div class="section-body" id="semanticBody">
+                <div class="empty-hint">发起对话后显示</div>
+            </div>
+        </div>
+
+        <!-- Memory Flush -->
+        <div class="panel-section" id="flushSection">
+            <div class="section-header" onclick="toggleSection('flushSection')">
+                <span>💾</span> Memory Flush
+                <span class="chevron">▼</span>
+            </div>
+            <div class="section-body">
+                <button class="flush-btn" id="flushBtn" onclick="triggerFlush()">触发 Memory Flush</button>
+                <div class="flush-progress" id="flushProgress">
+                    <div class="flush-step" id="fstep-start">
+                        <div class="fstep-icon">1</div>
+                        <div class="fstep-body">
+                            <div class="fstep-title">读取会话消息</div>
+                            <div class="fstep-detail" id="fstep-start-detail">等待触发...</div>
+                        </div>
+                    </div>
+                    <div class="flush-step" id="fstep-pass1">
+                        <div class="fstep-icon">2</div>
+                        <div class="fstep-body">
+                            <div class="fstep-title">Pass 1 — 更新 USER.md</div>
+                            <div class="fstep-detail" id="fstep-pass1-detail">提取用户偏好与基本信息</div>
+                        </div>
+                    </div>
+                    <div class="flush-step" id="fstep-pass2">
+                        <div class="fstep-icon">3</div>
+                        <div class="fstep-body">
+                            <div class="fstep-title">Pass 2 — 追加 MEMORY.md</div>
+                            <div class="fstep-detail" id="fstep-pass2-detail">提取值得长期记忆的事件/偏好</div>
+                        </div>
+                    </div>
+                    <div class="flush-step" id="fstep-pass3">
+                        <div class="fstep-icon">4</div>
+                        <div class="fstep-body">
+                            <div class="fstep-title">Pass 3 — 向量化写入 FAISS</div>
+                            <div class="fstep-detail" id="fstep-pass3-detail">新条目 Embedding → 更新索引</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 记忆统计 -->
+        <div class="panel-section" id="statsSection">
+            <div class="section-header" onclick="toggleSection('statsSection')">
+                <span>📊</span> 记忆统计
+                <span class="chevron">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="stat-row"><span class="stat-label">MEMORY.md 条目</span><span class="stat-value"
+                                                                                          id="statEntries">—</span>
+                </div>
+                <div class="stat-row"><span class="stat-label">FAISS 向量条目</span><span class="stat-value"
+                                                                                          id="statFaiss">—</span></div>
+                <div class="stat-row"><span class="stat-label">历史会话数</span><span class="stat-value"
+                                                                                      id="statSessions">—</span></div>
+                <div class="stat-row"><span class="stat-label">当前会话消息</span><span class="stat-value"
+                                                                                        id="statMsgs">—</span></div>
+            </div>
+        </div>
+
+        <!-- Markdown 文件查看器组 -->
+        <div class="panel-section collapsed" id="userMdSection">
+            <div class="section-header" onclick="toggleSection('userMdSection')">
+                <span>👤</span> USER.md <span style="font-size:10px;opacity:.6;margin-left:4px;">用户画像</span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="memory-viewer" id="userMdViewer">（未加载）</div>
+            </div>
+        </div>
+
+        <div class="panel-section collapsed" id="memoryMdSection">
+            <div class="section-header" onclick="toggleSection('memoryMdSection')">
+                <span>🗃️</span> MEMORY.md <span style="font-size:10px;opacity:.6;margin-left:4px;">跨会话记忆</span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="memory-viewer" id="memoryMdViewer">（未加载）</div>
+            </div>
+        </div>
+
+        <div class="panel-section collapsed" id="soulMdSection">
+            <div class="section-header" onclick="toggleSection('soulMdSection')">
+                <span>🧬</span> SOUL.md <span style="font-size:10px;opacity:.6;margin-left:4px;">人格定义</span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="memory-viewer" id="soulMdViewer">（未加载）</div>
+            </div>
+        </div>
+
+        <div class="panel-section collapsed" id="agentsMdSection">
+            <div class="section-header" onclick="toggleSection('agentsMdSection')">
+                <span>📋</span> AGENTS.md <span style="font-size:10px;opacity:.6;margin-left:4px;">操作规范</span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="memory-viewer" id="agentsMdViewer">（未加载）</div>
+            </div>
+        </div>
+
+        <div class="panel-section collapsed" id="heartbeatMdSection">
+            <div class="section-header" onclick="toggleSection('heartbeatMdSection')">
+                <span>💓</span> HEARTBEAT.md <span style="font-size:10px;opacity:.6;margin-left:4px;">自动化任务</span>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="memory-viewer" id="heartbeatMdViewer">（未加载）</div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    let currentSessionId = null;
+    let messageCount = 0;
+
+    // ── 工具函数 ──────────────────────────────────────────────────────────────────
+
+    function toggleSection(id) {
+        document.getElementById(id).classList.toggle('collapsed');
+    }
+
+    function fillExample(btn) {
+        document.getElementById('inputBox').value = btn.textContent;
+        document.getElementById('inputBox').focus();
+    }
+
+    function handleKey(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    }
+
+    function scrollToBottom() {
+        const el = document.getElementById('chatMessages');
+        el.scrollTop = el.scrollHeight;
+    }
+
+    function setLoading(on) {
+        document.getElementById('sendBtn').disabled = on;
+        document.getElementById('flushBtn').disabled = on;
+        document.getElementById('inputBox').disabled = on;
+    }
+
+    // ── 添加消息气泡 ──────────────────────────────────────────────────────────────
+
+    function addMessage(role, text, streaming = false) {
+        const container = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = `msg ${role}`;
+        const avatarChar = role === 'user' ? '你' : '🧠';
+        div.innerHTML = `
+    <div class="avatar">${avatarChar}</div>
+    <div class="bubble${streaming ? ' streaming' : ''}" id="bubble-${Date.now()}">${escHtml(text)}</div>
+  `;
+        container.appendChild(div);
+        scrollToBottom();
+        return div.querySelector('.bubble');
+    }
+
+    function escHtml(s) {
+        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // ── 四层指示灯更新 ────────────────────────────────────────────────────────────
+
+    function lightLayer(name, chars) {
+        const row = document.getElementById(`layer-${name}`);
+        const dot = row?.querySelector('.layer-dot');
+        const charsEl = document.getElementById(`chars-${name}`);
+        if (!row) return;
+        row.classList.add('active');
+        if (dot) dot.classList.add('lit');
+        if (charsEl && chars != null) charsEl.textContent = chars > 0 ? `${chars} 字符` : '';
+    }
+
+    function resetLayers() {
+        ['soul', 'user_profile', 'agents_manual', 'long_term_memory', 'faiss', 'layer2'].forEach(n => {
+            const row = document.getElementById(`layer-${n}`);
+            const dot = row?.querySelector('.layer-dot');
+            if (row) row.classList.remove('active');
+            if (dot) dot.classList.remove('lit');
+            const c = document.getElementById(`chars-${n}`);
+            if (c) c.textContent = '—';
+        });
+    }
+
+    // ── 语义检索结果 ──────────────────────────────────────────────────────────────
+
+    function showSemanticResults(results) {
+        const body = document.getElementById('semanticBody');
+        if (!results || results.length === 0) {
+            body.innerHTML = '<div class="empty-hint">本次查询无相关历史记忆</div>';
+            lightLayer('faiss', 0);
+            return;
+        }
+        lightLayer('faiss', results.length);
+        const el = document.getElementById('chars-faiss');
+        if (el) el.textContent = `${results.length} 条命中`;
+
+        body.innerHTML = results.map(r => `
+    <div class="semantic-result">
+      <div class="sr-header">
+        <span class="sr-cat">${r.category || 'fact'}</span>
+        <span style="font-size:12px;color:var(--text)">${escHtml(r.title || '')}</span>
+        <span class="sr-score">${Math.round(r.score * 100)}%</span>
+      </div>
+      <div class="sr-text">${escHtml(r.content || '')}</div>
+    </div>
+  `).join('');
+    }
+
+    // ── Flush 进度更新 ────────────────────────────────────────────────────────────
+
+    function flushStepActive(stepId) {
+        document.getElementById(`fstep-${stepId}`)?.classList.add('active');
+    }
+
+    function flushStepDone(stepId, detail = '') {
+        const el = document.getElementById(`fstep-${stepId}`);
+        if (!el) return;
+        el.classList.remove('active');
+        el.classList.add('done');
+        if (detail) el.querySelector('.fstep-detail').textContent = detail;
+    }
+
+    // ── 发送消息 ──────────────────────────────────────────────────────────────────
+
+    async function sendMessage() {
+        const input = document.getElementById('inputBox');
+        const text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+
+        // ── 斜杠命令拦截 ──────────────────────────────────────────────────────────
+        if (text === '/flush') {
+            await triggerFlush();
+            return;
+        }
+        if (text === '/new') {
+            await newSession();
+            return;
+        }
+        if (text === '/memory') {
+            // 展开 USER.md 和 MEMORY.md 查看器
+            document.getElementById('userMdSection').classList.remove('collapsed');
+            document.getElementById('memoryMdSection').classList.remove('collapsed');
+            document.getElementById('userMdSection').scrollIntoView({behavior: 'smooth'});
+            await loadMemories();
+            return;
+        }
+        if (text === '/layers') {
+            document.getElementById('layersSection').classList.remove('collapsed');
+            document.getElementById('layersSection').scrollIntoView({behavior: 'smooth'});
+            return;
+        }
+        if (text === '/reset') {
+            await factoryReset();
+            return;
+        }
+        if (text === '/help') {
+            addMessage('assistant',
+                '可用命令：\n/flush  — 触发 Memory Flush\n/memory — 展开记忆文件查看器\n/layers — 展开四层记忆面板\n/new    — 开始新会话\n/reset  — 回到出厂初始态（清空所有记忆）'
+            );
+            return;
+        }
+        // ── 普通消息 ──────────────────────────────────────────────────────────────
+
+        setLoading(true);
+        resetLayers();
+
+        addMessage('user', text);
+        const assistantBubble = addMessage('assistant', '', true);
+
+        try {
+            const resp = await fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: text, session_id: currentSessionId}),
+            });
+
+            const reader = resp.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            let responseText = '';
+
+            while (true) {
+                const {done, value} = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, {stream: true});
+                const lines = buffer.split('\n');
+                buffer = lines.pop();
+
+                for (const line of lines) {
+                    if (!line.startsWith('data: ')) continue;
+                    const data = JSON.parse(line.slice(6));
+
+                    if (data.type === 'memory_load') {
+                        data.layers.forEach(l => lightLayer(l.name, l.chars));
+                    } else if (data.type === 'semantic_search') {
+                        showSemanticResults(data.results);
+                    } else if (data.type === 'context_assembly') {
+                        lightLayer('layer2', data.history_turns);
+                        document.getElementById('chars-layer2').textContent = `${data.history_turns} 轮历史`;
+                    } else if (data.type === 'token') {
+                        responseText += data.text;
+                        assistantBubble.classList.add('streaming');
+                        assistantBubble.textContent = responseText;
+                        scrollToBottom();
+                    } else if (data.type === 'done') {
+                        assistantBubble.classList.remove('streaming');
+                        messageCount = data.message_count;
+                        document.getElementById('statMsgs').textContent = messageCount;
+                        currentSessionId = data.session_id;
+                    }
+                }
+            }
+        } catch (e) {
+            assistantBubble.classList.remove('streaming');
+            assistantBubble.textContent = '连接失败：' + e.message;
+        }
+        setLoading(false);
+    }
+
+    // ── 触发 Flush ────────────────────────────────────────────────────────────────
+
+    async function triggerFlush() {
+        setLoading(true);
+        // 展开 flush 面板
+        document.getElementById('flushSection').classList.remove('collapsed');
+
+        // 重置进度
+        ['start', 'pass1', 'pass2', 'pass3'].forEach(s => {
+            const el = document.getElementById(`fstep-${s}`);
+            if (el) {
+                el.classList.remove('active', 'done');
+            }
+        });
+
+        flushStepActive('start');
+
+        try {
+            const resp = await fetch('/flush', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({session_id: currentSessionId}),
+            });
+            const reader = resp.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+
+            while (true) {
+                const {done, value} = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, {stream: true});
+                const lines = buffer.split('\n');
+                buffer = lines.pop();
+
+                for (const line of lines) {
+                    if (!line.startsWith('data: ')) continue;
+                    const data = JSON.parse(line.slice(6));
+
+                    if (data.type === 'flush_start') {
+                        flushStepDone('start', `${data.message_count} 条消息`);
+                        flushStepActive('pass1');
+                    } else if (data.type === 'flush_pass1') {
+                        const detail = data.count > 0
+                            ? data.user_updates.slice(0, 3).join('；') + (data.count > 3 ? '…' : '')
+                            : '（无新信息）';
+                        flushStepDone('pass1', `更新 ${data.count} 项：${detail}`);
+                        flushStepActive('pass2');
+                    } else if (data.type === 'flush_pass2') {
+                        const detail = data.count > 0
+                            ? data.new_entries.map(e => `[${e.category}] ${e.title}`).slice(0, 3).join('；')
+                            : '（无新记忆）';
+                        flushStepDone('pass2', `新增 ${data.count} 条：${detail}`);
+                        flushStepActive('pass3');
+                    } else if (data.type === 'flush_pass3') {
+                        flushStepDone('pass3', `向量化 ${data.vectorized} 条，索引共 ${data.total_in_index} 条`);
+                    } else if (data.type === 'flush_compaction') {
+                        const el = document.getElementById('fstep-pass3');
+                        if (el) {
+                            const extra = document.createElement('div');
+                            extra.className = 'fstep-detail';
+                            extra.style.color = 'var(--yellow)';
+                            extra.textContent = `Compaction：${data.before} → ${data.after} 条`;
+                            el.querySelector('.fstep-body').appendChild(extra);
+                        }
+                    } else if (data.type === 'flush_done') {
+                        if (data.error) {
+                            document.getElementById('fstep-pass1-detail').textContent = data.error;
+                        }
+                        await loadMemories();
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('Flush error:', e);
+        }
+        setLoading(false);
+    }
+
+    // ── 加载记忆状态 ──────────────────────────────────────────────────────────────
+
+    async function loadMemories() {
+        try {
+            const resp = await fetch('/memories');
+            const data = await resp.json();
+            document.getElementById('statEntries').textContent = data.entry_count;
+            document.getElementById('statFaiss').textContent = data.faiss_total;
+            document.getElementById('statSessions').textContent = data.recent_sessions.length;
+            document.getElementById('entryCountBadge').textContent = `记忆 ${data.entry_count} 条`;
+            document.getElementById('userMdViewer').textContent = data.user_md || '（空）';
+            document.getElementById('memoryMdViewer').textContent = data.memory_md || '（空）';
+            document.getElementById('soulMdViewer').textContent = data.soul_md || '（空）';
+            document.getElementById('agentsMdViewer').textContent = data.agents_md || '（空）';
+            document.getElementById('heartbeatMdViewer').textContent = data.heartbeat_md || '（空）';
+        } catch (e) {
+            document.getElementById('statusBadge').textContent = '● 连接失败';
+            document.getElementById('statusBadge').classList.remove('online');
+        }
+    }
+
+    // ── 新会话 ────────────────────────────────────────────────────────────────────
+
+    async function newSession() {
+        if (!confirm('开始新会话？当前会话将被关闭（建议先 Flush 保存记忆）。')) return;
+        try {
+            const resp = await fetch('/session/new', {method: 'POST'});
+            const data = await resp.json();
+            currentSessionId = data.session_id;
+            messageCount = 0;
+            document.getElementById('chatMessages').innerHTML = `
+      <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">
+        新会话 #${currentSessionId} 已开始，记忆从上次 Flush 恢复。
+      </div>`;
+            resetLayers();
+            document.getElementById('statMsgs').textContent = '0';
+            await loadMemories();
+        } catch (e) {
+            alert('创建新会话失败：' + e.message);
+        }
+    }
+
+    // ── 出厂重置（顶栏按钮 + /reset 命令共用）─────────────────────────────────────
+
+    async function factoryReset() {
+        if (!confirm('⚠️ 确认回到出厂初始态？\n将清空所有记忆、对话历史和向量索引，此操作不可撤销。')) return;
+        setLoading(true);
+        try {
+            const resp = await fetch('/reset', {method: 'POST'});
+            const data = await resp.json();
+            document.getElementById('chatMessages').innerHTML = `
+      <div style="text-align:center;padding:30px 0;color:var(--muted);font-size:13px;">
+        <div style="font-size:28px;margin-bottom:8px;">🔄</div>
+        已回到出厂初始态，记忆已清空。新会话 #${data.session_id} 已开始。
+      </div>`;
+            currentSessionId = data.session_id;
+            messageCount = 0;
+            document.getElementById('statMsgs').textContent = '0';
+            resetLayers();
+            await loadMemories();
+        } catch (e) {
+            alert('出厂重置失败：' + e.message + '\n（若服务已重启仍失败，请确认 uvicorn 在运行）');
+        }
+        setLoading(false);
+    }
+
+    // ── /stream 持久连接：接收 heartbeat 广播 ────────────────────────────────────
+
+    function connectStream() {
+        const es = new EventSource('/stream');
+
+        es.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+
+            if (data.type === 'heartbeat_message') {
+                addHeartbeatMessage(data);
+                loadMemories();
+            } else if (data.type === 'heartbeat_task_added') {
+                addHeartbeatMessage({
+                    task_name: 'scheduler',
+                    description: '新增定时任务',
+                    message: data.message,
+                    fired_at: new Date().toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'}),
+                });
+            } else if (data.type === 'heartbeat_task_cancelled') {
+                addHeartbeatMessage({
+                    task_name: data.task_name,
+                    description: '停止定时任务',
+                    message: data.message,
+                    fired_at: new Date().toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'}),
+                });
+            } else if (data.type === 'heartbeat_connected') {
+                console.log(`[HEARTBEAT] 已连接，当前 ${data.task_count} 个任务`);
+            } else if (data.type === 'heartbeat_reloaded') {
+                console.log('[HEARTBEAT] 任务列表已重新加载');
+            }
+        };
+
+        es.onerror = (e) => {
+            console.warn('[HEARTBEAT] SSE 连接错误，将自动重连', e);
+        };
+        es.onopen = () => {
+            console.log('[HEARTBEAT] SSE 连接已建立');
+        };
+    }
+
+    function addHeartbeatMessage(data) {
+        const container = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = 'msg heartbeat';
+        div.innerHTML = `
+    <div class="avatar">💓</div>
+    <div class="bubble">
+      <div>
+        <span class="hb-badge">⏰ ${escHtml(data.description || data.task_name)}</span>
+        <span class="hb-time">${escHtml(data.fired_at || '')}</span>
+      </div>
+      ${escHtml(data.message)}
+    </div>
+  `;
+        container.appendChild(div);
+        scrollToBottom();
+    }
+
+    // ── 初始化 ────────────────────────────────────────────────────────────────────
+
+    (async function init() {
+        try {
+            const resp = await fetch('/health');
+            const data = await resp.json();
+            currentSessionId = data.session_id;
+            document.getElementById('statusBadge').textContent = '● 运行中';
+            if (data.model) {
+                document.getElementById('modelBadge').textContent = data.model.display;
+            }
+            await loadMemories();
+            connectStream();  // 建立持久 SSE 连接，接收定时任务推送
+        } catch (e) {
+            document.getElementById('statusBadge').textContent = '● 服务未启动';
+            document.getElementById('statusBadge').classList.remove('online');
+        }
+    })();
+</script>
+</body>
+</html>
