@@ -33,9 +33,9 @@ Layer 4 关键词检索：SQLite FTS5 全文索引（BM25）
 依赖：仅 stdlib sqlite3（需编译 FTS5，Python 3.9+ Windows 通常自带）
 """
 
+import logging
 import re
 import sqlite3
-import logging
 from pathlib import Path
 
 logger = logging.getLogger(__name__)

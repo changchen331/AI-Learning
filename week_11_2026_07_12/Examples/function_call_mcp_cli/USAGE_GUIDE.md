@@ -176,7 +176,7 @@ python compare.py --questions "宁德时代2023年营收？" "比亚迪2023年�
 python compare.py --provider dashscope
 ```
 
-对每个问题依次跑 Function Call / MCP / CLI(named) / CLI(bash) 四方式，记录工具调用、耗时、是否拒绝幻觉，输出对比表到
+对每个问题依次跑 Function Call / MCP / CLI (named) / CLI (bash) 四方式，记录工具调用、耗时、是否拒绝幻觉，输出对比表到
 `output/compare_result.md`，同时在控制台打印简表。
 
 **预期**：四方式对同一问题调用工具基本一致；Function Call 进程内直调最快，MCP/CLI 有子进程或 IPC 开销更高；问比亚迪（不在库）时四方式都正确拒绝。
@@ -224,7 +224,7 @@ Server 子进程通过 `env={**os.environ}` 继承父进程环境变量。
 **Q4：DeepSeek 不返回 tool_calls，直接回答了**
 偶发现象。系统 prompt 已强调"必须先调 search_annual_report"。若仍频繁出现，换 `--provider dashscope`（qwen-plus）。
 
-**Q5：CLI(bash) 模型生成的命令被沙箱拦截**
+**Q5：CLI (bash) 模型生成的命令被沙箱拦截**
 看拦截信息：命中黑名单（危险命令）或命令头不在白名单（只允许 python/git/ls/cat/echo/type/dir）。模型应在 prompt 提示的命令集内生成。
 
 **Q6：天气查到奇怪的地方（如"宁德"查到西藏）**

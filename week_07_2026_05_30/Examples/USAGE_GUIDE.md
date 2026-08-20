@@ -107,14 +107,14 @@ python train.py --batch_size 16            # 显存不足时
 
 **关键参数**：
 
-| 参数               | 默认值  | 说明                   |
-|------------------|------|----------------------|
-| `--epochs`       | 3    | 建议 3~5 轮             |
-| `--batch_size`   | 32   | 24GB GPU可用32，8GB建议16 |
-| `--max_length`   | 128  | 文本截断长度               |
-| `--lr`           | 2e-5 | BERT层学习率             |
-| `--head_lr_mult` | 5.0  | 分类头学习率倍数             |
-| `--warmup_ratio` | 0.1  | 预热步比例                |
+| 参数             | 默认值 | 说明                      |
+|------------------|--------|---------------------------|
+| `--epochs`       | 3      | 建议 3~5 轮               |
+| `--batch_size`   | 32     | 24GB GPU可用32，8GB建议16 |
+| `--max_length`   | 128    | 文本截断长度              |
+| `--lr`           | 2e-5   | BERT层学习率              |
+| `--head_lr_mult` | 5.0    | 分类头学习率倍数          |
+| `--warmup_ratio` | 0.1    | 预热步比例                |
 
 **预期输出**（3 epochs）：
 
@@ -208,7 +208,7 @@ python llm_ner.py --model qwen-max    # 使用更强模型
 
 **费用估算**：qwen-plus 100 条 × (约 200 input + 100 output tokens) × 2（zero+few）≈ **¥0.3~0.5**
 
-**评估方式**：span F1 + text.find() 近似定位（与 evaluate_sft.py 完全一致，数字可直接对比）
+**评估方式**：span F1 + text.find () 近似定位（与 evaluate_sft.py 完全一致，数字可直接对比）
 
 **预期输出**：
 
@@ -253,13 +253,13 @@ python train_sft.py \
 
 **两种模式对比**：
 
-| 维度            | LoRA（默认）                      | 全量微调（`--full_ft`）                 |
-|---------------|-------------------------------|-----------------------------------|
-| 可训练参数         | ~1.08M（0.22%）                 | 495M（100%）                        |
-| 默认学习率         | 2e-4（自动）                      | 2e-5（需手动指定）                       |
-| 显存需求          | ~3GB                          | ~8~10GB                           |
+| 维度            | LoRA（默认）                  | 全量微调（`--full_ft`）           |
+|-----------------|-------------------------------|-----------------------------------|
+| 可训练参数      | ~1.08M（0.22%）               | 495M（100%）                      |
+| 默认学习率      | 2e-4（自动）                  | 2e-5（需手动指定）                |
+| 显存需求        | ~3GB                          | ~8~10GB                           |
 | checkpoint 目录 | `outputs/sft_adapter/`        | `outputs/sft_full_ckpt/`          |
-| 日志文件          | `outputs/logs/train_sft.json` | `outputs/logs/train_full_ft.json` |
+| 日志文件        | `outputs/logs/train_sft.json` | `outputs/logs/train_full_ft.json` |
 
 **实测训练日志**（LoRA，全量数据，1 epoch，RTX 4060）：
 
@@ -419,19 +419,18 @@ pip install --upgrade scipy numexpr bottleneck pyarrow
 ```
 
 **Q: CRF 训练比 Linear 慢很多**
-A: 正常现象。CRF 前向算法需要 O(L × K²) 计算（L=序列长，K=标签数）。
-对于 max_length=128、21个标签，每步约慢 20-30%。
+A: 正常现象。CRF 前向算法需要 O (L × K²) 计算（L=序列长，K=标签数）。 对于 max_length=128、21个标签，每步约慢 20-30%。
 
 **Q: seqeval 报错 `ValueError: prefixes are wrong`**
 A: 确认标签字符串格式为 `O` / `B-type` / `I-type`，不能有 `B_type`（下划线分隔）。
 
 **Q: CRF 的 `emissions` 形状错误**
-A: `torchcrf` 要求 `batch_first=True` 时形状为 `(batch, seq_len, num_labels)`，
-mask 必须是 `BoolTensor`（`attention_mask.bool()`）。
+A: `torchcrf` 要求 `batch_first=True` 时形状为 `(batch, seq_len, num_labels)`， mask 必须是 `BoolTensor`（
+`attention_mask.bool()`）。
 
 **Q: 显存不足（OOM）**
-A: 调低 `--batch_size`（16 → 8），或者降低 `--max_length`（128 → 64）。
-cluener2020 的 P95 文本长度约 60 字，max_length=64 损失信息极少。
+A: 调低 `--batch_size`（16 → 8），或者降低 `--max_length`（128 → 64）。 cluener2020 的 P95 文本长度约 60 字，max_length=64
+损失信息极少。
 
 **Q: train_sft.py 报 `ModuleNotFoundError: No module named 'peft'`**
 A: LoRA 微调需要 peft 库，运行：
@@ -446,7 +445,7 @@ pip install peft>=0.14.0
 A: 需要先运行 `train_sft.py` 完成训练。LoRA 默认保存到 `outputs/sft_adapter/`，全量微调保存到 `outputs/sft_full_ckpt/`。
 
 **Q: SFT 的 F1（0.63）低于 BERT+CRF（0.73），差在哪里？**
-A: 两者的评估标准已基本统一（均为 span F1 + text.find() 定位，seqeval 与之差 < 0.01），差距是真实的。根本原因是 NER 任务的特性：
+A: 两者的评估标准已基本统一（均为 span F1 + text.find () 定位，seqeval 与之差 < 0.01），差距是真实的。根本原因是 NER 任务的特性：
 
 1. 序列标注天然适合精确边界定位——BIO 标签逐 token 输出，边界信息直接编码在标签里
 2. CRF 的 Viterbi 解码还保证零非法序列，生成式方法没有这个保证

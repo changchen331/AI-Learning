@@ -1,0 +1,28 @@
+{
+  "word": "crazy",
+  "phonetic": "/ˈkreɪzi/",
+  "pos": "adj.",
+  "definition": "疯狂的，狂热的，不理智的",
+  "examples": [
+    {
+      "en": "You must be crazy to go out in this weather.",
+      "zh": "你一定是疯了才在这种天气出去。"
+    },
+    {
+      "en": "The crowd went crazy when the band came on stage.",
+      "zh": "乐队上台时观众疯狂了。"
+    },
+    {
+      "en": "She has a crazy idea that she can fly.",
+      "zh": "她有个疯狂的想法，认为自己能飞。"
+    }
+  ],
+  "synonyms": [
+    "mad",
+    "insane",
+    "foolish",
+    "wild",
+    "absurd",
+    "bizarre"
+  ]
+}

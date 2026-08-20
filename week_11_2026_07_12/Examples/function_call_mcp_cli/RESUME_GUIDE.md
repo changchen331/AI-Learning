@@ -2,16 +2,16 @@
 
 ## 1. 可量化数据
 
-| 指标    | 数值                                                       | 说明                                      |
-|-------|----------------------------------------------------------|-----------------------------------------|
-| 知识库规模 | 15 份 A 股年报 / 10353 个语义分块                                 | 5 家公司 × 3 年                             |
-| 向量索引  | FAISS IndexFlatIP，10353 × 1024 维                         | L2 归一化后内积 = 余弦相似度                       |
-| 工具数   | 3 个（search_annual_report / list_companies / get_weather） | 三方式共用同一份后端                              |
-| 对比方式数 | 4 种（Function Call / MCP / CLI-named / CLI-bash）          | 同一问题集横向对比                               |
-| 单轮延迟  | Function Call ~5s / MCP ~6s / CLI ~6-13s                 | FC 进程内直调最快；MCP/CLI 有子进程或 IPC 开销，随问题规模上升 |
-| 幻觉控制  | 4/4 方式正确拒绝不在库的公司（比亚迪）                                    | 部分方式 0 工具调用即拒绝                          |
-| 沙箱规则  | 13 条危险模式正则 + 7 个命令头白名单 + 超时 15s                          | CLI(bash) 形态安全兜底                        |
-| 代码复用  | 三方式共享 `src/` 后端，零逻辑重复                                    | 公平对比前提                                  |
+| 指标       | 数值                                                        | 说明                                                           |
+|------------|-------------------------------------------------------------|----------------------------------------------------------------|
+| 知识库规模 | 15 份 A 股年报 / 10353 个语义分块                           | 5 家公司 × 3 年                                                |
+| 向量索引   | FAISS IndexFlatIP，10353 × 1024 维                          | L2 归一化后内积 = 余弦相似度                                   |
+| 工具数     | 3 个（search_annual_report / list_companies / get_weather） | 三方式共用同一份后端                                           |
+| 对比方式数 | 4 种（Function Call / MCP / CLI-named / CLI-bash）          | 同一问题集横向对比                                             |
+| 单轮延迟   | Function Call ~5s / MCP ~6s / CLI ~6-13s                    | FC 进程内直调最快；MCP/CLI 有子进程或 IPC 开销，随问题规模上升 |
+| 幻觉控制   | 4/4 方式正确拒绝不在库的公司（比亚迪）                      | 部分方式 0 工具调用即拒绝                                      |
+| 沙箱规则   | 13 条危险模式正则 + 7 个命令头白名单 + 超时 15s             | CLI(bash) 形态安全兜底                                         |
+| 代码复用   | 三方式共享 `src/` 后端，零逻辑重复                          | 公平对比前提                                                   |
 
 ## 2. 项目名称怎么写
 
@@ -36,14 +36,15 @@
 > FastMCP 实现自写 Server，Host 端经 stdio JSON-RPC 完成 initialize/list_tools/call_tool 全流程，并将 MCP inputSchema 适配为
 > OpenAI tools schema 喂给 LLM；CLI 层提供具名白名单（run_cli）与通用沙箱（run_bash，13 条危险模式正则 + 命令头白名单 +
 > 超时）两种形态。自建 compare.py 对 4 类问题 × 4 方式实跑，量化对比接入成本/延迟/跨模型复用性/幻觉控制行为差异，得出"
-> 四方式能力一致、Function Call 进程内直调最快而 MCP/CLI 有子进程或 IPC 开销、CLI(bash) 需沙箱兜底"等结论。LLM 默认
+> 四方式能力一致、Function Call 进程内直调最快而 MCP/CLI 有子进程或 IPC 开销、CLI (bash) 需沙箱兜底"等结论。LLM 默认
 > DeepSeek（function calling + 并行调用），Embedding 用 DashScope text-embedding-v3。
 
 ### 3.2 后端工程师方向
 
 > **大模型工具调用协议接入与 CLI 沙箱实践**
 > 围绕"同一份业务能力如何被大模型安全调用"设计三套接入方案并对比。MCP 方案：用 FastMCP 实现两个 stdio Server（年报 RAG /
-> 天气），Host 端用 AsyncExitStack 统一管理多 Server 生命周期，实现 initialize 握手、list_tools 工具发现、call_tool 路由的全链路；并完成
+> 天气），Host 端用 AsyncExitStack 统一管理多 Server 生命周期，实现 initialize 握手、list_tools 工具发现、call_tool
+> 路由的全链路；并完成
 > MCP inputSchema → OpenAI tools schema 的协议层适配。CLI 方案：argparse 统一入口 + pyproject `[project.scripts]` 注册为
 > PATH 上的真实命令 `fincli`（`pip install -e .`，与 git/ls 同形态，非 `python xxx.py`）+ 两种触发形态——具名 run_cli（白名单
 > enum，host 拼 `fincli` 子命令执行，安全可控）与通用 run_bash（shell=True + 危险命令正则黑名单 + 命令头白名单 + 15s 超时 +
@@ -67,18 +68,18 @@
 ### 4.3 3 年以上
 
 > 主导大模型工具调用接入方案选型与对比验证。定义同业务后端 × 三方式对比框架，量化接入成本/延迟/跨模型复用/安全四维度，输出选型建议（快速原型用
-> Function Call、多工具生态用 MCP、工程师场景用 CLI+沙箱）。设计 CLI(bash) 沙箱安全模型（黑名单正则 + 白名单 + 资源限制），解决
+> Function Call、多工具生态用 MCP、工程师场景用 CLI+沙箱）。设计 CLI (bash) 沙箱安全模型（黑名单正则 + 白名单 + 资源限制），解决
 > MCP 多 Server 生命周期管理与协议层 schema 适配问题。
 
 ## 5. 好句 vs 差句对比
 
-| 差句           | 好句                                                                                                              |
-|--------------|-----------------------------------------------------------------------------------------------------------------|
+| 差句                | 好句                                                                                                                          |
+|---------------------|-------------------------------------------------------------------------------------------------------------------------------|
 | 用 MCP 做了工具调用 | 用 FastMCP 实现 stdio Server，Host 端走 initialize→list_tools→call_tool 全流程，并适配 MCP inputSchema 为 OpenAI tools schema |
-| 做了 CLI 工具    | 实现 CLI 两种形态：具名 run_cli（白名单 enum）与通用 run_bash（13 条危险模式正则 + 命令头白名单 + 超时 + cwd 锁定）                                 |
-| 对比了三种方式      | 同一业务后端 × 三方式横向对比 4 类问题，量化延迟（FC ~5s / MCP ~6s / CLI ~6-13s）与幻觉控制行为差异                                             |
-| 防止了危险命令      | 沙箱拦截 rm/del/format/sudo/curl\|sh/nc 等 13 类模式，命令头白名单仅放行 7 个可执行文件                                                 |
-| 解决了递归 bug    | MCP tool 函数与导入后端函数同名遮蔽导致 RecursionError，用 as 别名导入隔离命名空间修复                                                       |
+| 做了 CLI 工具       | 实现 CLI 两种形态：具名 run_cli（白名单 enum）与通用 run_bash（13 条危险模式正则 + 命令头白名单 + 超时 + cwd 锁定）           |
+| 对比了三种方式      | 同一业务后端 × 三方式横向对比 4 类问题，量化延迟（FC ~5s / MCP ~6s / CLI ~6-13s）与幻觉控制行为差异                           |
+| 防止了危险命令      | 沙箱拦截 rm/del/format/sudo/curl\|sh/nc 等 13 类模式，命令头白名单仅放行 7 个可执行文件                                       |
+| 解决了递归 bug      | MCP tool 函数与导入后端函数同名遮蔽导致 RecursionError，用 as 别名导入隔离命名空间修复                                        |
 
 ## 6. 面试常见问题
 
@@ -94,7 +95,7 @@
    MCP 让工具与模型解耦，但具体喂给某个 LLM 时仍要变成该模型 API 认识的格式（OpenAI 的 `function.parameters`）。MCP 的
    `inputSchema` 本身就是 JSON Schema，直接塞进 `parameters` 字段即可。
 
-4. **CLI(bash) 形态有哪些安全风险，怎么防？**
+4. **CLI (bash) 形态有哪些安全风险，怎么防？**
    模型可能生成 `rm -rf`、`curl|sh`、反弹 shell 等。本项目用四层防御：危险模式正则黑名单、命令头白名单（只放行
    python/git/ls/cat/echo 等）、15s 超时、工作目录锁定。形态 A（具名 enum）天然更安全，是优先选择。
 

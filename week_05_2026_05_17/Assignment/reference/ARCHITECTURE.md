@@ -88,39 +88,39 @@ logits (B, T, 21128)
 
 ### 3.2 参数规模分布
 
-| 组件                      | 参数量                     | 占比  |
-|-------------------------|-------------------------|-----|
-| Token Embedding         | 21128 × 384 = 8.1M      | 43% |
-| Position Embedding      | 256 × 384 = 0.1M        | <1% |
-| 6 × Attention (QKV+Out) | 6 × 4 × 384² = 3.5M     | 19% |
-| 6 × FFN (两层线性)          | 6 × 2 × 384×1536 = 7.1M | 38% |
-| LM Head                 | 共享 Embedding，0 额外参数     | 0%  |
-| **总计**                  | **~18.8M**              |     |
+| 组件                    | 参数量                     | 占比 |
+|-------------------------|----------------------------|------|
+| Token Embedding         | 21128 × 384 = 8.1M         | 43%  |
+| Position Embedding      | 256 × 384 = 0.1M           | <1%  |
+| 6 × Attention (QKV+Out) | 6 × 4 × 384² = 3.5M        | 19%  |
+| 6 × FFN (两层线性)      | 6 × 2 × 384×1536 = 7.1M    | 38%  |
+| LM Head                 | 共享 Embedding，0 额外参数 | 0%   |
+| **总计**                | **~18.8M**                 |      |
 
 ### 3.3 关键设计选择原因
 
-| 设计           | 选择                         | 原因                             |
-|--------------|----------------------------|--------------------------------|
-| 位置编码         | 可学习 Embedding              | 实现简单，便于学生理解；sin/cos 留作扩展练习     |
-| 归一化位置        | Pre-LN（LN 在残差前）            | 训练更稳定，不需要仔细调 warmup；现代 GPT 标准  |
-| 激活函数         | GELU                       | GPT-2/3 标准选择，比 ReLU 在 LM 任务上略优 |
-| Weight Tying | LM Head 共享 Token Embedding | 减少 8M 参数，经验上提升生成质量             |
-| Tokenizer    | bert-base-chinese          | 本地已有，字级别直观，vocab 覆盖常见汉字        |
+| 设计         | 选择                         | 原因                                           |
+|--------------|------------------------------|------------------------------------------------|
+| 位置编码     | 可学习 Embedding             | 实现简单，便于学生理解；sin/cos 留作扩展练习   |
+| 归一化位置   | Pre-LN（LN 在残差前）        | 训练更稳定，不需要仔细调 warmup；现代 GPT 标准 |
+| 激活函数     | GELU                         | GPT-2/3 标准选择，比 ReLU 在 LM 任务上略优     |
+| Weight Tying | LM Head 共享 Token Embedding | 减少 8M 参数，经验上提升生成质量               |
+| Tokenizer    | bert-base-chinese            | 本地已有，字级别直观，vocab 覆盖常见汉字       |
 
 ---
 
 ## 四、训练配置
 
-| 超参数          | 值               | 说明                   |
-|--------------|-----------------|----------------------|
-| seq_len      | 256             | 上下文窗口长度              |
-| batch_size   | 32              | 8G 显存舒适上限            |
-| lr           | 3e-4            | AdamW 典型学习率          |
-| weight_decay | 0.1             | 只施加在 2D+ 参数（线性层权重）上  |
-| grad_clip    | 1.0             | 防止梯度爆炸               |
-| betas        | (0.9, 0.95)     | GPT-3 论文推荐           |
-| scheduler    | CosineAnnealing | lr 从 3e-4 余弦衰减到 3e-5 |
-| epochs       | 3               | 快速验证；完整训练可跑 5~10     |
+| 超参数       | 值              | 说明                              |
+|--------------|-----------------|-----------------------------------|
+| seq_len      | 256             | 上下文窗口长度                    |
+| batch_size   | 32              | 8G 显存舒适上限                   |
+| lr           | 3e-4            | AdamW 典型学习率                  |
+| weight_decay | 0.1             | 只施加在 2D+ 参数（线性层权重）上 |
+| grad_clip    | 1.0             | 防止梯度爆炸                      |
+| betas        | (0.9, 0.95)     | GPT-3 论文推荐                    |
+| scheduler    | CosineAnnealing | lr 从 3e-4 余弦衰减到 3e-5        |
+| epochs       | 3               | 快速验证；完整训练可跑 5~10       |
 
 **显存估算（8G GPU）**：
 
@@ -143,21 +143,20 @@ H   = -1/N × Σ log P(token_i | token_0..i-1)
 
 **评估说明**：
 
-- 必须用**总 token 数**做分母，不能用 batch 数（每 batch token 数相同时等价，但语义更准确）
+- 必须用 **总 token 数**做分母，不能用 batch 数（每 batch token 数相同时等价，但语义更准确）
 - 验证集 PPL < 训练集 PPL 说明过拟合
-- 中文 Wikipedia 语料，~25M 参数模型，3 epoch 后 val PPL 预期降至 **50~150** 区间
-  （随机猜测基线：PPL ≈ 21128）
+- 中文 Wikipedia 语料，~25M 参数模型，3 epoch 后 val PPL 预期降至 **50~150** 区间 （随机猜测基线：PPL ≈ 21128）
 
 ---
 
 ## 六、解码策略对比
 
-| 策略          | 参数           | 确定性  | 文本质量         | 多样性 |
-|-------------|--------------|------|--------------|-----|
-| Greedy      | —            | 完全确定 | 容易重复/陷入循环    | 最低  |
-| Temperature | T=0.8        | 随机   | 比 greedy 更流畅 | 中   |
-| Top-K       | K=50, T=0.8  | 随机   | 截断长尾噪声       | 中高  |
-| Top-P       | p=0.9, T=0.8 | 随机   | 自适应候选数量，最稳定  | 高   |
+| 策略        | 参数         | 确定性   | 文本质量               | 多样性 |
+|-------------|--------------|----------|------------------------|--------|
+| Greedy      | —            | 完全确定 | 容易重复/陷入循环      | 最低   |
+| Temperature | T=0.8        | 随机     | 比 greedy 更流畅       | 中     |
+| Top-K       | K=50, T=0.8  | 随机     | 截断长尾噪声           | 中高   |
+| Top-P       | p=0.9, T=0.8 | 随机     | 自适应候选数量，最稳定 | 高     |
 
 **教学要点**：Top-K 的缺陷是固定候选数——分布尖锐时 K=50 仍可能包含大量噪声，分布平坦时 K=50 又太少；Top-P 通过累积概率自适应解决此问题。
 
@@ -193,14 +192,14 @@ H   = -1/N × Σ log P(token_i | token_0..i-1)
 
 ## 八、关键工程决策与踩坑
 
-| 问题                                | 根因                                                                        | 解法                                                                                     |
-|-----------------------------------|---------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| Windows OpenMP 冲突                 | torch 与 numpy 各自链接 libiomp5md.dll                                         | 所有脚本顶部加 `os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")`                        |
-| transformers 不接受 Windows 相对路径     | 含 `..` 的路径被当 HuggingFace repo ID                                          | 用 `Path(__file__).parent.parent` 构造绝对路径                                                |
-| HuggingFace XET 存储国内无法访问          | hf-mirror.com 将大文件 302 到 `cas-bridge.xethub.hf.co`（美国 CDN），国内封锁           | 彻底绕开 HF：用 `requests` 直连 `dumps.wikimedia.org` 官方 dump，流式 BZ2 解压 + `XMLPullParser` 增量解析 |
-| `datasets 4.0` 不支持 dataset script | 旧 `wikipedia` 仓库报 `RuntimeError: Dataset scripts are no longer supported` | 同上，直接用 Wikimedia dump，不经 datasets 库                                                    |
-| Top-P 实现细节                        | 累积概率超过 p 后需"保留第一个超过的 token"                                               | `sorted_indices_to_remove[1:] = sorted_indices_to_remove[:-1].clone()`，index 0 强制保留    |
-| Weight Tying 后 LM Head 梯度重复       | `lm_head.weight = token_emb.weight` 共享同一 tensor                           | PyTorch 自动合并梯度，无需额外处理                                                                  |
+| 问题                                 | 根因                                                                          | 解法                                                                                                      |
+|--------------------------------------|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| Windows OpenMP 冲突                  | torch 与 numpy 各自链接 libiomp5md.dll                                        | 所有脚本顶部加 `os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")`                                    |
+| transformers 不接受 Windows 相对路径 | 含 `..` 的路径被当 HuggingFace repo ID                                        | 用 `Path(__file__).parent.parent` 构造绝对路径                                                            |
+| HuggingFace XET 存储国内无法访问     | hf-mirror.com 将大文件 302 到 `cas-bridge.xethub.hf.co`（美国 CDN），国内封锁 | 彻底绕开 HF：用 `requests` 直连 `dumps.wikimedia.org` 官方 dump，流式 BZ2 解压 + `XMLPullParser` 增量解析 |
+| `datasets 4.0` 不支持 dataset script | 旧 `wikipedia` 仓库报 `RuntimeError: Dataset scripts are no longer supported` | 同上，直接用 Wikimedia dump，不经 datasets 库                                                             |
+| Top-P 实现细节                       | 累积概率超过 p 后需"保留第一个超过的 token"                                   | `sorted_indices_to_remove[1:] = sorted_indices_to_remove[:-1].clone()`，index 0 强制保留                  |
+| Weight Tying 后 LM Head 梯度重复     | `lm_head.weight = token_emb.weight` 共享同一 tensor                           | PyTorch 自动合并梯度，无需额外处理                                                                        |
 
 ---
 

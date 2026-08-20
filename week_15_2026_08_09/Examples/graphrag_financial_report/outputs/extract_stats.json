@@ -1,0 +1,8 @@
+{
+  "reports": 15,
+  "blocks_processed": 375,
+  "triples_extracted": 1153,
+  "elapsed_seconds": 659.4,
+  "avg_triples_per_block": 3.07,
+  "model": "deepseek-chat (deepseek-v4-flash)"
+}

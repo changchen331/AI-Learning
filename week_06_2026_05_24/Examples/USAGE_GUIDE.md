@@ -16,14 +16,14 @@ pip install -r requirements.txt
 
 核心依赖版本要求：
 
-| 包                    | 版本（已验证）         | 说明                                               |
+| 包                   | 版本（已验证）  | 说明                                             |
 |----------------------|-----------------|--------------------------------------------------|
-| torch                | 2.6.0+cu126     | CUDA 12.6；CPU 也可用，速度慢约 10x                       |
+| torch                | 2.6.0+cu126     | CUDA 12.6；CPU 也可用，速度慢约 10x              |
 | transformers         | 5.5.3           | BertTokenizer / BertModel / AutoModelForCausalLM |
-| peft                 | 0.15.0          | LoRA 微调（`src_llm/train_sft.py` 依赖）               |
-| datasets             | 4.0.0           | 下载 TNEWS                                         |
-| scikit-learn         | 1.5.1           | 加权 loss / F1 / 混淆矩阵                              |
-| matplotlib / seaborn | 3.10.7 / 0.13.2 | 数据分析图表                                           |
+| peft                 | 0.15.0          | LoRA 微调（`src_llm/train_sft.py` 依赖）         |
+| datasets             | 4.0.0           | 下载 TNEWS                                       |
+| scikit-learn         | 1.5.1           | 加权 loss / F1 / 混淆矩阵                        |
+| matplotlib / seaborn | 3.10.7 / 0.13.2 | 数据分析图表                                     |
 
 ### 1.2 预训练模型
 
@@ -98,13 +98,13 @@ python explore_data.py --skip_token
 
 **生成的图表**（保存至 `outputs/figures/`）：
 
-| 文件名                         | 内容                    |
-|-----------------------------|-----------------------|
-| `label_dist_train.png`      | 训练集类别分布柱状图            |
-| `label_dist_val.png`        | 验证集类别分布柱状图            |
-| `char_length_train.png`     | 字符长度分布直方图 + 截断覆盖率曲线   |
-| `length_by_label_train.png` | 各类别长度箱线图 + 均值柱状图      |
-| `token_length_train.png`    | Token 长度 vs 字符长度对比直方图 |
+| 文件名                      | 内容                                |
+|-----------------------------|-------------------------------------|
+| `label_dist_train.png`      | 训练集类别分布柱状图                |
+| `label_dist_val.png`        | 验证集类别分布柱状图                |
+| `char_length_train.png`     | 字符长度分布直方图 + 截断覆盖率曲线 |
+| `length_by_label_train.png` | 各类别长度箱线图 + 均值柱状图       |
+| `token_length_train.png`    | Token 长度 vs 字符长度对比直方图    |
 
 **关键结论**（供教学讲解）：
 
@@ -162,7 +162,7 @@ Epoch 2/3 | train_loss=1.2156 train_acc=0.5987 | val_acc=0.5891 val_macro_f1=0.4
 Epoch 3/3 | train_loss=0.9823 train_acc=0.6543 | val_acc=0.6012 val_macro_f1=0.4876 | ...
 ```
 
-> **训练时间参考**：GPU（RTX 系列）每 epoch 约 10~12 分钟；CPU 约 60~90 分钟。  
+> **训练时间参考**：GPU（RTX 系列）每 epoch 约 10 ~12 分钟；CPU 约 60~90 分钟。  
 > 建议先用 `--epochs 1` 验证流程，1 epoch val_acc 可达约 0.56。
 
 ### 4.4 消融实验（三种池化对比）
@@ -173,8 +173,7 @@ python train.py --pool mean --epochs 3
 python train.py --pool max  --epochs 3
 ```
 
-三次训练各自保存 `best_cls.pt` / `best_mean.pt` / `best_max.pt`，
-用 `evaluate.py` 分别加载对比。
+三次训练各自保存 `best_cls.pt` / `best_mean.pt` / `best_max.pt`， 用 `evaluate.py` 分别加载对比。
 
 ---
 
@@ -353,13 +352,13 @@ python train_sft.py \
 
 **两种模式对比**：
 
-| 维度         | LoRA（默认）                          | 全量微调（`--full_ft`）              |
-|------------|-----------------------------------|--------------------------------|
-| 可训练参数      | 1.08M（**0.22%**）                  | 495M（**100%**）                 |
-| 推荐学习率      | 2e-4（自动）                          | 2e-5（需手动指定）                    |
-| 显存需求       | ~3GB（RTX 4060 可跑）                 | ~8~10GB（需 ≥ 16GB 稳定）           |
+| 维度       | LoRA（默认）                         | 全量微调（`--full_ft`）              |
+|------------|--------------------------------------|--------------------------------------|
+| 可训练参数 | 1.08M（**0.22%**）                   | 495M（**100%**）                     |
+| 推荐学习率 | 2e-4（自动）                         | 2e-5（需手动指定）                   |
+| 显存需求   | ~3GB（RTX 4060 可跑）                | ~8~10GB（需 ≥ 16GB 稳定）            |
 | checkpoint | `outputs/sft_adapter/`（仅 adapter） | `outputs/sft_full_ckpt/`（完整模型） |
-| 日志文件       | `train_log_sft.json`              | `train_log_full_ft.json`       |
+| 日志文件   | `train_log_sft.json`                 | `train_log_full_ft.json`             |
 
 **实测训练日志**（LoRA，5000 条，3 epoch，RTX 4060）：
 
@@ -457,8 +456,7 @@ sudo apt install fonts-wqy-microhei
 
 **Q5：`datasets` 下载超时**
 
-数据已在 `data/` 目录下落盘，`download_data.py` 只需运行一次。
-后续 `dataset.py` 直接读取本地 JSON，不再访问网络。
+数据已在 `data/` 目录下落盘，`download_data.py` 只需运行一次。 后续 `dataset.py` 直接读取本地 JSON，不再访问网络。
 
 **Q6：transformers 5.x 下 BertModel 输出变为 tuple，`outputs.last_hidden_state` 报 AttributeError**
 
@@ -476,8 +474,7 @@ transformers 5.x 将 `from_pretrained` 的 `torch_dtype` 参数重命名为 `dty
 
 **Q9：证券类（label_id=12）的 Recall 非常低**
 
-这是数据集本身的问题（45 条验证样本）。
-启用加权 loss 可以提升，但不能完全解决：
+这是数据集本身的问题（45 条验证样本）。 启用加权 loss 可以提升，但不能完全解决：
 
 ```bash
 python train.py --use_class_weight

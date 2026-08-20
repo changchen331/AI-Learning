@@ -42,12 +42,12 @@ pip install -r requirements.txt
 
 ### 1.3 关键兼容性说明（CUDA / 驱动版本）
 
-| 组件           | 版本                  | 原因                              |
-|--------------|---------------------|---------------------------------|
-| NVIDIA 驱动    | 566.x（CUDA 12.7 兼容） | Windows 侧，WSL2 自动桥接             |
-| vLLM         | **0.9.2**           | 0.20+ 要 CUDA 13（需驱动 580+）不兼容    |
-| torch        | **2.7.0+cu126**     | 与 vLLM 0.9.2 匹配                 |
-| transformers | **4.52.4**          | vLLM 0.9.2 不兼容 transformers 5.x |
+| 组件         | 版本                    | 原因                                  |
+|--------------|-------------------------|---------------------------------------|
+| NVIDIA 驱动  | 566.x（CUDA 12.7 兼容） | Windows 侧，WSL2 自动桥接             |
+| vLLM         | **0.9.2**               | 0.20+ 要 CUDA 13（需驱动 580+）不兼容 |
+| torch        | **2.7.0+cu126**         | 与 vLLM 0.9.2 匹配                    |
+| transformers | **4.52.4**              | vLLM 0.9.2 不兼容 transformers 5.x    |
 
 如果 `torch.cuda.is_available()` 返回 `False`，99% 是 vLLM/torch 版本选了 CUDA 13（需驱动 580+），降级到上表版本即可。
 
@@ -184,7 +184,7 @@ python demo_response_format.py
 
 **场景**：新闻情感分类 + 置信度 + 关键词
 
-**教学要点**：`response_format={"type": "json_object"}` 是 OpenAI/Azure/vLLM 都兼容的**可移植方案**。相比 `guided_json`
+**教学要点**：`response_format={"type": "json_object"}` 是 OpenAI/Azure/vLLM 都兼容的 **可移植方案**。相比 `guided_json`
 它跨厂商可用但约束更弱。选型时权衡：
 
 - 跨厂商部署 → response_format
@@ -214,12 +214,9 @@ python demo_function_call.py --tool order
 - 典型失败案例（前 3 条）
 - `outputs/function_call_results.json`：详细数据（可用于后续分析）
 
-**预期结果**：
-| 指标 | 裸 prompt | response_format | guided_json |
-|------|----------|-----------------|-------------|
-| JSON 合法 | ~90% | 100% | 100% |
-| 字段齐全 | ~90% | 100% | 100% |
-| **完整 schema 通过** | **40-60%** | **40-70%** | **100%** |
+**预期结果**： | 指标 | 裸 prompt | response_format | guided_json | |------|----------|-----------------|-------------| |
+JSON 合法 | ~90% | 100% | 100% | | 字段齐全 | ~90% | 100% | 100% | | **完整 schema 通过** | **40-60%** | **40-70%** |
+**100%** |
 
 **核心教学点**：`response_format` 和 `guided_json` 之间的 30~50 个百分点差距就是约束解码的工程价值——`response_format`
 只管语法，不管字段值是否合法。
@@ -328,7 +325,7 @@ vLLM server 没启动。另开终端跑 `bash start_server.sh`，等看到 `Appl
 
 ### Q6：跑 bench_throughput.py 显存溢出
 
-正常，因为同时有 transformers 模型 + vLLM 模型。请**先停掉 vLLM server**：
+正常，因为同时有 transformers 模型 + vLLM 模型。请 **先停掉 vLLM server**：
 
 ```bash
 fuser -k 8000/tcp

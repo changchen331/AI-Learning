@@ -51,12 +51,12 @@ python explore_data.py
 
 生成 4 张图到 `outputs/figures/`：
 
-| 图表文件                            | 内容              | 教学重点                    |
-|---------------------------------|-----------------|-------------------------|
-| `label_distribution.png`        | 正/负样本数量         | 类别不均衡（31% vs 69%）       |
-| `char_length_distribution.png`  | 字符长度分布          | max_length=32 已覆盖 98.4% |
-| `length_diff_distribution.png`  | 正/负样本长度差        | 无 length bias，数据质量好     |
-| `token_length_distribution.png` | BERT Token 长度分布 | Token ≈ 字符（中文特性）        |
+| 图表文件                        | 内容                | 教学重点                   |
+|---------------------------------|---------------------|----------------------------|
+| `label_distribution.png`        | 正/负样本数量       | 类别不均衡（31% vs 69%）   |
+| `char_length_distribution.png`  | 字符长度分布        | max_length=32 已覆盖 98.4% |
+| `length_diff_distribution.png`  | 正/负样本长度差     | 无 length bias，数据质量好 |
+| `token_length_distribution.png` | BERT Token 长度分布 | Token ≈ 字符（中文特性）   |
 
 ---
 
@@ -74,7 +74,7 @@ python train_biencoder.py --loss cosine
 **内部流程：**
 
 1. 加载 AFQMC train/val（PairDataset，sentence1 / sentence2 / label）
-2. 每个 step：encode(s1) → emb_a，encode(s2) → emb_b，label 0→-1 / 1→+1
+2. 每个 step：encode (s1) → emb_a，encode (s2) → emb_b，label 0→-1 / 1→+1
 3. `F.cosine_embedding_loss(emb_a, emb_b, cos_target, margin=0.3)`
 4. 每个 epoch 末：val 集计算余弦相似度 → 枚举 101 个阈值 → 取 F1 最高
 5. 保存 val_f1 最优的 checkpoint
@@ -103,8 +103,8 @@ python train_biencoder.py --loss triplet --margin 0.3
 
 ### 4.3 参数建议（课堂演示 vs 学生练习）
 
-| 场景     | 推荐参数                                                |
-|--------|-----------------------------------------------------|
+| 场景         | 推荐参数                                            |
+|--------------|-----------------------------------------------------|
 | 课堂快速演示 | `--num_hidden_layers 4 --epochs 3 --batch_size 32`  |
 | 学生完整训练 | `--num_hidden_layers 12 --epochs 5 --batch_size 16` |
 | 池化策略对比 | `--pool cls` vs `--pool mean` vs `--pool max`       |
@@ -176,10 +176,10 @@ CrossEncoder (CrossEntropyLoss)    0.6921        0.5703          argmax
 
 **几个值得注意的规律：**
 
-- CrossEncoder Accuracy 最高但 F1 最低：1 epoch 训练不足时倾向于预测多数类（负类），
-  accuracy 因此虚高——这本身就是一个教学点（accuracy ≠ F1）
-- CosineEmbeddingLoss 优于 TripletLoss：AFQMC 正样本只有 10K 条，TripletLoss
-  三元组数量受限；数据量更大时（如 LCQMC）Triplet 的优势会更明显
+- CrossEncoder Accuracy 最高但 F1 最低：1 epoch 训练不足时倾向于预测多数类（负类）， accuracy
+  因此虚高——这本身就是一个教学点（accuracy ≠ F1）
+- CosineEmbeddingLoss 优于 TripletLoss：AFQMC 正样本只有 10K 条，TripletLoss 三元组数量受限；数据量更大时（如 LCQMC）Triplet
+  的优势会更明显
 - 生成图表：`method_comparison_bar.png`（柱状对比）+ `biencoder_sim_distributions.png`（分布对比）
 
 ---
@@ -263,14 +263,14 @@ python train_sft.py \
 
 **两种模式对比**：
 
-| 维度            | LoRA（默认）                      | 全量微调（`--full_ft`）                 |
-|---------------|-------------------------------|-----------------------------------|
-| 可训练参数         | ~1.08M（0.22%）                 | 495M（100%）                        |
-| 默认学习率         | 2e-4（自动）                      | 2e-5（需手动指定）                       |
+| 维度            | LoRA（默认）                  | 全量微调（`--full_ft`）           |
+|-----------------|-------------------------------|-----------------------------------|
+| 可训练参数      | ~1.08M（0.22%）               | 495M（100%）                      |
+| 默认学习率      | 2e-4（自动）                  | 2e-5（需手动指定）                |
 | checkpoint 目录 | `outputs/sft_adapter/`        | `outputs/sft_full_ckpt/`          |
-| 日志文件          | `outputs/logs/train_sft.json` | `outputs/logs/train_full_ft.json` |
+| 日志文件        | `outputs/logs/train_sft.json` | `outputs/logs/train_full_ft.json` |
 
-> **类别平衡说明**：AFQMC 正负比 31:69。`train_sft.py` 默认开启**正负平衡采样**（各取 `num_train//2` 条），避免模型退化为全预测负例（F1=0
+> **类别平衡说明**：AFQMC 正负比 31:69。`train_sft.py` 默认开启 **正负平衡采样**（各取 `num_train//2` 条），避免模型退化为全预测负例（F1=0
 > 的教学反例在第一版实测中出现过，与 CrossEncoder 1-epoch 是同一问题）。
 
 ---
@@ -366,7 +366,7 @@ print(f"相似度: {sim:.4f}  阈值: {threshold:.2f}  预测: {'相似' if sim 
 > transformers 将相对路径当成 HuggingFace repo ID 验证。已用 `Path(__file__).parent.parent` 构造绝对路径解决
 
 **Q: BiEncoder 评估时 val_f1 很低（< 0.6）**
-> 可能原因：(1) 学习率偏高（试 `--lr 1e-5`）；(2) epoch 不够（试 `--epochs 5`）；(3) margin 过大（试 `--margin 0.1`）
+> 可能原因： (1) 学习率偏高（试 `--lr 1e-5`）； (2) epoch 不够（试 `--epochs 5`）； (3) margin 过大（试 `--margin 0.1`）
 
 **Q: AFQMC test 集评估结果异常（全预测为 0）**
 > 正常现象——test 集标签在 CLUE 竞赛中未公开，label=-1。评估请用 `--split validation`

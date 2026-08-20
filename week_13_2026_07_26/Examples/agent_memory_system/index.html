@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Agent 记忆系统 — 教学演示</title>
     <style>
         :root {
@@ -652,8 +652,8 @@
         </div>
         <div class="chat-input-area">
             <div class="chat-input-row">
-                <textarea id="inputBox" placeholder="输入消息，Enter 发送，Shift+Enter 换行" rows="2"
-                          onkeydown="handleKey(event)"></textarea>
+                <textarea id="inputBox" onkeydown="handleKey(event)" placeholder="输入消息，Enter 发送，Shift+Enter 换行"
+                          rows="2"></textarea>
                 <button class="send-btn" id="sendBtn" onclick="sendMessage()">发送</button>
             </div>
             <div class="example-btns">

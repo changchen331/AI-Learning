@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>年报 RAG 问答 · 教学演示</title>
     <style>
         * {
@@ -596,21 +596,21 @@
     </div>
 
     <!-- 状态区域 -->
-    <div id="hint" class="hint">
+    <div class="hint" id="hint">
         <p>🔍</p>
         <p>输入问题后，页面会展示 RAG 流水线的每一步中间结果</p>
         <p style="margin-top:.4rem;font-size:.78rem">向量检索 → BM25检索 → RRF融合 → 上下文 → LLM生成</p>
     </div>
 
-    <div id="loading" class="loading hidden">
+    <div class="loading hidden" id="loading">
         <div class="spinner"></div>
         <span>正在检索与生成，通常需要 3～8 秒……</span>
     </div>
 
-    <div id="error" class="error-box hidden"></div>
+    <div class="error-box hidden" id="error"></div>
 
     <!-- 流水线可视化 -->
-    <div id="pipeline" class="pipeline hidden">
+    <div class="pipeline hidden" id="pipeline">
 
         <!-- ① 向量检索 -->
         <div class="step s-vec" id="s1">

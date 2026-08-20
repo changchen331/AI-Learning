@@ -17,11 +17,10 @@ from typing import Callable, Awaitable
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-
-from week_13_2026_07_26.Examples.agent_memory_system.src.heartbeat_parser import HeartbeatParser, HEARTBEAT_PATH
-from week_13_2026_07_26.Examples.agent_memory_system.src.llm_config import get_chat_client
-from week_13_2026_07_26.Examples.agent_memory_system.src.memory_loader import MemoryLoader
-from week_13_2026_07_26.Examples.agent_memory_system.src.session_db import SessionDB
+from src.heartbeat_parser import HeartbeatParser, HEARTBEAT_PATH
+from src.llm_config import get_chat_client
+from src.memory_loader import MemoryLoader
+from src.session_db import SessionDB
 
 logger = logging.getLogger(__name__)
 
@@ -200,7 +199,7 @@ class HeartbeatScheduler:
         summary = resp.choices[0].message.content.strip()
 
         # 写入 MEMORY.md
-        from week_13_2026_07_26.Examples.agent_memory_system.src.memory_flush import MemoryFlusher
+        from src.memory_flush import MemoryFlusher
         flusher = MemoryFlusher()
         flusher._append_to_memory_md([{
             "category": "event",
@@ -218,7 +217,7 @@ class HeartbeatScheduler:
 
     async def _action_compact_memory(self, task: dict):
         """触发 Memory Compaction"""
-        from week_13_2026_07_26.Examples.agent_memory_system.src.memory_flush import MemoryFlusher
+        from src.memory_flush import MemoryFlusher
         loader = MemoryLoader()
         count = loader.get_memory_entry_count()
         if count < 5:

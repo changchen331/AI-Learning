@@ -10,17 +10,17 @@ version: 1.117.3
 
 ## 支持的图表类型
 
-| 类型 | 适用场景 | 关键特征 |
-|------|---------|---------|
-| **架构图（Architecture）** | 系统组件与关系 | 分组方框、连接箭头、区域边界 |
-| **流程图（Flowchart）** | 决策逻辑、流程步骤 | 菱形决策、圆角步骤框、有向流向 |
-| **时序图（Sequence）** | 角色之间按时间顺序的交互 | 垂直生命线、横向消息、激活条 |
-| **结构图（Structural）** | 类图、ER 图、组织架构图 | 分格方框、带类型的关系（继承、组合） |
-| **思维导图（Mind Map）** | 头脑风暴、主题探索 | 中心节点、放射状分支、有机布局 |
-| **时间线（Timeline）** | 按时间顺序的事件 | 横/纵轴、事件标记、时段跨度 |
-| **概念示意图（Illustrative）** | 概念解释、对比 | 自由布局、图标、注释、视觉隐喻 |
-| **状态机（State Machine）** | 状态转换、生命周期 | 圆角状态节点、带标签的转换、起止标记 |
-| **数据流图（Data Flow）** | 数据转换管线 | 处理气泡、数据存储、外部实体 |
+| 类型                           | 适用场景                 | 关键特征                             |
+|--------------------------------|--------------------------|--------------------------------------|
+| **架构图（Architecture）**     | 系统组件与关系           | 分组方框、连接箭头、区域边界         |
+| **流程图（Flowchart）**        | 决策逻辑、流程步骤       | 菱形决策、圆角步骤框、有向流向       |
+| **时序图（Sequence）**         | 角色之间按时间顺序的交互 | 垂直生命线、横向消息、激活条         |
+| **结构图（Structural）**       | 类图、ER 图、组织架构图  | 分格方框、带类型的关系（继承、组合） |
+| **思维导图（Mind Map）**       | 头脑风暴、主题探索       | 中心节点、放射状分支、有机布局       |
+| **时间线（Timeline）**         | 按时间顺序的事件         | 横/纵轴、事件标记、时段跨度          |
+| **概念示意图（Illustrative）** | 概念解释、对比           | 自由布局、图标、注释、视觉隐喻       |
+| **状态机（State Machine）**    | 状态转换、生命周期       | 圆角状态节点、带标签的转换、起止标记 |
+| **数据流图（Data Flow）**      | 数据转换管线             | 处理气泡、数据存储、外部实体         |
 
 ## 设计系统
 
@@ -28,16 +28,16 @@ version: 1.117.3
 
 按组件类别分配语义颜色：
 
-| 类别 | 填充色 (rgba) | 描边色 | 用于 |
-|------|-------------|--------|---------|
-| Primary（主色） | `rgba(8, 51, 68, 0.4)` | `#22d3ee`（青） | 前端、面向用户、输入 |
-| Secondary（次色） | `rgba(6, 78, 59, 0.4)` | `#34d399`（翠绿） | 后端、服务、处理 |
-| Tertiary（三色） | `rgba(76, 29, 149, 0.4)` | `#a78bfa`（紫） | 数据库、存储、持久化 |
-| Accent（强调） | `rgba(120, 53, 15, 0.3)` | `#fbbf24`（琥珀） | 云、基础设施、区域 |
-| Alert（警示） | `rgba(136, 19, 55, 0.4)` | `#fb7185`（玫红） | 安全、错误、警告 |
-| Connector（连接） | `rgba(251, 146, 60, 0.3)` | `#fb923c`（橙） | 总线、队列、中间件 |
-| Neutral（中性） | `rgba(30, 41, 59, 0.5)` | `#94a3b8`（灰蓝） | 外部、通用、未知 |
-| Highlight（高亮） | `rgba(59, 130, 246, 0.3)` | `#60a5fa`（蓝） | 活跃状态、焦点、当前步骤 |
+| 类别              | 填充色 (rgba)             | 描边色            | 用于                     |
+|-------------------|---------------------------|-------------------|--------------------------|
+| Primary（主色）   | `rgba(8, 51, 68, 0.4)`    | `#22d3ee`（青）   | 前端、面向用户、输入     |
+| Secondary（次色） | `rgba(6, 78, 59, 0.4)`    | `#34d399`（翠绿） | 后端、服务、处理         |
+| Tertiary（三色）  | `rgba(76, 29, 149, 0.4)`  | `#a78bfa`（紫）   | 数据库、存储、持久化     |
+| Accent（强调）    | `rgba(120, 53, 15, 0.3)`  | `#fbbf24`（琥珀） | 云、基础设施、区域       |
+| Alert（警示）     | `rgba(136, 19, 55, 0.4)`  | `#fb7185`（玫红） | 安全、错误、警告         |
+| Connector（连接） | `rgba(251, 146, 60, 0.3)` | `#fb923c`（橙）   | 总线、队列、中间件       |
+| Neutral（中性）   | `rgba(30, 41, 59, 0.5)`   | `#94a3b8`（灰蓝） | 外部、通用、未知         |
+| Highlight（高亮） | `rgba(59, 130, 246, 0.3)` | `#60a5fa`（蓝）   | 活跃状态、焦点、当前步骤 |
 
 对于流程图和时序图，按角色（actor、决策、处理）而非技术栈分配颜色。
 
@@ -53,6 +53,7 @@ version: 1.117.3
 ```
 
 按角色的字号：
+
 - **标题：** 16px，weight 700
 - **组件名：** 11-12px，weight 600
 - **副标签/描述：** 9px，weight 400，颜色 `#94a3b8`
@@ -62,6 +63,7 @@ version: 1.117.3
 ### 核心视觉元素
 
 **背景：** `#0f172a`（slate-900）加细网格：
+
 ```svg
 <defs>
   <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -73,6 +75,7 @@ version: 1.117.3
 ```
 
 **箭头标记（标准）：**
+
 ```svg
 <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
   <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
@@ -80,6 +83,7 @@ version: 1.117.3
 ```
 
 **箭头标记（彩色）——按需为每种颜色创建：**
+
 ```svg
 <marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
   <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/>
@@ -87,6 +91,7 @@ version: 1.117.3
 ```
 
 **开放箭头（用于异步/返回消息）：**
+
 ```svg
 <marker id="arrow-open" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
   <polyline points="0 0, 10 3.5, 0 7" fill="none" stroke="#64748b" stroke-width="1.5"/>
@@ -107,6 +112,7 @@ version: 1.117.3
 8. 标题块（左上）
 
 不透明遮罩矩形这一技巧至关重要——没有它，半透明的组件填充会透出下方的箭头：
+
 ```svg
 <!-- 遮罩层：不透明背景以隐藏箭头 -->
 <rect x="100" y="100" width="160" height="60" rx="6" fill="#0f172a"/>
@@ -131,6 +137,7 @@ version: 1.117.3
 ### 组件样式
 
 **标准方框（服务/处理）：**
+
 ```svg
 <rect x="X" y="Y" width="160" height="60" rx="6" fill="#0f172a"/>
 <rect x="X" y="Y" width="160" height="60" rx="6" fill="FILL" stroke="STROKE" stroke-width="1.5"/>
@@ -139,6 +146,7 @@ version: 1.117.3
 ```
 
 **决策菱形（流程图）：**
+
 ```svg
 <g transform="translate(CX, CY)">
   <polygon points="0,-35 50,0 0,35 -50,0" fill="#0f172a"/>
@@ -148,6 +156,7 @@ version: 1.117.3
 ```
 
 **数据库圆柱：**
+
 ```svg
 <g transform="translate(X, Y)">
   <rect x="0" y="10" width="120" height="50" rx="2" fill="#0f172a"/>
@@ -163,12 +172,14 @@ version: 1.117.3
 ```
 
 **区域边界：**
+
 ```svg
 <rect x="X" y="Y" width="W" height="H" rx="12" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="8,4"/>
 <text x="X+12" y="Y+16" fill="#fbbf24" font-size="9" font-weight="600">AWS us-east-1</text>
 ```
 
 **安全组：**
+
 ```svg
 <rect x="X" y="Y" width="W" height="H" rx="8" fill="none" stroke="#fb7185" stroke-width="1" stroke-dasharray="4,4"/>
 <text x="X+10" y="Y+14" fill="#fb7185" font-size="8" font-weight="500">VPC / Security Group</text>
@@ -176,45 +187,54 @@ version: 1.117.3
 
 ## 各类型的布局指引
 
-先确定本 SKILL.md 文件所在目录路径为 `{baseDir}`。开始布局前，先读取对应图表类型的参考文件。参考文件位于 `{baseDir}/references/`，包含详细的布局算法与示例。
+先确定本 SKILL.md 文件所在目录路径为 `{baseDir}`。开始布局前，先读取对应图表类型的参考文件。参考文件位于
+`{baseDir}/references/`，包含详细的布局算法与示例。
 
 ### 架构图
+
 → 阅读 `{baseDir}/references/architecture.md`
 
 要点：数据流从左到右或从上到下。将相关服务用区域边界分组。层与层之间用总线/连接器。数据库放在底部或右侧。
 
 ### 流程图
+
 → 阅读 `{baseDir}/references/flowchart.md`
 
 要点：主流程从上到下。决策用菱形，出口箭头上标 Yes/No。起止用圆角矩形。主路径（happy path）用 Highlight 色。
 
 ### 时序图
+
 → 阅读 `{baseDir}/references/sequence.md`
 
 要点：角色为顶部方框，垂直虚线生命线，横向箭头表示消息（实线=同步，虚线=返回）。时间自上而下。激活条表示处理中。复杂时给消息编号。
 
 ### 结构图
+
 → 阅读 `{baseDir}/references/structural.md`
 
 要点：分格方框（类图的 名称/属性/方法 三格）。关系线：实线+实心菱形=组合，实线+空心菱形=聚合，虚线箭头=依赖，实线三角=继承。
 
 ### 思维导图
+
 从中心概念放射的自由布局。分支用有机曲线（带三次贝塞尔的 `<path>`）。用调色板变换分支颜色。中心节点字号最大，向外递减。
 
 ### 时间线
+
 横轴或纵轴线。事件标记为轴上的圆点或菱形。描述文字交替偏移到两侧以避免重叠。用颜色区分事件类型。
 
 ### 状态机
+
 圆角矩形状态，复合状态用双边框。实心圆为初态，靶心为终态。自转换用弧形箭头。所有转换按 `event [guard] / action` 格式标注。
 
 ## 输出规则
 
-1. 输出**单个 `.svg` 文件**——除 Google Fonts 引入外无外部依赖
+1. 输出 **单个 `.svg` 文件**——除 Google Fonts 引入外无外部依赖
 2. 设置 `viewBox` 以容纳所有内容并留 30px 内边距；不要设置固定的 `width`/`height` 属性（让 SVG 自适应缩放）
 3. 在根 `<svg>` 元素上包含 `xmlns="http://www.w3.org/2000/svg"`
 4. 将所有 `<style>`、`<defs>`、标记和图案放在 SVG 顶部
 5. 居中标签使用 `text-anchor="middle"`；确保文字不溢出方框
-6. **中文文本支持：** 当标签含中文字符时，使用 `font-family: 'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', sans-serif'` 并加宽方框宽度——CJK 字符更宽
+6. **中文文本支持：** 当标签含中文字符时，使用 `font-family: 'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', sans-serif'`
+   并加宽方框宽度——CJK 字符更宽
 7. **保存位置：** 若输入是文件，保存到 `{inputFileDir}/diagram/`；否则保存到 `{projectDir}/diagram/{topic-slug}/`。目录不存在则创建
 
 ## 脚本
@@ -232,6 +252,7 @@ ${BUN_X} {baseDir}/scripts/main.ts <svg-path> [options]
 ```
 
 选项：
+
 - `-s, --scale <n>` — 缩放倍数（默认：2）
 - `-o, --output <path>` — 自定义输出路径（默认：`<input>@2x.png`）
 - `--json` — JSON 输出

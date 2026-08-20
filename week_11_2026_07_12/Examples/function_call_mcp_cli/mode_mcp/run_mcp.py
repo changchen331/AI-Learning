@@ -31,11 +31,10 @@ import os
 import sys
 import time
 from contextlib import AsyncExitStack
-from pathlib import Path
-
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from openai import OpenAI
+from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent
 

@@ -6,16 +6,16 @@
 
 ## 一、可量化数据（可直接写进简历）
 
-| 维度                           | 数字                                                    | 出处                                   |
-|------------------------------|-------------------------------------------------------|--------------------------------------|
-| 吞吐加速 vs transformers 串行      | **59.3×**（0.82 → 48.59 QPS）                           | `outputs/throughput_results.json`    |
-| 吞吐加速 vs transformers batch=8 | **12.5×**（3.89 → 48.59 QPS）                           | 同上                                   |
-| Generation throughput        | **3394 tok/s**（单 0.5B 模型 / RTX 4060 8GB）              | 同上                                   |
-| 50 并发请求端到端时延                 | **1.03s**（同卡，同 50 条 prompt）                           | 同上                                   |
-| Function call 合法率提升          | 裸 prompt 60% → **guided_json 100%**（stock quote 50 例） | `outputs/function_call_results.json` |
-| 复杂 schema 场景提升               | **42% → 100%**（create_order，含正则 + enum + 范围约束）        | 同上                                   |
-| 约束解码延迟代价                     | **≈ 0%**（0.43s vs 0.43s，FSM 一次构建长期复用）                 | 同上                                   |
-| 工具数 × 测试规模                   | 2 个工具 × 50 条 × 3 模式 = **300 次请求对比**                   | `src/demo_function_call.py`          |
+| 维度                             | 数字                                                      | 出处                                 |
+|----------------------------------|-----------------------------------------------------------|--------------------------------------|
+| 吞吐加速 vs transformers 串行    | **59.3×**（0.82 → 48.59 QPS）                             | `outputs/throughput_results.json`    |
+| 吞吐加速 vs transformers batch=8 | **12.5×**（3.89 → 48.59 QPS）                             | 同上                                 |
+| Generation throughput            | **3394 tok/s**（单 0.5B 模型 / RTX 4060 8GB）             | 同上                                 |
+| 50 并发请求端到端时延            | **1.03s**（同卡，同 50 条 prompt）                        | 同上                                 |
+| Function call 合法率提升         | 裸 prompt 60% → **guided_json 100%**（stock quote 50 例） | `outputs/function_call_results.json` |
+| 复杂 schema 场景提升             | **42% → 100%**（create_order，含正则 + enum + 范围约束）  | 同上                                 |
+| 约束解码延迟代价                 | **≈ 0%**（0.43s vs 0.43s，FSM 一次构建长期复用）          | 同上                                 |
+| 工具数 × 测试规模                | 2 个工具 × 50 条 × 3 模式 = **300 次请求对比**            | `src/demo_function_call.py`          |
 
 **写简历建议**：
 
@@ -41,9 +41,9 @@
 
 **挑岗位重点**：
 
-- 投**算法工程师**：强调"约束解码"、"Function Call 可靠性"
-- 投**后端/工程**：强调"OpenAI 兼容 API"、"60× 吞吐"、"生产部署"
-- 投**MLOps/推理工程**：强调"PagedAttention"、"continuous batching"、"WSL2 跨平台"
+- 投 **算法工程师**：强调"约束解码"、"Function Call 可靠性"
+- 投 **后端/工程**：强调"OpenAI 兼容 API"、"60× 吞吐"、"生产部署"
+- 投 **MLOps/推理工程**：强调"PagedAttention"、"continuous batching"、"WSL2 跨平台"
 
 ---
 
@@ -59,7 +59,8 @@
 > 种约束解码方式（guided_choice / guided_regex / guided_json / response_format）在 Function Call 场景的可靠性提升。
 >
 > **关键成果**：
-> - 同卡同模型下，**vLLM 相对 transformers 串行加速 59.3×、相对 batch=8 加速 12.5×**，Generation throughput 达到 3394 tok/s
+> - 同卡同模型下， **vLLM 相对 transformers 串行加速 59.3×、相对 batch=8 加速 12.5×**，Generation throughput 达到 3394
+    tok/s
 > - 设计 2 个工具（`get_stock_quote` 金融查询 + `create_order` 电商下单）共 100 条测试用例，系统对比三种 JSON 输出方式
 > - 用 `guided_json` 把复杂 schema（含 6 位正则、11 位手机号正则、整数范围、多枚举）的通过率从 **42% 提升到 100%**，且延迟无额外开销
 > - 深入分析失败模式：字段拼错、枚举值用自然语言、手机号前缀加号等，并用 FSM 解码从根本上解决
@@ -76,7 +77,7 @@
 > **项目概述**：在 Windows 开发机上基于 WSL2 构建 vLLM 生产级部署流水线，一键启动 OpenAI 兼容 HTTP 服务，支持流式推理、约束解码、并发请求调度。
 >
 > **关键成果**：
-> - 端到端部署一个 Qwen2-0.5B-Instruct 推理服务，**QPS 从原生 transformers 的 0.82 提升到 48.59（59× 加速）**
+> - 端到端部署一个 Qwen2-0.5B-Instruct 推理服务， **QPS 从原生 transformers 的 0.82 提升到 48.59（59× 加速）**
 > - 50 并发请求从 61 秒压缩到 1 秒完成，GPU 利用率从串行时的 ~20% 拉到满载
 > - 定位并解决驱动-CUDA-torch-vLLM 四层版本兼容问题（CUDA 13 需 NVIDIA 驱动 580+；降级 vLLM 到 0.9.2 + torch 2.7+cu126 适配
     12.7 驱动）
@@ -92,7 +93,7 @@
 > - 从零搭建 WSL2 + CUDA + vLLM 环境，解决 6 个真实兼容性问题（包括 CUDA 13 驱动不匹配、transformers 5.x 与 vLLM 0.9.2 的
     aimv2 冲突等）
 > - 实现 3 个吞吐对比路线（串行 / 手动 batch / vLLM），横向对比得出 **vLLM 加速 59×** 的结论
-> - 设计 6 个演示脚本覆盖 4 种约束解码，**Function Call 场景 schema 通过率 42% → 100%**
+> - 设计 6 个演示脚本覆盖 4 种约束解码， **Function Call 场景 schema 通过率 42% → 100%**
 > - 产出 3 份工程文档（ARCHITECTURE / USAGE_GUIDE / RESUME_GUIDE）+ 柱状图 + JSON 详细结果
 
 ---
@@ -104,7 +105,7 @@
 聚焦"做了什么 + 学到了什么"：
 
 > 在 WSL2 中搭建 vLLM 推理服务，对比 transformers 原生推理与 vLLM 的吞吐，实测 **vLLM 加速 59.3×**，并用 50 条测试集量化了
-`guided_json` 约束解码对 Function Call 可靠性的影响（通过率 42% → 100%）。通过该项目理解了 PagedAttention、continuous
+> `guided_json` 约束解码对 Function Call 可靠性的影响（通过率 42% → 100%）。通过该项目理解了 PagedAttention、continuous
 > batching、约束解码（FSM）的基本原理。
 
 ### 1~3 年经验
@@ -120,21 +121,21 @@
 聚焦"设计决策 + 工程权衡"：
 
 > 设计 vLLM 教学 demo 的整体架构：选择 0.9.2 版本（兼容 CUDA 12.7 驱动，覆盖 90% 笔记本用户）、用 transformers 原生推理做性能
-> baseline、用 jsonschema 做分层评估指标（JSON 语法 / 必选字段 / 完整 schema）。通过对比实验量化得出两个结论：**vLLM 相对
-transformers 加速 59.3×**（PagedAttention + continuous batching 的复合收益），**`guided_json` 相对 `response_format` 在复杂
+> baseline、用 jsonschema 做分层评估指标（JSON 语法 / 必选字段 / 完整 schema）。通过对比实验量化得出两个结论： **vLLM 相对
+transformers 加速 59.3×**（PagedAttention + continuous batching 的复合收益）， **`guided_json` 相对 `response_format` 在复杂
 schema 场景差距 58 个百分点**（JSON 合法率相同，但字段语义正确率仅 42% vs 100%）。项目产出可用于课堂教学和团队培训。
 
 ---
 
 ## 五、好句 vs 差句对比
 
-| 差           | 好                                                                                                        |
-|-------------|----------------------------------------------------------------------------------------------------------|
-| 学习了 vLLM 部署 | 完成 vLLM 0.9.2 服务化部署，50 并发请求从 61s 压到 1s                                                                   |
-| 用了约束解码技术    | 用 guided_json 把 Function Call 的 schema 通过率从 42% 提升到 100%                                                 |
-| 做了吞吐测试      | 设计 3 路 × 50 请求 benchmark，定量得出 vLLM 相对 transformers 加速 59×                                                |
-| 解决了一些兼容性问题  | 定位 NVIDIA 驱动-CUDA-torch-vLLM 四层版本链问题，降级 vLLM 0.20→0.9.2 修复                                               |
-| 项目效果良好      | 失败案例分析显示：裸 prompt 42% 失败集中在字段语义（`"credit card"` 不在 enum / `"+手机号"`违反正则），guided_json 通过 FSM 屏蔽非法 token 根治 |
+| 差                   | 好                                                                                                                                              |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| 学习了 vLLM 部署     | 完成 vLLM 0.9.2 服务化部署，50 并发请求从 61s 压到 1s                                                                                           |
+| 用了约束解码技术     | 用 guided_json 把 Function Call 的 schema 通过率从 42% 提升到 100%                                                                              |
+| 做了吞吐测试         | 设计 3 路 × 50 请求 benchmark，定量得出 vLLM 相对 transformers 加速 59×                                                                         |
+| 解决了一些兼容性问题 | 定位 NVIDIA 驱动-CUDA-torch-vLLM 四层版本链问题，降级 vLLM 0.20→0.9.2 修复                                                                      |
+| 项目效果良好         | 失败案例分析显示：裸 prompt 42% 失败集中在字段语义（`"credit card"` 不在 enum / `"+手机号"`违反正则），guided_json 通过 FSM 屏蔽非法 token 根治 |
 
 ---
 
@@ -178,15 +179,15 @@ A：vLLM 用 xgrammar 把 JSON Schema 编译成 FSM（有限状态自动机）�
 
 A：
 
-- `response_format={"type": "json_object"}`：OpenAI 官方 API，只保证输出是**合法 JSON**（语法层），不管字段名、字段值类型、枚举值
-- `guided_json=schema`：vLLM 扩展，保证输出**完全符合 JSON Schema**（语义层），包括字段齐全、类型正确、正则匹配、枚举合法、数值范围
+- `response_format={"type": "json_object"}`：OpenAI 官方 API，只保证输出是 **合法 JSON**（语法层），不管字段名、字段值类型、枚举值
+- `guided_json=schema`：vLLM 扩展，保证输出 **完全符合 JSON Schema**（语义层），包括字段齐全、类型正确、正则匹配、枚举合法、数值范围
 
 实测数据：create_order 场景下，`response_format` 和裸 prompt 完整通过率都是 42%，`guided_json` 是 100%，差距 58 个百分点。
 
 **Q：约束解码会不会让模型输出"合法但胡说"？**
 
 A：会。约束解码只管格式，不管语义正确性。本项目 0.5B 模型偶尔把"宁德时代"代码猜错（000750 vs 300750），但市场代码、日期格式、字段结构都
-100% 合法。这是教学重点之一：**guided 解决格式问题，不解决模型能力问题**。生产上需要结合更大模型 / fine-tune / RAG。
+100% 合法。这是教学重点之一： **guided 解决格式问题，不解决模型能力问题**。生产上需要结合更大模型 / fine-tune / RAG。
 
 **Q：约束解码有性能代价吗？**
 

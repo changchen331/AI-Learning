@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Agent 自进化演示</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surf: #1e293b;
+            --surf2: #334155;
+            --border: #475569;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --danger: #f43f5e;
+            --warn: #f59e0b;
+            --purple: #a78bfa;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --code-bg: #0f172a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 15px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden
+        }
+
+        /* ── Header ── */
+        header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: var(--surf);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0
+        }
+
+        header h1 {
+            font-size: 17px;
+            font-weight: 700;
+            flex: 1
+        }
+
+        #phaseLabel {
+            font-size: 13px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            background: var(--surf2);
+            color: var(--muted)
+        }
+
+        #phaseLabel.running {
+            background: #1d4ed8;
+            color: #bfdbfe
+        }
+
+        #phaseLabel.done {
+            background: #065f46;
+            color: #a7f3d0
+        }
+
+        #resetBtn {
+            padding: 6px 16px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px
+        }
+
+        #resetBtn:hover {
+            border-color: var(--danger);
+            color: var(--danger)
+        }
+
+        /* ── Steps bar ── */
+        #stepsBar {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: var(--surf);
+            border-bottom: 1px solid var(--border);
+            gap: 0;
+            flex-shrink: 0;
+            overflow-x: auto
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0
+        }
+
+        .step-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--surf2);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: var(--muted);
+            cursor: default;
+            flex-shrink: 0;
+            transition: .2s
+        }
+
+        .step-dot.active {
+            border-color: var(--accent);
+            color: var(--accent)
+        }
+
+        .step-dot.done {
+            background: var(--success);
+            border-color: var(--success);
+            color: #fff
+        }
+
+        .step-dot.current {
+            border-color: var(--warn);
+            color: var(--warn);
+            animation: pulse 1.5s infinite
+        }
+
+        .step-label {
+            font-size: 10px;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 2px;
+            white-space: nowrap;
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .step-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 0 4px
+        }
+
+        .step-line {
+            width: 20px;
+            height: 2px;
+            background: var(--border);
+            flex-shrink: 0
+        }
+
+        .step-line.done {
+            background: var(--success)
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1
+            }
+            50% {
+                opacity: .5
+            }
+        }
+
+        /* ── Main layout ── */
+        /* grid-template-rows:1fr + min-height:0 是让内部 flex 子栏能正确滚动的关键 */
+        .layout {
+            display: grid;
+            grid-template-columns:220px 1fr 260px;
+            grid-template-rows:1fr;
+            gap: 0;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden
+        }
+
+        /* ── Left panel ── */
+        .left-panel {
+            background: var(--surf);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            overflow: hidden;
+            min-height: 0
+        }
+
+        .left-section {
+            padding: 12px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .left-section h3 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            margin-bottom: 10px
+        }
+
+        #mainBtn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: .15s
+        }
+
+        #mainBtn:hover {
+            background: #2563eb
+        }
+
+        #mainBtn:disabled {
+            background: var(--surf2);
+            color: var(--muted);
+            cursor: not-allowed
+        }
+
+        #mainBtn.warn {
+            background: var(--warn)
+        }
+
+        #mainBtn.success {
+            background: var(--success)
+        }
+
+        /* Accuracy chart */
+        .acc-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 5px
+        }
+
+        .acc-label {
+            font-size: 11px;
+            color: var(--muted);
+            width: 70px;
+            flex-shrink: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .acc-bar-wrap {
+            flex: 1;
+            background: var(--surf2);
+            border-radius: 3px;
+            height: 9px;
+            overflow: hidden
+        }
+
+        .acc-bar {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+            transition: width .5s;
+            min-width: 2px
+        }
+
+        .acc-pct {
+            font-size: 11px;
+            color: var(--text);
+            width: 34px;
+            text-align: right;
+            flex-shrink: 0
+        }
+
+        /* Run list */
+        .run-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .run-item:last-child {
+            border: none
+        }
+
+        .run-id {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .run-acc {
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        /* ── Center panel ── */
+        .center-panel {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0
+        }
+
+        #feed {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        /* 避免 flex 列子项被自动压缩，保持自然高度，feed 才会出现滚动条 */
+        #feed > * {
+            flex-shrink: 0
+        }
+
+        /* Q item — overflow:visible 是展开能工作的关键 */
+        .q-item {
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 2px
+        }
+
+        .q-item:hover {
+            border-color: var(--accent)
+        }
+
+        .q-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--surf);
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none
+        }
+
+        .q-item.expanded .q-header {
+            border-radius: 8px 8px 0 0
+        }
+
+        .q-seq {
+            font-size: 12px;
+            color: var(--muted);
+            width: 32px;
+            flex-shrink: 0;
+            font-variant-numeric: tabular-nums
+        }
+
+        .q-correct {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0
+        }
+
+        .q-correct.ok {
+            background: var(--success)
+        }
+
+        .q-correct.fail {
+            background: var(--danger)
+        }
+
+        .q-correct.pending {
+            background: var(--warn);
+            animation: pulse 1s infinite
+        }
+
+        /* min-width:0 是 flex 子项文字省略号生效的必要条件 */
+        .q-text {
+            flex: 1;
+            font-size: 13.5px;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .cat-badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--surf2);
+            color: var(--muted);
+            flex-shrink: 0;
+            white-space: nowrap
+        }
+
+        .q-arrow {
+            font-size: 12px;
+            color: var(--muted);
+            flex-shrink: 0;
+            transition: transform .2s;
+            margin-left: 2px
+        }
+
+        .q-item.expanded .q-arrow {
+            transform: rotate(90deg)
+        }
+
+        .q-body {
+            display: none;
+            padding: 12px;
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px
+        }
+
+        .q-body.open {
+            display: block
+        }
+
+        .q-answer {
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word
+        }
+
+        .q-reason {
+            font-size: 12px;
+            color: var(--danger);
+            margin-top: 6px;
+            padding: 4px 8px;
+            background: rgba(244, 63, 94, .08);
+            border-radius: 4px
+        }
+
+        /* Eval summary */
+        .eval-q-mini {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 8px;
+            border-radius: 4px
+        }
+
+        .eval-q-mini.ok {
+            background: rgba(16, 185, 129, .08)
+        }
+
+        .eval-q-mini.fail {
+            background: rgba(244, 63, 94, .08)
+        }
+
+        /* Nudge card — 可点击标题折叠，方便讲解完再收起 */
+        .nudge-card {
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            margin: 6px 0
+        }
+
+        .nudge-title {
+            background: rgba(167, 139, 250, .15);
+            padding: 10px 14px;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--purple);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 6px 6px 0 0
+        }
+
+        .nudge-card.collapsed .nudge-title {
+            border-radius: 6px
+        }
+
+        .nudge-arrow {
+            margin-left: auto;
+            font-size: 13px;
+            transition: transform .2s
+        }
+
+        .nudge-card.collapsed .nudge-arrow {
+            transform: rotate(-90deg)
+        }
+
+        .nudge-body {
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .nudge-card.collapsed .nudge-body {
+            display: none
+        }
+
+        .analysis-text {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+            padding: 10px;
+            background: var(--code-bg);
+            border-radius: 4px;
+            max-height: 120px;
+            overflow-y: auto
+        }
+
+        .skill-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            margin: 2px
+        }
+
+        .skill-pill.create {
+            background: rgba(16, 185, 129, .15);
+            color: var(--success);
+            border: 1px solid var(--success)
+        }
+
+        .skill-pill.patch {
+            background: rgba(245, 158, 11, .15);
+            color: var(--warn);
+            border: 1px solid var(--warn)
+        }
+
+        .probe-result {
+            padding: 8px;
+            background: var(--code-bg);
+            border-radius: 4px
+        }
+
+        .probe-result .big-acc {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent)
+        }
+
+        .probe-cats {
+            display: grid;
+            grid-template-columns:1fr 1fr;
+            gap: 4px;
+            margin-top: 6px
+        }
+
+        .probe-cat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .probe-cat-bar {
+            flex: 1;
+            background: var(--surf2);
+            border-radius: 2px;
+            height: 5px;
+            overflow: hidden
+        }
+
+        .probe-cat-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px
+        }
+
+        .block-acc {
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: rgba(59, 130, 246, .1);
+            font-size: 13px;
+            text-align: center;
+            border: 1px solid rgba(59, 130, 246, .3)
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--border);
+            border-top-color: var(--purple);
+            border-radius: 50%;
+            animation: spin .7s linear infinite
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* Eval grid (baseline/final) */
+        .eval-grid {
+            display: grid;
+            grid-template-columns:repeat(6, 1fr);
+            gap: 2px
+        }
+
+        .eval-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px
+        }
+
+        .eval-dot.ok {
+            background: var(--success)
+        }
+
+        .eval-dot.fail {
+            background: var(--danger)
+        }
+
+        /* comparison table */
+        .cmp-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 8px
+        }
+
+        .cmp-table th {
+            background: var(--surf2);
+            padding: 7px 10px;
+            text-align: left;
+            color: var(--muted)
+        }
+
+        .cmp-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .delta {
+            font-weight: 700
+        }
+
+        .delta.pos {
+            color: var(--success)
+        }
+
+        .delta.neg {
+            color: var(--danger)
+        }
+
+        /* ── Right panel ── */
+        .right-panel {
+            background: var(--surf);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0
+        }
+
+        .right-header {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        #skillList {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 8px
+        }
+
+        .skill-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            overflow: hidden
+        }
+
+        .skill-card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 12px;
+            background: var(--surf2);
+            cursor: pointer;
+            user-select: none
+        }
+
+        .skill-card-header:hover {
+            background: var(--border)
+        }
+
+        .skill-name {
+            font-size: 13px;
+            font-weight: 600;
+            flex: 1
+        }
+
+        .ver-badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--surf);
+            color: var(--accent);
+            border: 1px solid var(--accent)
+        }
+
+        .skill-expand {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .skill-content {
+            display: none;
+            padding: 8px;
+            background: var(--code-bg);
+            max-height: 180px;
+            overflow-y: auto
+        }
+
+        .skill-content.open {
+            display: block
+        }
+
+        .skill-content pre {
+            font-size: 10px;
+            color: #cbd5e1;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5
+        }
+
+        .skill-history {
+            padding: 6px 10px;
+            background: var(--surf);
+            border-top: 1px solid var(--border);
+            display: none
+        }
+
+        .skill-history.open {
+            display: block
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 0;
+            font-size: 12px;
+            border-bottom: 1px dotted var(--border);
+            cursor: pointer
+        }
+
+        .history-item:last-child {
+            border: none
+        }
+
+        .history-item:hover {
+            color: var(--accent)
+        }
+
+        .h-ver {
+            color: var(--accent);
+            font-weight: 700;
+            width: 24px;
+            flex-shrink: 0
+        }
+
+        .h-action {
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            flex-shrink: 0
+        }
+
+        .h-action.create {
+            background: rgba(16, 185, 129, .2);
+            color: var(--success)
+        }
+
+        .h-action.patch {
+            background: rgba(245, 158, 11, .2);
+            color: var(--warn)
+        }
+
+        .h-action.initial {
+            background: rgba(148, 163, 184, .2);
+            color: var(--muted)
+        }
+
+        .h-time {
+            color: var(--muted);
+            margin-left: auto;
+            flex-shrink: 0
+        }
+
+        .h-reason {
+            flex: 1;
+            min-width: 0;
+            color: var(--muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        /* ── Modal ── */
+        #modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100
+        }
+
+        #modal.hidden {
+            display: none
+        }
+
+        .modal-box {
+            background: var(--surf);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            width: 680px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .modal-header h3 {
+            font-size: 14px
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 18px;
+            cursor: pointer
+        }
+
+        .modal-close:hover {
+            color: var(--text)
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px
+        }
+
+        .diff-grid {
+            display: grid;
+            grid-template-columns:1fr 1fr;
+            gap: 12px
+        }
+
+        .diff-col h4 {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 6px
+        }
+
+        .diff-pre {
+            background: var(--code-bg);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #cbd5e1;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow-y: auto
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--surf2);
+            border-radius: 2px
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🤖 云购商城客服 · Agent 自进化演示</h1>
+    <span id="phaseLabel">就绪</span>
+    <button id="resetBtn" onclick="doReset()">↺ 重置初始态</button>
+</header>
+
+<div id="stepsBar"></div>
+
+<div class="layout">
+
+    <!-- ── 左面板 ── -->
+    <aside class="left-panel">
+        <div class="left-section">
+            <h3>下一步操作</h3>
+            <button id="mainBtn" onclick="doAction()">基线评估</button>
+            <div id="phaseHint" style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5"></div>
+        </div>
+        <div class="left-section" style="flex:1;overflow-y:auto">
+            <h3>准确率记录</h3>
+            <div id="runList"></div>
+        </div>
+    </aside>
+
+    <!-- ── 中面板 ── -->
+    <main class="center-panel">
+        <div id="feed"></div>
+    </main>
+
+    <!-- ── 右面板 ── -->
+    <aside class="right-panel">
+        <div class="right-header">
+            <span>技能库</span>
+            <span id="skillCount" style="color:var(--accent)">0 个 Skill</span>
+        </div>
+        <div id="skillList"></div>
+    </aside>
+
+</div>
+
+<!-- 版本对比 Modal -->
+<div class="hidden" id="modal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="modalTitle">Skill 版本详情</h3>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+    // ══════════════════════════════════════════════════════════════
+    //  状态
+    // ══════════════════════════════════════════════════════════════
+    let st = {
+        phase: 'idle',
+        currentBlock: 0,
+        totalBlocks: 8,
+        blockNames: [],
+        nudgeCount: 0,
+        evalResults: {},
+        streaming: false,
+    };
+
+    const BLOCK_LABELS = {
+        refund_basic: '基础退款',
+        digital_goods: '数字商品',
+        vip_refund_basic: 'VIP退款基础',
+        white_card_and_promotion: '白卡+促销陷阱',
+        logistics: '物流取消',
+        promotions: '促销券规则',
+        payment_account: '支付与账户',
+        mixed_validation: '综合验证',
+    };
+
+    const PHASE_HINTS = {
+        idle: '点击「基线评估」运行初始 Skills 的 60 题测试，获得进化前基准数字。',
+        baseline_done: '基线记录完毕，现在逐块运行演示脚本。每块 10 题后自动触发后台 Nudge 回顾。',
+        all_blocks_done: '8 个类别块全部完成，点击「最终评估」对比进化前后的准确率变化。',
+        complete: '实验完成！查看上方各类别准确率的提升，以及右侧 Skill 版本演化树。',
+    };
+
+    // ══════════════════════════════════════════════════════════════
+    //  构建步骤条
+    // ══════════════════════════════════════════════════════════════
+    function buildSteps(blockNames) {
+        const bar = document.getElementById('stepsBar');
+        bar.innerHTML = '';
+        const steps = ['baseline', ...blockNames.map((_, i) => `block_${i}`), 'final'];
+        const labels = ['基线评估', ...blockNames.map(n => BLOCK_LABELS[n] || n), '最终评估'];
+
+        steps.forEach((key, i) => {
+            if (i > 0) {
+                const line = document.createElement('div');
+                line.className = 'step-line';
+                line.id = `line_${i}`;
+                bar.appendChild(line);
+            }
+            const wrap = document.createElement('div');
+            wrap.className = 'step-wrap';
+            wrap.innerHTML = `<div class="step-dot" id="dot_${key}">${i + 1}</div>
+                      <div class="step-label" title="${labels[i]}">${labels[i]}</div>`;
+            bar.appendChild(wrap);
+        });
+    }
+
+    function updateStepDots() {
+        // baseline
+        const bDot = document.getElementById('dot_baseline');
+        if (bDot) {
+            if (st.evalResults['baseline']) bDot.className = 'step-dot done';
+            else if (st.phase === 'baseline_running') bDot.className = 'step-dot current';
+            else bDot.className = 'step-dot';
+        }
+        // blocks
+        for (let i = 0; i < st.totalBlocks; i++) {
+            const dot = document.getElementById(`dot_block_${i}`);
+            const line = document.getElementById(`line_${i + 1}`);
+            if (!dot) continue;
+            if (i < st.currentBlock) {
+                dot.className = 'step-dot done';
+                if (line) line.className = 'step-line done';
+            } else if (i === st.currentBlock && st.streaming) {
+                dot.className = 'step-dot current';
+            } else {
+                dot.className = 'step-dot';
+            }
+        }
+        // final
+        const fDot = document.getElementById('dot_final');
+        if (fDot) {
+            if (st.phase === 'complete') fDot.className = 'step-dot done';
+            else if (st.phase === 'final_running') fDot.className = 'step-dot current';
+            else fDot.className = 'step-dot';
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  主操作按钮逻辑
+    // ══════════════════════════════════════════════════════════════
+    function updateMainBtn() {
+        const btn = document.getElementById('mainBtn');
+        const hint = document.getElementById('phaseHint');
+        if (st.streaming) {
+            btn.textContent = '运行中...';
+            btn.disabled = true;
+            return;
+        }
+        btn.disabled = false;
+        if (st.phase === 'idle') {
+            btn.textContent = '▶ 基线评估（60题）';
+            btn.className = '';
+            hint.textContent = PHASE_HINTS.idle;
+        } else if (st.phase === 'baseline_done' || st.phase.endsWith('_done')) {
+            const idx = st.currentBlock;
+            if (idx < st.totalBlocks) {
+                const name = st.blockNames[idx] || `Block ${idx + 1}`;
+                const label = BLOCK_LABELS[name] || name;
+                btn.textContent = `▶ 第 ${idx + 1}/8 块：${label}`;
+                btn.className = '';
+                hint.textContent = `接下来运行「${label}」类别的 10 道题，观察哪些会失败，然后触发 Nudge 回顾。`;
+            } else {
+                btn.textContent = '▶ 最终评估（60题）';
+                btn.className = 'success';
+                hint.textContent = PHASE_HINTS.all_blocks_done;
+            }
+        } else if (st.phase === 'complete') {
+            btn.textContent = '✓ 实验完成';
+            btn.disabled = true;
+            hint.textContent = PHASE_HINTS.complete;
+        } else {
+            btn.textContent = '运行中...';
+            btn.disabled = true;
+        }
+        document.getElementById('phaseLabel').textContent = {
+            idle: '就绪', baseline_done: '基线完成', all_blocks_done: '待最终评估', complete: '已完成'
+        }[st.phase] || st.phase;
+        document.getElementById('phaseLabel').className =
+            st.phase === 'complete' ? 'done' : (st.streaming ? 'running' : '');
+    }
+
+    function doAction() {
+        if (st.streaming) return;
+        if (st.phase === 'idle') startStream('/stream/baseline');
+        else if (st.phase === 'baseline_done' || st.phase.endsWith('_done')) {
+            if (st.currentBlock < st.totalBlocks)
+                startStream(`/stream/block/${st.currentBlock}`);
+            else
+                startStream('/stream/final');
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  SSE 流处理
+    // ══════════════════════════════════════════════════════════════
+    let evalMiniItems = [];   // 基线/最终评估的小点
+    let currentNudgeCard = null;
+    let currentBlockItems = {};
+
+    function startStream(url) {
+        if (st.streaming) return;
+        st.streaming = true;
+        updateMainBtn();
+        evalMiniItems = [];
+        currentBlockItems = {};
+
+        const es = new EventSource(url);
+        es.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            handleEvent(data);
+            if (data.type === 'done') {
+                es.close();
+                st.streaming = false;
+                updateMainBtn();
+            }
+            if (data.type === 'error') {
+                es.close();
+                st.streaming = false;
+                alert(data.message);
+                updateMainBtn();
+            }
+        };
+        es.onerror = () => {
+            es.close();
+            st.streaming = false;
+            updateMainBtn();
+        };
+    }
+
+    function handleEvent(d) {
+        switch (d.type) {
+            case 'eval_q':
+                onEvalQ(d);
+                break;
+            case 'eval_complete':
+                onEvalComplete(d);
+                break;
+            case 'question_start':
+                onQStart(d);
+                break;
+            case 'question_result':
+                onQResult(d);
+                break;
+            case 'block_complete':
+                onBlockComplete(d);
+                break;
+            case 'nudge_start':
+                onNudgeStart(d);
+                break;
+            case 'nudge_skipped':
+                onNudgeSkipped(d);
+                break;
+            case 'reviewer_analysis':
+                onReviewerAnalysis(d);
+                break;
+            case 'skill_action':
+                onSkillAction(d);
+                break;
+            case 'nudge_complete':
+                onNudgeComplete(d);
+                break;
+            case 'probe_start':
+                onProbeStart(d);
+                break;
+            case 'probe_result':
+                onProbeResult(d);
+                break;
+            case 'phase_change':
+                st.phase = d.phase;
+                if (d.current_block !== undefined) st.currentBlock = d.current_block;
+                updateMainBtn();
+                updateStepDots();
+                loadSkills();
+                break;
+        }
+    }
+
+    // ── eval_q (基线/最终 每题) ────────────────────────────────────
+    // 每题渲染成可展开 q-item（与 block 一致），使用 run-id 作前缀避免 DOM id 冲突
+    function onEvalQ(d) {
+        const feed = document.getElementById('feed');
+        // run_id 直接从事件取，避免依赖客户端 st.phase（流首个事件到达时 phase 尚未更新）
+        const runId = d.run_id || 'eval';
+        let card = document.querySelector('.eval-card-active');
+        if (!card) {
+            const label = runId === 'baseline' ? '基线' : (runId === 'final' ? '最终' : '评估');
+            card = document.createElement('div');
+            card.className = 'nudge-card eval-card-active';
+            card.dataset.runId = runId;
+            card.style.borderColor = 'var(--accent)';
+            card.innerHTML = `
+      <div class="nudge-title" style="color:var(--accent);background:rgba(59,130,246,.12)"
+           onclick="toggleNudge(this.parentNode)">
+        <span class="eval-title">📊 ${label}评估（60 题） 运行中...</span>
+        <span class="nudge-arrow">▾</span>
+      </div>
+      <div class="nudge-body">
+        <div class="eval-items"></div>
+        <div class="eval-summary" style="margin-top:10px"></div>
+      </div>`;
+            feed.appendChild(card);
+            smartScroll();
+        }
+        const uid = `${runId[0]}${d.id}`;   // 'b1'…(baseline) 或 'f1'…(final)
+        const itemsDiv = card.querySelector('.eval-items');
+        const item = document.createElement('div');
+        item.className = 'q-item';
+        item.id = `q_${uid}`;
+        item.innerHTML = `<div class="q-header" onclick="toggleQ('${uid}')">
+    <span class="q-seq">Q${String(d.id).padStart(2, '0')}</span>
+    <span class="q-correct ${d.correct ? 'ok' : 'fail'}"></span>
+    <span class="q-text">${escHtml(d.question)}</span>
+    <span class="cat-badge">${d.category || ''}</span>
+    <span class="q-arrow">▸</span>
+  </div>
+  <div class="q-body" id="qb_${uid}">
+    <div class="q-answer">${escHtml(d.answer || '')}</div>
+    ${!d.correct && d.fail_reason ? `<div class="q-reason">✗ ${escHtml(d.fail_reason)}</div>` : ''}
+  </div>`;
+        itemsDiv.appendChild(item);
+
+        evalMiniItems.push(d);
+        const tot = evalMiniItems.length;
+        const ok = evalMiniItems.filter(x => x.correct).length;
+        const titleEl = card.querySelector('.eval-title');
+        if (titleEl) titleEl.textContent =
+            `📊 ${runId === 'baseline' ? '基线' : '最终'}评估 · 进行中 ${ok}/${tot} 正确`;
+
+        if (tot % 10 === 0) smartScroll();
+    }
+
+    function onEvalComplete(d) {
+        const card = document.querySelector('.eval-card-active');
+        if (!card) return;
+        const titleEl = card.querySelector('.eval-title');
+        if (titleEl) titleEl.textContent =
+            `📊 ${d.run_id === 'baseline' ? '基线' : '最终'}评估 完成：${d.correct}/${d.total} = ${pct(d.accuracy)}`;
+        const summary = card.querySelector('.eval-summary');
+        if (summary && d.by_category) {
+            summary.innerHTML =
+                '<div style="font-size:12px;color:var(--muted);margin-bottom:6px">分类准确率：</div>'
+                + catBarsHtml(d.by_category, 'acc-row');
+        }
+        card.classList.remove('eval-card-active');   // 下次评估会另建新卡
+
+        st.evalResults[d.run_id] = {accuracy: d.accuracy, correct: d.correct, total: d.total};
+        updateRunList();
+        if (d.run_id === 'final') addComparisonTable(d);
+        smartScroll();
+    }
+
+    // ── Block Q&A ─────────────────────────────────────────────────
+    function onQStart(d) {
+        const feed = document.getElementById('feed');
+        const item = document.createElement('div');
+        item.className = 'q-item';
+        item.id = `q_${d.seq}`;
+        item.innerHTML = `<div class="q-header" onclick="toggleQ(${d.seq})">
+    <span class="q-seq">Q${String(d.seq).padStart(2, '0')}</span>
+    <span class="q-correct pending" id="qc_${d.seq}"></span>
+    <span class="q-text">${escHtml(d.question)}</span>
+    <span class="cat-badge">${d.block || ''}</span>
+    <span class="q-arrow">▸</span>
+  </div>
+  <div class="q-body" id="qb_${d.seq}">
+    <div class="q-answer" id="qa_${d.seq}">回答中...</div>
+  </div>`;
+        feed.appendChild(item);
+        currentBlockItems[d.seq] = item;
+        smartScroll();
+    }
+
+    function onQResult(d) {
+        const dot = document.getElementById(`qc_${d.seq}`);
+        const ans = document.getElementById(`qa_${d.seq}`);
+        if (dot) {
+            dot.className = `q-correct ${d.correct ? 'ok' : 'fail'}`;
+        }
+        if (ans) {
+            ans.textContent = d.answer;
+            if (!d.correct && d.fail_reason) {
+                const r = document.createElement('div');
+                r.className = 'q-reason';
+                r.textContent = '✗ ' + d.fail_reason;
+                ans.parentNode.appendChild(r);
+            }
+        }
+        smartScroll();
+    }
+
+    function toggleQ(seq) {
+        const item = document.getElementById(`q_${seq}`);
+        const body = document.getElementById(`qb_${seq}`);
+        if (!body) return;
+        const opening = !body.classList.contains('open');
+        body.classList.toggle('open', opening);
+        if (item) item.classList.toggle('expanded', opening);
+    }
+
+    // ── Block complete ────────────────────────────────────────────
+    function onBlockComplete(d) {
+        const feed = document.getElementById('feed');
+        const bar = document.createElement('div');
+        bar.className = 'block-acc';
+        bar.innerHTML = `本块「${BLOCK_LABELS[d.block] || d.block}」完成：
+    <strong>${d.correct}/${d.total} = ${pct(d.accuracy)}</strong>`;
+        feed.appendChild(bar);
+        smartScroll();
+    }
+
+    // ── Nudge ────────────────────────────────────────────────────
+    function onNudgeStart(d) {
+        const feed = document.getElementById('feed');
+        const card = document.createElement('div');
+        card.className = 'nudge-card';
+        card.innerHTML = `
+    <div class="nudge-title" onclick="toggleNudge(this.parentNode)">
+      <span>🔔 Nudge #${d.nudge_num} 触发 ── 块：${BLOCK_LABELS[d.block] || d.block}</span>
+      <span class="nudge-arrow">▾</span>
+    </div>
+    <div class="nudge-body" id="nb_${d.nudge_num}">
+      <div style="display:flex;align-items:center;gap:8px;color:var(--purple)">
+        <span class="spinner"></span><span style="font-size:12px">后台回顾 Agent 分析中...</span>
+      </div>
+    </div>`;
+        feed.appendChild(card);
+        currentNudgeCard = {num: d.nudge_num, card};
+        smartScroll();
+    }
+
+    function toggleNudge(cardEl) {
+        cardEl.classList.toggle('collapsed');
+    }
+
+    // 全对跳过：显示一张绿色小卡片，不触发 Reviewer 也不跑 Probe
+    function onNudgeSkipped(d) {
+        const feed = document.getElementById('feed');
+        const card = document.createElement('div');
+        card.className = 'nudge-card';
+        card.style.borderColor = 'var(--success)';
+        card.innerHTML = `
+    <div class="nudge-title" style="color:var(--success);background:rgba(16,185,129,.12)">
+      <span>✓ 本块 [${BLOCK_LABELS[d.block] || d.block}] 全对 — 跳过本轮进化</span>
+    </div>
+    <div class="nudge-body">
+      <div style="font-size:12px;color:var(--muted)">
+        ${escHtml(d.reason || '本块全部答对，无失败样本，Reviewer 无需介入；Skill 库保持不变。')}
+      </div>
+    </div>`;
+        feed.appendChild(card);
+        smartScroll();
+    }
+
+    function onReviewerAnalysis(d) {
+        const nb = document.getElementById(`nb_${currentNudgeCard?.num}`);
+        if (!nb || !d.analysis) return;
+        const div = document.createElement('div');
+        div.innerHTML = `<div style="font-size:11px;color:var(--muted);margin-bottom:4px">回顾分析：</div>
+    <div class="analysis-text">${escHtml(d.analysis)}</div>`;
+        nb.appendChild(div);
+        smartScroll();
+    }
+
+    function onSkillAction(d) {
+        const nb = document.getElementById(`nb_${currentNudgeCard?.num}`);
+        if (!nb) return;
+        let actions = nb.querySelector('.skill-actions');
+        if (!actions) {
+            actions = document.createElement('div');
+            actions.className = 'skill-actions';
+            nb.appendChild(actions);
+        }
+        const pill = document.createElement('span');
+        pill.className = `skill-pill ${d.action}`;
+        pill.innerHTML = `${d.action === 'create' ? '✚' : '✏'} <strong>${d.skill_name}</strong>`;
+        pill.title = d.reason;
+        pill.onclick = () => showSkillModal(d.skill_name);
+        actions.appendChild(pill);
+        smartScroll();
+    }
+
+    function onNudgeComplete(d) {
+        const nb = document.getElementById(`nb_${currentNudgeCard?.num}`);
+        if (!nb) return;
+        // remove spinner
+        const spinWrap = nb.querySelector('.spinner')?.parentElement;
+        if (spinWrap) spinWrap.remove();
+        if (d.num_actions === 0) {
+            const p = document.createElement('div');
+            p.style.cssText = 'font-size:11px;color:var(--muted)';
+            p.textContent = '── 本轮无需更新 Skill';
+            nb.appendChild(p);
+        }
+        // show probe waiting spinner
+        const ps = document.createElement('div');
+        ps.id = `probe_spin_${currentNudgeCard?.num}`;
+        ps.style.cssText = 'display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px';
+        ps.innerHTML = `<span class="spinner"></span> Probe eval 运行中（30题）...`;
+        nb.appendChild(ps);
+        smartScroll();
+    }
+
+    function onProbeStart(d) { /* spinner already shown in onNudgeComplete */
+    }
+
+    function onProbeResult(d) {
+        const nb = document.getElementById(`nb_${currentNudgeCard?.num}`);
+        if (nb) {
+            const spin = document.getElementById(`probe_spin_${currentNudgeCard?.num}`);
+            if (spin) spin.remove();
+            const res = document.createElement('div');
+            res.className = 'probe-result';
+            res.innerHTML = `
+      <div>Probe eval：<span class="big-acc">${pct(d.accuracy)}</span>
+        <span style="font-size:11px;color:var(--muted)"> (${d.correct}/${d.total})</span></div>
+      <div class="probe-cats">${catBarsHtml(d.by_category, 'probe-cat', true)}</div>`;
+            nb.appendChild(res);
+        }
+        st.evalResults[d.run_id] = {accuracy: d.accuracy, correct: d.correct, total: d.total};
+        st.nudgeCount++;
+        updateRunList();
+        smartScroll();
+    }
+
+    // ── Comparison table ──────────────────────────────────────────
+    function addComparisonTable(finalData) {
+        const feed = document.getElementById('feed');
+        const base = st.evalResults['baseline'];
+        if (!base) return;
+        const rows = Object.entries(finalData.by_category).map(([cat, fv]) => {
+            const bv = (st.evalResults['baseline'] || {}).by_category?.[cat];
+            const ba = bv ? bv.accuracy : null;
+            const delta = ba !== null ? fv.accuracy - ba : null;
+            const dStr = delta !== null
+                ? `<span class="delta ${delta >= 0 ? 'pos' : 'neg'}">${delta >= 0 ? '+' : ''}${(delta * 100).toFixed(0)}%</span>`
+                : '—';
+            return `<tr>
+      <td>${cat}</td>
+      <td>${ba !== null ? pct(ba) : '—'}</td>
+      <td>${pct(fv.accuracy)}</td>
+      <td>${dStr}</td>
+    </tr>`;
+        });
+        const baseDelta = base ? finalData.accuracy - base.accuracy : 0;
+        const card = document.createElement('div');
+        card.className = 'nudge-card';
+        card.style.borderColor = 'var(--success)';
+        card.innerHTML = `
+    <div class="nudge-title" style="color:var(--success)">
+      🎉 实验完成 ── 总体提升 <strong style="font-size:16px">+${(baseDelta * 100).toFixed(1)}%</strong>
+      &nbsp;（${base?.correct ?? '?'}/${base?.total ?? '?'} → ${finalData.correct}/${finalData.total}）
+    </div>
+    <div class="nudge-body">
+      <table class="cmp-table">
+        <thead><tr><th>类别</th><th>基线</th><th>最终</th><th>变化</th></tr></thead>
+        <tbody>${rows.join('')}</tbody>
+      </table>
+    </div>`;
+        feed.appendChild(card);
+        smartScroll();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  Run list（左侧准确率记录）
+    // ══════════════════════════════════════════════════════════════
+    function updateRunList() {
+        const list = document.getElementById('runList');
+        list.innerHTML = '';
+        const order = ['baseline',
+            ...Array.from({length: st.totalBlocks}, (_, i) => `after_block_${i}`),
+            'final'];
+        order.forEach(rid => {
+            const r = st.evalResults[rid];
+            if (!r) return;
+            const item = document.createElement('div');
+            item.className = 'run-item';
+            const label = rid === 'baseline' ? '基线' :
+                rid === 'final' ? '最终' :
+                    `Block${rid.replace('after_block_', '') * 1 + 1}后`;
+            const color = r.accuracy >= 0.7 ? 'var(--success)' :
+                r.accuracy >= 0.5 ? 'var(--warn)' : 'var(--danger)';
+            item.innerHTML = `<span class="run-id">${label}</span>
+                      <span class="run-acc" style="color:${color}">${pct(r.accuracy)}</span>`;
+            list.appendChild(item);
+        });
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  Skill 面板（右侧）
+    // ══════════════════════════════════════════════════════════════
+    async function loadSkills() {
+        const resp = await fetch('/skills').catch(() => null);
+        if (!resp || !resp.ok) return;
+        const skills = await resp.json();
+        const list = document.getElementById('skillList');
+        const count = Object.keys(skills).length;
+        document.getElementById('skillCount').textContent = `${count} 个 Skill`;
+        list.innerHTML = '';
+        for (const [name, info] of Object.entries(skills)) {
+            const isNew = info.history?.at(-1)?.action === 'create';
+            const isUpdated = info.version_count > 1 && info.history?.at(-1)?.action === 'patch';
+            const card = document.createElement('div');
+            card.className = 'skill-card';
+            card.innerHTML = `
+      <div class="skill-card-header" onclick="toggleSkill('${name}')">
+        <span class="skill-name">${name}</span>
+        <span class="ver-badge">v${info.version_count}</span>
+        ${isNew ? '<span style="font-size:9px;color:var(--success);margin-left:4px">NEW</span>' : ''}
+        ${isUpdated ? '<span style="font-size:9px;color:var(--warn);margin-left:4px">UPDATED</span>' : ''}
+        <span class="skill-expand" id="sex_${name}">▸</span>
+      </div>
+      <div class="skill-content" id="sc_${name}">
+        <pre>${escHtml(info.content)}</pre>
+      </div>
+      <div class="skill-history" id="sh_${name}">
+        ${(info.history || []).map(h => `
+          <div class="history-item" onclick="showVersionModal('${name}', ${h.version})" title="${escHtml(h.reason)}">
+            <span class="h-ver">v${h.version}</span>
+            <span class="h-action ${h.action}">${h.action}</span>
+            <span class="h-reason">${escHtml(h.reason.substring(0, 40))}</span>
+            <span class="h-time">${h.time.substring(11, 16)}</span>
+          </div>`).join('')}
+        <div style="text-align:right;margin-top:4px">
+          <button onclick="showSkillModal('${name}')" style="font-size:10px;background:none;border:1px solid var(--border);color:var(--muted);padding:2px 8px;border-radius:4px;cursor:pointer">版本对比 →</button>
+        </div>
+      </div>`;
+            list.appendChild(card);
+        }
+    }
+
+    function toggleSkill(name) {
+        const sc = document.getElementById(`sc_${name}`);
+        const sh = document.getElementById(`sh_${name}`);
+        const arrow = document.getElementById(`sex_${name}`);
+        const open = sc?.className.includes('open');
+        if (sc) sc.className = open ? 'skill-content' : 'skill-content open';
+        if (sh) sh.className = open ? 'skill-history' : 'skill-history open';
+        if (arrow) arrow.textContent = open ? '▸' : '▾';
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  Modal
+    // ══════════════════════════════════════════════════════════════
+    async function showSkillModal(name) {
+        const resp = await fetch('/skills');
+        const skills = await resp.json();
+        const info = skills[name];
+        if (!info) return;
+        document.getElementById('modalTitle').textContent = `Skill: ${name}（${info.version_count} 个版本）`;
+        const body = document.getElementById('modalBody');
+
+        const history = info.history || [];
+        if (history.length < 2) {
+            body.innerHTML = `<div class="diff-pre">${escHtml(info.content)}</div>`;
+        } else {
+            // Show all versions as a timeline, click to compare any two
+            const latest = history.at(-1);
+            const initial = history[0];
+            body.innerHTML = `
+      <div style="margin-bottom:10px;font-size:12px;color:var(--muted)">
+        点击任意版本条目查看内容，对比 v1 → 最新版：
+      </div>
+      <div class="diff-grid">
+        <div>
+          <h4>v${initial.version} [${initial.action}] ${initial.time}</h4>
+          <div id="diffLeft" class="diff-pre">加载中...</div>
+        </div>
+        <div>
+          <h4>v${latest.version} [${latest.action}] ${latest.time}</h4>
+          <div id="diffRight" class="diff-pre">加载中...</div>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">版本历史（点击查看内容）：</div>
+        ${history.map(h => `
+          <div class="history-item" onclick="loadVersionIntoModal('${name}', ${h.version})"
+               title="${escHtml(h.reason)}" style="padding:5px 0;border-bottom:1px solid var(--border)">
+            <span class="h-ver">v${h.version}</span>
+            <span class="h-action ${h.action}">${h.action}</span>
+            <span class="h-reason">${escHtml(h.reason)}</span>
+            <span class="h-time">${h.time.substring(11, 19)}</span>
+          </div>`).join('')}
+      </div>`;
+            // load initial and latest
+            loadVersionContent(name, initial.version, 'diffLeft');
+            loadVersionContent(name, latest.version, 'diffRight');
+        }
+        document.getElementById('modal').className = '';
+    }
+
+    async function showVersionModal(name, version) {
+        await showSkillModal(name);
+        // highlight the clicked version on right
+        loadVersionContent(name, version, 'diffRight');
+    }
+
+    async function loadVersionContent(name, version, elId) {
+        const r = await fetch(`/skill_version/${name}/${version}`);
+        const d = await r.json();
+        const el = document.getElementById(elId);
+        if (el) el.textContent = d.content || d.error;
+    }
+
+    async function loadVersionIntoModal(name, version) {
+        loadVersionContent(name, version, 'diffRight');
+        const title = document.getElementById('modalTitle');
+        if (title) title.textContent += ` ← 右侧已切换到 v${version}`;
+    }
+
+    function closeModal() {
+        document.getElementById('modal').className = 'hidden';
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  Reset
+    // ══════════════════════════════════════════════════════════════
+    async function doReset() {
+        if (!confirm('重置将清空所有 Skill 进化记录并还原初始状态，确认？')) return;
+        await fetch('/reset', {method: 'POST'});
+        document.getElementById('feed').innerHTML = '';
+        st.evalResults = {};
+        document.getElementById('runList').innerHTML = '';
+        const r = await fetch('/state').then(r => r.json());
+        Object.assign(st, {
+            phase: r.phase, currentBlock: r.current_block,
+            totalBlocks: r.total_blocks, blockNames: r.block_names,
+        });
+        updateMainBtn();
+        updateStepDots();
+        loadSkills();
+        document.getElementById('phaseLabel').textContent = '已重置';
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  辅助函数
+    // ══════════════════════════════════════════════════════════════
+    function pct(v) {
+        return (v * 100).toFixed(1) + '%';
+    }
+
+    function escHtml(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // 仅当用户已在底部附近（48px 容差）时才跟随滚动，避免向上翻看时被强制拉回
+    function smartScroll() {
+        const f = document.getElementById('feed');
+        if (!f) return;
+        const nearBottom = f.scrollHeight - f.scrollTop - f.clientHeight < 48;
+        if (nearBottom) f.scrollTop = f.scrollHeight;
+    }
+
+    function catBarsHtml(byCategory, rowClass, compact) {
+        return Object.entries(byCategory).map(([cat, v]) => {
+            const a = v.accuracy ?? (v.correct / v.total);
+            const color = a >= 0.7 ? 'var(--success)' : a >= 0.5 ? 'var(--warn)' : 'var(--danger)';
+            if (compact) {
+                return `<div class="${rowClass}">
+        <span style="flex:0 0 80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</span>
+        <div class="probe-cat-bar"><div class="probe-cat-fill" style="width:${(a * 100).toFixed(0)}%;background:${color}"></div></div>
+        <span style="width:32px;text-align:right;color:${color}">${(a * 100).toFixed(0)}%</span>
+      </div>`;
+            }
+            return `<div class="${rowClass}">
+      <span class="acc-label" title="${cat}">${cat}</span>
+      <div class="acc-bar-wrap"><div class="acc-bar" style="width:${(a * 100).toFixed(0)}%;background:${color}"></div></div>
+      <span class="acc-pct" style="color:${color}">${(a * 100).toFixed(0)}%</span>
+    </div>`;
+        }).join('');
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  初始化
+    // ══════════════════════════════════════════════════════════════
+    window.onload = async function () {
+        const r = await fetch('/state').then(r => r.json()).catch(() => ({}));
+        Object.assign(st, {
+            phase: r.phase || 'idle',
+            currentBlock: r.current_block || 0,
+            totalBlocks: r.total_blocks || 8,
+            blockNames: r.block_names || [],
+            nudgeCount: r.nudge_count || 0,
+            evalResults: r.eval_results || {},
+        });
+        buildSteps(st.blockNames);
+        updateMainBtn();
+        updateStepDots();
+        loadSkills();
+        updateRunList();
+    };
+</script>
+</body>
+</html>

@@ -8,17 +8,17 @@
 2. **性能能力**：PagedAttention + continuous batching 的定量收益
 3. **约束解码能力**：guided_choice / guided_regex / guided_json / response_format 四种解码约束的工程价值
 
-场景选型：**金融问答 / 电商下单**——和课程体系中 `rag_annual_report`、`react_financial_agent` 等项目呼应，学生能把 vLLM
+场景选型： **金融问答 / 电商下单**——和课程体系中 `rag_annual_report`、`react_financial_agent` 等项目呼应，学生能把 vLLM
 的推理层和 RAG/Agent 的应用层串起来。
 
 ### 核心方案对比
 
-| 部署方案                        | 优点                         | 缺点               | 本项目立场         |
-|-----------------------------|----------------------------|------------------|---------------|
-| Transformers `.generate()`  | 原生、零依赖                     | 吞吐极差、不支持约束解码     | 作为性能 baseline |
-| Transformers batching 手写    | 简单能跑                       | padding 浪费、无动态调度 | 作为性能 baseline |
-| vLLM OpenAI server          | OpenAI 兼容、动态 batching、约束解码 | 只支持 Linux        | **教学主线**      |
-| TGI / TensorRT-LLM / SGLang | 各有专长                       | 复杂或厂商绑定          | 课后扩展阅读        |
+| 部署方案                    | 优点                                 | 缺点                     | 本项目立场        |
+|-----------------------------|--------------------------------------|--------------------------|-------------------|
+| Transformers `.generate()`  | 原生、零依赖                         | 吞吐极差、不支持约束解码 | 作为性能 baseline |
+| Transformers batching 手写  | 简单能跑                             | padding 浪费、无动态调度 | 作为性能 baseline |
+| vLLM OpenAI server          | OpenAI 兼容、动态 batching、约束解码 | 只支持 Linux             | **教学主线**      |
+| TGI / TensorRT-LLM / SGLang | 各有专长                             | 复杂或厂商绑定           | 课后扩展阅读      |
 
 ---
 
@@ -93,13 +93,13 @@ demo_guided_      demo_guided_        demo_guided_       demo_response    demo_f
 
 **关键启动参数**（`start_server.sh`）：
 
-| 参数                         | 值       | 理由                                   |
-|----------------------------|---------|--------------------------------------|
-| `--max-model-len`          | 2048    | 0.5B 模型不需要长上下文，省 KV cache            |
-| `--gpu-memory-utilization` | 0.6     | 留 40% 显存给并行的 transformers benchmark  |
-| `--dtype`                  | float16 | Qwen2 半精度足够，bf16 也可                  |
-| `--enforce-eager`          | 加       | 关 CUDA graph 首次启动快 5~10 秒（教学不追求极致性能） |
-| `--host 0.0.0.0`           |         | 允许 Windows 浏览器访问                     |
+| 参数                       | 值      | 理由                                                   |
+|----------------------------|---------|--------------------------------------------------------|
+| `--max-model-len`          | 2048    | 0.5B 模型不需要长上下文，省 KV cache                   |
+| `--gpu-memory-utilization` | 0.6     | 留 40% 显存给并行的 transformers benchmark             |
+| `--dtype`                  | float16 | Qwen2 半精度足够，bf16 也可                            |
+| `--enforce-eager`          | 加      | 关 CUDA graph 首次启动快 5~10 秒（教学不追求极致性能） |
+| `--host 0.0.0.0`           |         | 允许 Windows 浏览器访问                                |
 
 ### 3.3 约束解码：guided_choice / guided_regex / guided_json
 
@@ -122,7 +122,7 @@ vLLM 内部用 **xgrammar + outlines_core** 实现约束解码。原理：
 选型原因：
 
 - 标准 JSON Schema 生态，可移植
-- 分层指标：**JSON 合法 → 字段齐全 → 完整 schema 通过**，让学生看清 3 种模式的差异到底在哪一层
+- 分层指标： **JSON 合法 → 字段齐全 → 完整 schema 通过**，让学生看清 3 种模式的差异到底在哪一层
 
 ---
 
@@ -130,11 +130,11 @@ vLLM 内部用 **xgrammar + outlines_core** 实现约束解码。原理：
 
 ### 4.1 吞吐对比（Qwen2-0.5B / RTX 4060 Laptop 8GB / WSL2）
 
-| 模式                                | 50 请求总耗时   | QPS       | Generation tok/s | 相对 vLLM   |
-|-----------------------------------|------------|-----------|------------------|-----------|
-| [A] transformers 串行               | **60.98s** | 0.82      | 60               | 0.017×    |
-| [B] transformers batch=8（padding） | 12.85s     | 3.89      | 289              | 0.080×    |
-| [C] vLLM continuous batching      | **1.03s**  | **48.59** | **3394**         | **1.00×** |
+| 模式                                | 50 请求总耗时 | QPS       | Generation tok/s | 相对 vLLM |
+|-------------------------------------|---------------|-----------|------------------|-----------|
+| [A] transformers 串行               | **60.98s**    | 0.82      | 60               | 0.017×    |
+| [B] transformers batch=8（padding） | 12.85s        | 3.89      | 289              | 0.080×    |
+| [C] vLLM continuous batching        | **1.03s**     | **48.59** | **3394**         | **1.00×** |
 
 **vLLM 相对 transformers 串行加速 59.3×；相对 batch=8 加速 12.5×。**
 
@@ -148,25 +148,25 @@ vLLM 内部用 **xgrammar + outlines_core** 实现约束解码。原理：
 
 ### 4.2 约束解码效果（get_stock_quote，50 条测试）
 
-| 指标               | 裸 prompt | response_format | guided_json |
-|------------------|----------|-----------------|-------------|
-| JSON 语法合法        | 86%      | 100%            | 100%        |
-| 必选字段齐全           | 86%      | 100%            | 100%        |
-| **完整 schema 通过** | **60%**  | **68%**         | **100%**    |
-| 平均延迟（秒）          | 0.43     | 0.41            | 0.43        |
+| 指标                 | 裸 prompt | response_format | guided_json |
+|----------------------|-----------|-----------------|-------------|
+| JSON 语法合法        | 86%       | 100%            | 100%        |
+| 必选字段齐全         | 86%       | 100%            | 100%        |
+| **完整 schema 通过** | **60%**   | **68%**         | **100%**    |
+| 平均延迟（秒）       | 0.43      | 0.41            | 0.43        |
 
 ### 4.3 约束解码效果（create_order，50 条测试）
 
-| 指标               | 裸 prompt | response_format | guided_json |
-|------------------|----------|-----------------|-------------|
-| JSON 语法合法        | 96%      | 100%            | 100%        |
-| 必选字段齐全           | 96%      | 100%            | 100%        |
-| **完整 schema 通过** | **42%**  | **42%**         | **100%**    |
-| 平均延迟（秒）          | 0.57     | 0.56            | 0.58        |
+| 指标                 | 裸 prompt | response_format | guided_json |
+|----------------------|-----------|-----------------|-------------|
+| JSON 语法合法        | 96%       | 100%            | 100%        |
+| 必选字段齐全         | 96%       | 100%            | 100%        |
+| **完整 schema 通过** | **42%**   | **42%**         | **100%**    |
+| 平均延迟（秒）       | 0.57      | 0.56            | 0.58        |
 
 **核心结论**：
 
-- `response_format={"type":"json_object"}` 把 JSON 合法率从 ~90% 拉到 100%，但**字段语义准确率不改善**
+- `response_format={"type":"json_object"}` 把 JSON 合法率从 ~90% 拉到 100%，但 **字段语义准确率不改善**
 - `guided_json=schema` 是唯一能把完整 schema 通过率拉到 100% 的方式
 - 约束解码几乎不增加延迟（FSM 一次构建长期复用）
 
@@ -198,28 +198,28 @@ guided_json:
 
 若时间充裕，可演示的消融维度：
 
-| 消融维度                                     | 关键观察                                             |
-|------------------------------------------|--------------------------------------------------|
-| `enforce_eager` on/off                   | CUDA Graph 优化约 +20% QPS，但首次启动慢 5~10s             |
-| `gpu_memory_utilization` 0.3 / 0.6 / 0.9 | KV cache 越大，batch concurrency 越高                 |
-| 模型规模 0.5B / 1.5B / 3B                    | tok/s 下降但 guided_json schema 通过率显著上升             |
-| prompt 长度变化                              | 短请求占 batch slot 少，长请求是 continuous batching 收益放大器 |
+| 消融维度                                 | 关键观察                                                        |
+|------------------------------------------|-----------------------------------------------------------------|
+| `enforce_eager` on/off                   | CUDA Graph 优化约 +20% QPS，但首次启动慢 5~10s                  |
+| `gpu_memory_utilization` 0.3 / 0.6 / 0.9 | KV cache 越大，batch concurrency 越高                           |
+| 模型规模 0.5B / 1.5B / 3B                | tok/s 下降但 guided_json schema 通过率显著上升                  |
+| prompt 长度变化                          | 短请求占 batch slot 少，长请求是 continuous batching 收益放大器 |
 
 ---
 
 ## 六、关键工程决策与踩坑
 
-| 问题                                                   | 根因                                                                    | 解法                                                          |
-|------------------------------------------------------|-----------------------------------------------------------------------|-------------------------------------------------------------|
-| `torch.cuda.is_available()` 返回 False                 | vLLM 0.20.x 依赖 torch 2.11 + CUDA 13，需要驱动 580+；常见笔记本驱动是 566（CUDA 12.7） | 降级 `pip install vllm==0.9.2`（带 torch 2.7+cu126）             |
-| `aimv2 is already used by a Transformers config`     | transformers 5.x 内置 aimv2，与 vLLM 0.9.2 代码冲突                           | `pip install transformers==4.52.4`                          |
-| `ValueError: Using a device_map requires accelerate` | transformers `from_pretrained(device_map="cuda")` 依赖 accelerate       | `pip install accelerate`                                    |
-| 中文路径 `/mnt/d/badou/项目材料准备/...` 加载模型                  | UTF-8 路径在 vLLM log 里看着乱码但实际能用                                         | 无需修复，log 里 `\uxxxx` 只是显示问题                                  |
-| 第一次 `wsl --install` 后 Ubuntu 不自动弹窗                   | Win11 新版行为，只装了 WSL 子系统                                                | 再次执行 `wsl --install -d Ubuntu-22.04` 会真正下载发行版               |
-| `pkill -f 'vllm.entrypoints'` 把自己的 bash 也杀了          | `-f` 模糊匹配命令行，bash 命令里也有这字符串                                           | 改用 `fuser -k 8000/tcp` 按端口杀                                 |
-| matplotlib 显示"串行"方块                                  | DejaVu Sans 不含中文字形                                                    | 图表标签改英文（`serial`/`batch`）                                   |
-| bench 同时跑 transformers + vLLM 显存不足                   | 两份 0.5B 模型 + KV cache                                                 | 先停掉 vLLM server 再跑 bench                                    |
-| WSL2 默认装在 C 盘，长期会挤满                                  | 默认路径 `%LOCALAPPDATA%\wsl\`                                            | `wsl --export` + `wsl --unregister` + `wsl --import` 迁到 D 盘 |
+| 问题                                                 | 根因                                                                                    | 解法                                                           |
+|------------------------------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------------------------------|
+| `torch.cuda.is_available()` 返回 False               | vLLM 0.20.x 依赖 torch 2.11 + CUDA 13，需要驱动 580+；常见笔记本驱动是 566（CUDA 12.7） | 降级 `pip install vllm==0.9.2`（带 torch 2.7+cu126）           |
+| `aimv2 is already used by a Transformers config`     | transformers 5.x 内置 aimv2，与 vLLM 0.9.2 代码冲突                                     | `pip install transformers==4.52.4`                             |
+| `ValueError: Using a device_map requires accelerate` | transformers `from_pretrained(device_map="cuda")` 依赖 accelerate                       | `pip install accelerate`                                       |
+| 中文路径 `/mnt/d/badou/项目材料准备/...` 加载模型    | UTF-8 路径在 vLLM log 里看着乱码但实际能用                                              | 无需修复，log 里 `\uxxxx` 只是显示问题                         |
+| 第一次 `wsl --install` 后 Ubuntu 不自动弹窗          | Win11 新版行为，只装了 WSL 子系统                                                       | 再次执行 `wsl --install -d Ubuntu-22.04` 会真正下载发行版      |
+| `pkill -f 'vllm.entrypoints'` 把自己的 bash 也杀了   | `-f` 模糊匹配命令行，bash 命令里也有这字符串                                            | 改用 `fuser -k 8000/tcp` 按端口杀                              |
+| matplotlib 显示"串行"方块                            | DejaVu Sans 不含中文字形                                                                | 图表标签改英文（`serial`/`batch`）                             |
+| bench 同时跑 transformers + vLLM 显存不足            | 两份 0.5B 模型 + KV cache                                                               | 先停掉 vLLM server 再跑 bench                                  |
+| WSL2 默认装在 C 盘，长期会挤满                       | 默认路径 `%LOCALAPPDATA%\wsl\`                                                          | `wsl --export` + `wsl --unregister` + `wsl --import` 迁到 D 盘 |
 
 ---
 

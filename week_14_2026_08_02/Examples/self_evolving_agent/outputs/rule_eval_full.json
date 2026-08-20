@@ -1,0 +1,1046 @@
+{
+  "timestamp": "2026-05-09T16:31:17.677375",
+  "skill_versions_active": {
+    "refund": 8,
+    "vip_benefits": 4
+  },
+  "summary": {
+    "total": 60,
+    "correct": 13,
+    "accuracy": 0.217
+  },
+  "by_category": {
+    "refund_basic": {
+      "total": 10,
+      "correct": 9,
+      "accuracy": 0.9
+    },
+    "vip_refund": {
+      "total": 12,
+      "correct": 3,
+      "accuracy": 0.25
+    },
+    "promotion_refund": {
+      "total": 12,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    "digital_goods": {
+      "total": 11,
+      "correct": 1,
+      "accuracy": 0.091
+    },
+    "logistics": {
+      "total": 8,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    "payment_account": {
+      "total": 7,
+      "correct": 0,
+      "accuracy": 0.0
+    }
+  },
+  "results": [
+    {
+      "id": 1,
+      "category": "refund_basic",
+      "question": "我买了一件T恤，签收后第25天，商品没拆袋保持完好，可以退货退款吗？",
+      "ground_truth": {
+        "required": [
+          "可以"
+        ],
+        "forbidden": [
+          "不可以",
+          "不支持退"
+        ]
+      },
+      "answer": "根据退货规则，签收后30天内可退，且商品须完好无损、未使用状态。您的情况符合条件，可以申请退货退款。退款到账时间根据支付方式不同：微信/支付宝1-3个工作日，银行卡3-5个工作日，余额支付实时到账。退货运费需由您自行承担。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 2,
+      "category": "refund_basic",
+      "question": "我签收商品已经35天了，现在想退货，还可以吗？",
+      "ground_truth": {
+        "required": [
+          "30天"
+        ],
+        "forbidden": [
+          "可以退货",
+          "可以申请退货",
+          "还可以退"
+        ]
+      },
+      "answer": "根据退货规则，商品需在签收后30天内退货，且商品须完好无损、未使用状态。您签收已35天，超过30天退货期限，因此不支持退货。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 3,
+      "category": "refund_basic",
+      "question": "退款会退到哪里？我是用微信支付的。",
+      "ground_truth": {
+        "required": [
+          "微信",
+          "1-3"
+        ],
+        "forbidden": [
+          "3-5"
+        ]
+      },
+      "answer": "如果您使用微信支付，退款到账时间为 **1-3个工作日**。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 4,
+      "category": "refund_basic",
+      "question": "退款多久到账？我用银行卡付款的。",
+      "ground_truth": {
+        "required": [
+          "3-5",
+          "工作日"
+        ],
+        "forbidden": [
+          "实时",
+          "1-3"
+        ]
+      },
+      "answer": "根据退款规则，使用银行卡付款的退款到账时间为 **3-5个工作日**。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 5,
+      "category": "refund_basic",
+      "question": "我用余额付款的订单申请了退款，多久能到账？",
+      "ground_truth": {
+        "required": [
+          "实时"
+        ],
+        "forbidden": [
+          "工作日"
+        ]
+      },
+      "answer": "余额支付退款是实时到账的。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 6,
+      "category": "refund_basic",
+      "question": "退货的时候运费谁来出？（我是普通用户，没有VIP）",
+      "ground_truth": {
+        "required": [
+          "自"
+        ],
+        "forbidden": [
+          "平台承担",
+          "免费"
+        ]
+      },
+      "answer": "根据退货规则，退货运费由用户自行承担。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 7,
+      "category": "refund_basic",
+      "question": "退货商品需要保持什么状态？",
+      "ground_truth": {
+        "required": [
+          "完好"
+        ],
+        "forbidden": []
+      },
+      "answer": "退货商品须保持完好无损、未使用状态。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 8,
+      "category": "refund_basic",
+      "question": "商品有明显质量问题，收到后20天，可以退货吗？",
+      "ground_truth": {
+        "required": [
+          "可以"
+        ],
+        "forbidden": [
+          "不可以"
+        ]
+      },
+      "answer": "可以退货。根据规则，商品存在明显质量问题，在签收后30天内可申请退货或换货，您收到后20天仍在退货期限内。申请时需提供照片说明质量问题。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 9,
+      "category": "refund_basic",
+      "question": "我用支付宝付的，退款能退回支付宝吗？多久到账？",
+      "ground_truth": {
+        "required": [
+          "支付宝",
+          "1-3"
+        ],
+        "forbidden": [
+          "3-5"
+        ]
+      },
+      "answer": "可以的。使用支付宝支付的订单，退款会原路退回支付宝账户，到账时间为 **1-3个工作日**。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 10,
+      "category": "refund_basic",
+      "question": "我混合支付的，一部分微信一部分余额，退款怎么退？",
+      "ground_truth": {
+        "required": [
+          "微信",
+          "余额",
+          "分别"
+        ],
+        "forbidden": []
+      },
+      "answer": "根据退款规则，退款到账时间取决于支付方式：\n\n- **微信支付部分**：1-3个工作日到账\n- **余额支付部分**：实时到账\n\n因此，混合支付的订单退款时，微信支付的金额会在1-3个工作日内退回，余额支付的金额会实时到账。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '分别'"
+    },
+    {
+      "id": 11,
+      "category": "vip_refund",
+      "question": "我是银卡VIP，商品收到45天了，可以退货吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "60"
+        ],
+        "forbidden": [
+          "不可以",
+          "30天"
+        ]
+      },
+      "answer": "根据退货规则，商品须在签收后 **30天内** 可退，且商品须完好无损、未使用状态。您已收到商品45天，超过30天退货期限，因此不支持退货。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '可以'"
+    },
+    {
+      "id": 12,
+      "category": "vip_refund",
+      "question": "我是金卡VIP，退货期限是多少天？",
+      "ground_truth": {
+        "required": [
+          "90"
+        ],
+        "forbidden": [
+          "60天",
+          "30天"
+        ]
+      },
+      "answer": "金卡VIP的退货期限与普通用户一致，为签收后 **30天内** 可退，商品须完好无损、未使用状态。超过30天不支持退货。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '90'"
+    },
+    {
+      "id": 13,
+      "category": "vip_refund",
+      "question": "我是白卡VIP，商品收到35天了，想退货，可以吗？",
+      "ground_truth": {
+        "required": [
+          "30天",
+          "白卡"
+        ],
+        "forbidden": [
+          "60天",
+          "可以退货",
+          "可以申请退"
+        ]
+      },
+      "answer": "根据退货规则，商品需在签收后 **30天内** 可退，且商品须完好无损、未使用状态。您已收到商品35天，超过30天退货期限，因此不支持退货。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '白卡'"
+    },
+    {
+      "id": 14,
+      "category": "vip_refund",
+      "question": "我是银卡VIP，退货运费需要我自己付吗？",
+      "ground_truth": {
+        "_note": "required 从 '免' 改 '平台'：Agent 更常用'由平台承担'而非'免运费'",
+        "required": [
+          "平台"
+        ],
+        "forbidden": [
+          "自付",
+          "自己付"
+        ]
+      },
+      "answer": "是的，根据退货规则，退货运费需要由用户自行承担，与VIP等级无关。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '平台'"
+    },
+    {
+      "id": 15,
+      "category": "vip_refund",
+      "question": "我是银卡VIP，商品有轻微使用痕迹，还能退货吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "轻微"
+        ],
+        "forbidden": [
+          "不可以"
+        ]
+      },
+      "answer": "根据退货规则，商品须完好无损、未使用状态才可在签收后30天内退货。您提到商品有轻微使用痕迹，不符合退货条件，因此不支持退货。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '可以'"
+    },
+    {
+      "id": 16,
+      "category": "vip_refund",
+      "question": "我是白卡VIP，退货运费是平台出还是我自己出？",
+      "ground_truth": {
+        "_note": "去掉 forbidden：正确答案会说'白卡自付，银卡由平台承担'作对比，会误伤。required 有'自'即证明 Agent 识别了白卡要自付",
+        "required": [
+          "自",
+          "白卡"
+        ],
+        "forbidden": []
+      },
+      "answer": "根据技能文档，退货运费由用户自行承担，与VIP等级无关。因此，您作为白卡VIP，退货运费仍需自己承担。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 17,
+      "category": "vip_refund",
+      "question": "专属客服通道是哪个VIP等级才有？",
+      "ground_truth": {
+        "_note": "去掉 forbidden：正确答案会列举'白卡和银卡VIP没有'，原 forbidden 把正确的否定列举也误判为错",
+        "required": [
+          "金卡"
+        ],
+        "forbidden": []
+      },
+      "answer": "金卡VIP享有专属客服通道。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 18,
+      "category": "vip_refund",
+      "question": "我是金卡VIP，商品收到65天了，能退货吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "90"
+        ],
+        "forbidden": [
+          "不可以"
+        ]
+      },
+      "answer": "根据退货规则，商品须在签收后30天内退货，且商品须完好无损、未使用状态。您的商品已收到65天，超过30天退货期限，因此不支持退货。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '可以'"
+    },
+    {
+      "id": 19,
+      "category": "vip_refund",
+      "question": "我是银卡VIP，商品收到62天了，能退货吗？",
+      "ground_truth": {
+        "required": [
+          "60天"
+        ],
+        "forbidden": [
+          "可以退货",
+          "可以申请退",
+          "还可以退"
+        ]
+      },
+      "answer": "根据退货规则，商品须在签收后30天内退货，且商品须完好无损、未使用状态。您的商品已收到62天，超过30天退货期限，因此不支持退货。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '60天'"
+    },
+    {
+      "id": 20,
+      "category": "vip_refund",
+      "question": "金卡VIP退货时商品允许有使用痕迹吗？",
+      "ground_truth": {
+        "required": [
+          "轻微",
+          "使用痕迹"
+        ],
+        "forbidden": []
+      },
+      "answer": "根据退货规则，商品须完好无损、未使用状态才可退货。金卡VIP同样适用此规则，因此商品不允许有使用痕迹。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '轻微'"
+    },
+    {
+      "id": 21,
+      "category": "vip_refund",
+      "question": "白卡VIP和普通用户的退款政策有什么区别？",
+      "ground_truth": {
+        "required": [
+          "30天",
+          "白卡"
+        ],
+        "forbidden": [
+          "60天",
+          "90天"
+        ]
+      },
+      "answer": "根据技能文档，白卡VIP和普通用户的退款政策没有区别。所有用户（包括白卡VIP）均适用以下统一规则：\n\n- **退货期限**：签收后30天内可退，商品须完好无损、未使用状态；超过30天不支持退货。\n- **质量问题**：30天内可申请退货或换货，需提供照片说明。\n- **退款到账时间**：微信/支付宝1-3个工作日，银行卡3-5个工作日，余额支付实时到账。\n- **退货运费**：用户自行承担来回运费。\n\n文档中未提及白卡VIP享有任何特殊的退款政策。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 22,
+      "category": "vip_refund",
+      "question": "银卡VIP商品有轻微划痕，20天了，退货运费谁出？",
+      "ground_truth": {
+        "_note": "进一步去掉 '可以'：问题核心是'运费谁出'，只需确认'平台承担'，能不能退由 forbidden 排错",
+        "required": [
+          "平台"
+        ],
+        "forbidden": [
+          "自付",
+          "自己付"
+        ]
+      },
+      "answer": "根据规则，商品存在明显质量问题，30天内可申请退货。您的情况属于质量问题，但退货运费需由用户自行承担。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '平台'"
+    },
+    {
+      "id": 23,
+      "category": "promotion_refund",
+      "question": "我买的是限时特惠商品，普通用户，能退货吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "answer": "根据退货规则，普通用户购买的商品在签收后 **30天内** 可退，且商品须完好无损、未使用状态。限时特惠商品同样适用此规则，只要符合上述条件即可申请退货。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '不'"
+    },
+    {
+      "id": 24,
+      "category": "promotion_refund",
+      "question": "我是银卡VIP，买的限时特惠商品，收到后第5天，可以退货吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "7天"
+        ],
+        "forbidden": [
+          "不可以"
+        ]
+      },
+      "answer": "根据技能文档，退货期限为签收后30天内，且商品须完好无损、未使用状态。您在第5天申请退货，在30天退货期内，因此可以退货。但需注意，退货运费由您自行承担。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '7天'"
+    },
+    {
+      "id": 25,
+      "category": "promotion_refund",
+      "question": "我是金卡VIP，买的限时特惠商品，收到后第8天，还能退货吗？",
+      "ground_truth": {
+        "_note": "去掉 90天/60天：Agent 解释例外时需要引用原规则'金卡不延长至90天'，保留会误伤；'可以退'足以抓主要错误",
+        "required": [
+          "7天"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "answer": "根据技能文档，退货期限为签收后30天内，且商品须完好无损、未使用状态。您在第8天申请退货，仍在30天退货期内，因此可以退货。金卡VIP身份不影响退货规则，但请注意退货运费由您自行承担。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '7天'"
+    },
+    {
+      "id": 26,
+      "category": "promotion_refund",
+      "question": "我是白卡VIP，买了限时特惠商品，收到后3天，能退吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退",
+          "7天"
+        ]
+      },
+      "answer": "根据云购商城的退货规则，签收后 **30天内** 可退货，且商品须完好无损、未使用状态。您收到商品仅3天，在退货期限内，因此可以申请退货。请注意，退货运费需由您自行承担。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '不'"
+    },
+    {
+      "id": 27,
+      "category": "promotion_refund",
+      "question": "我是银卡VIP，限时特惠商品，收到后第9天，来得及退货吗？",
+      "ground_truth": {
+        "_note": "去掉单字 '不'：Agent 常用'无法退货/已超过'表达否定；'可以退'抓主要错误",
+        "required": [
+          "7天"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "answer": "根据退货规则，签收后 **30天内** 可退，且商品须完好无损、未使用状态。您在第9天申请退货，在30天退货期内，因此来得及退货。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '7天'"
+    },
+    {
+      "id": 28,
+      "category": "promotion_refund",
+      "question": "我是金卡VIP，限时特惠商品，收到4天，退货运费谁出？",
+      "ground_truth": {
+        "_note": "去掉 '免'：同 Q14/Q22，Agent 更常用'平台承担'而非'免'字",
+        "required": [
+          "平台"
+        ],
+        "forbidden": [
+          "自付",
+          "自己付"
+        ]
+      },
+      "answer": "根据技能文档中的规定，退货运费由用户自行承担，无论是否为VIP会员或商品类型。因此，您需要自行承担来回运费。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '平台'"
+    },
+    {
+      "id": 29,
+      "category": "promotion_refund",
+      "question": "参加了满减活动，退了其中一件商品，需要补满减差价吗？",
+      "ground_truth": {
+        "_note": "去掉 '重新计算' 这个具体术语：Agent 常用'不再满足门槛'/'订单金额变化'等说法。forbidden 抓错误方向",
+        "required": [
+          "补"
+        ],
+        "forbidden": [
+          "不需要",
+          "不用补"
+        ]
+      },
+      "answer": "需要联系人工客服。",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 30,
+      "category": "promotion_refund",
+      "question": "我用了新人券下单，退款之后券还会退给我吗？",
+      "ground_truth": {
+        "required": [
+          "不补发"
+        ],
+        "forbidden": [
+          "退还",
+          "补发"
+        ]
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 31,
+      "category": "promotion_refund",
+      "question": "限时特惠商品可以叠加优惠券吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以叠加"
+        ]
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 32,
+      "category": "promotion_refund",
+      "question": "积分商城兑换的商品可以退款吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 33,
+      "category": "promotion_refund",
+      "question": "银卡VIP买限时特惠，收到5天，有轻微划痕，能退吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "7天"
+        ],
+        "forbidden": [
+          "不可以"
+        ]
+      },
+      "answer": "根据退货规则，签收后30天内可退，您的商品签收仅5天，在退货期限内。但退货需满足商品完好无损、未使用状态。您提到商品有轻微划痕，这属于质量问题，30天内可申请退货或换货，需提供照片说明。因此，您可以申请退货，但需提供划痕照片作为质量问题说明。退货运费由您自行承担。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '7天'"
+    },
+    {
+      "id": 34,
+      "category": "promotion_refund",
+      "question": "满599减80的活动，我买了800元的东西，退了400元的商品，需要补差价吗？",
+      "ground_truth": {
+        "_note": "去掉 '不满'：Agent 常说'不再满足'中间多个字就匹配不到。forbidden 抓错误方向",
+        "required": [
+          "补"
+        ],
+        "forbidden": [
+          "不需要",
+          "不用补"
+        ]
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 35,
+      "category": "digital_goods",
+      "question": "我买了一本电子书，想退款，可以吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "answer": "需要联系人工客服。",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 36,
+      "category": "digital_goods",
+      "question": "软件激活码买了但还没激活，可以退款吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退",
+          "可以"
+        ]
+      },
+      "answer": "根据退款规则，退货期限为签收后30天内，且商品须完好无损、未使用状态。软件激活码若未激活，可视为未使用状态，在签收后30天内可以申请退款。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '不'"
+    },
+    {
+      "id": 37,
+      "category": "digital_goods",
+      "question": "我是金卡VIP，买了游戏点卡，VIP能享受退款特权吗？",
+      "ground_truth": {
+        "required": [
+          "不",
+          "数字商品"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "answer": "根据技能文档，金卡VIP的专属服务是享有专属客服通道，但退款退货规则对所有用户统一适用，没有针对VIP的特殊退款特权。具体规则如下：\n\n- 退货期限：签收后30天内可退，商品须完好无损、未使用状态。\n- 质量问题：30天内可申请退货或换货，需提供照片说明。\n- 退款到账时间：微信/支付宝1-3个工作日，银行卡3-5个工作日，余额支付实时到账。\n- 退货运费：用户自行承担来回运费。\n\n游戏点卡属于数字商品，通常无法满足“商品完好无损、未使用状态”的条件，因此可能不支持退货。如需进一步确认，建议联系人工客服。",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 38,
+      "category": "digital_goods",
+      "question": "数字商品在什么情况下可以退款？",
+      "ground_truth": {
+        "required": [
+          "质量问题",
+          "工单",
+          "截图"
+        ],
+        "forbidden": []
+      },
+      "answer": "需要联系人工客服。",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 39,
+      "category": "digital_goods",
+      "question": "平台会员卡是数字商品吗？能退款吗？",
+      "ground_truth": {
+        "required": [
+          "数字",
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 40,
+      "category": "digital_goods",
+      "question": "买了电子书发现买错了，想退款怎么办？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "answer": "根据技能文档，退货规则仅适用于实体商品（需商品完好、未使用状态），电子书不属于此范围。因此，需要联系人工客服。",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 41,
+      "category": "digital_goods",
+      "question": "软件激活码有质量问题，怎么申请退款？",
+      "ground_truth": {
+        "required": [
+          "工单",
+          "截图"
+        ],
+        "forbidden": []
+      },
+      "answer": "根据退款退货规则，如果商品存在明显质量问题，在签收后30天内可以申请退货或换货。申请时需提供照片说明质量问题。退款到账时间根据支付方式不同：微信/支付宝1-3个工作日，银行卡3-5个工作日，余额支付实时到账。退货运费由用户自行承担。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '工单'"
+    },
+    {
+      "id": 42,
+      "category": "digital_goods",
+      "question": "银卡VIP购买了电子书，声称有VIP60天退款特权，可以退吗？",
+      "ground_truth": {
+        "_note": "去掉 60天：Agent 会解释'虽然银卡享有60天退货期，但数字商品不支持'，保留会误伤；'可以退'足以抓主要错误",
+        "required": [
+          "不",
+          "数字商品"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 43,
+      "category": "digital_goods",
+      "question": "游戏点卡是数字商品吗？",
+      "ground_truth": {
+        "required": [
+          "数字商品",
+          "是"
+        ],
+        "forbidden": []
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 44,
+      "category": "digital_goods",
+      "question": "我金卡VIP，刚买的电子书30分钟前下单，能退吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退",
+          "30天",
+          "60天",
+          "90天"
+        ]
+      },
+      "answer": "根据技能文档，退货期限为签收后30天内，且商品须完好无损、未使用状态。您刚下单30分钟，商品尚未签收，因此符合退货条件。但请注意，退货运费需由您自行承担。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '不'"
+    },
+    {
+      "id": 45,
+      "category": "digital_goods",
+      "question": "电子书激活了之后还能退款吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "answer": "根据退货规则，商品须完好无损且未使用状态才可退货。电子书激活后属于已使用状态，因此不支持退款。",
+      "rule_correct": true,
+      "rule_reason": "correct"
+    },
+    {
+      "id": 46,
+      "category": "logistics",
+      "question": "我刚付款2小时，订单还没发货，可以取消订单吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "24小时"
+        ],
+        "forbidden": [
+          "退款流程",
+          "退货"
+        ]
+      },
+      "answer": "需要联系人工客服。",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 47,
+      "category": "logistics",
+      "question": "我付款3天了，订单还显示待发货，可以直接取消吗？",
+      "ground_truth": {
+        "required": [
+          "退货退款",
+          "48小时"
+        ],
+        "forbidden": [
+          "直接取消"
+        ]
+      },
+      "answer": "根据技能文档，我无法直接回答关于订单取消的问题。需要联系人工客服。",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 48,
+      "category": "logistics",
+      "question": "标准配送需要几天可以收到？",
+      "ground_truth": {
+        "required": [
+          "3",
+          "7",
+          "工作日"
+        ],
+        "forbidden": []
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 49,
+      "category": "logistics",
+      "question": "次日达服务需要几点前下单？在哪些城市有？",
+      "ground_truth": {
+        "required": [
+          "14",
+          "北京",
+          "上海"
+        ],
+        "forbidden": []
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 50,
+      "category": "logistics",
+      "question": "我在新疆，可以选次日达吗？",
+      "ground_truth": {
+        "required": [
+          "不支持"
+        ],
+        "forbidden": [
+          "可以"
+        ]
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 51,
+      "category": "logistics",
+      "question": "取消未发货订单，退款多久到账？",
+      "ground_truth": {
+        "required": [
+          "24小时"
+        ],
+        "forbidden": [
+          "3-5",
+          "1-3"
+        ]
+      },
+      "answer": "根据退款规则，未发货订单取消后，退款到账时间如下：\n\n- 微信/支付宝：1-3个工作日\n- 银行卡：3-5个工作日\n- 余额支付：实时到账",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '24小时'"
+    },
+    {
+      "id": 52,
+      "category": "logistics",
+      "question": "付款后36小时，订单待发货，可以取消吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "48小时"
+        ],
+        "forbidden": []
+      },
+      "answer": "需要联系人工客服。",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 53,
+      "category": "logistics",
+      "question": "满多少元可以免运费？",
+      "ground_truth": {
+        "required": [
+          "99"
+        ],
+        "forbidden": []
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 54,
+      "category": "payment_account",
+      "question": "账户余额可以提现吗？",
+      "ground_truth": {
+        "required": [
+          "不支持"
+        ],
+        "forbidden": [
+          "可以提现"
+        ]
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 55,
+      "category": "payment_account",
+      "question": "余额可以转给朋友吗？每天有上限吗？",
+      "ground_truth": {
+        "required": [
+          "500",
+          "每日"
+        ],
+        "forbidden": []
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 56,
+      "category": "payment_account",
+      "question": "我的订单用积分抵扣了10元，退款的话会退回多少积分？",
+      "ground_truth": {
+        "required": [
+          "800",
+          "80"
+        ],
+        "forbidden": [
+          "1000",
+          "100积分"
+        ]
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 57,
+      "category": "payment_account",
+      "question": "我账户被冻结了，提交了退款申请，能被处理吗？",
+      "ground_truth": {
+        "required": [
+          "解冻",
+          "先"
+        ],
+        "forbidden": []
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 58,
+      "category": "payment_account",
+      "question": "积分抵扣了50元，其余100元用银行卡付，申请退款后怎么退？",
+      "ground_truth": {
+        "required": [
+          "4000",
+          "100",
+          "银行卡"
+        ],
+        "forbidden": []
+      },
+      "answer": "根据退款规则，退款到账时间取决于支付方式：\n\n- **余额支付**：实时到账\n- **银行卡支付**：3-5个工作日\n\n您的情况是积分抵扣50元（相当于余额支付部分），其余100元用银行卡支付。因此：\n- 积分抵扣的50元会实时退回您的账户余额。\n- 银行卡支付的100元会在3-5个工作日内退回您的银行卡。\n\n请注意，退款需在签收后30天内申请，且商品须完好无损、未使用状态。",
+      "rule_correct": false,
+      "rule_reason": "缺少关键词: '4000'"
+    },
+    {
+      "id": 59,
+      "category": "payment_account",
+      "question": "账户被冻结，VIP权益还能使用吗？",
+      "ground_truth": {
+        "_note": "去掉 '不'：Agent 常用'无法使用'。required 保留'冻结'证明 Agent 识别了场景，forbidden 抓错误方向",
+        "required": [
+          "冻结"
+        ],
+        "forbidden": [
+          "可以使用"
+        ]
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    },
+    {
+      "id": 60,
+      "category": "payment_account",
+      "question": "账户被冻结了怎么解冻？需要多久？",
+      "ground_truth": {
+        "required": [
+          "客服",
+          "1-3",
+          "工作日"
+        ],
+        "forbidden": []
+      },
+      "answer": "需要联系人工客服",
+      "rule_correct": false,
+      "rule_reason": "Agent 推脱（含 '联系人工'）"
+    }
+  ]
+}

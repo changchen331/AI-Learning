@@ -4,11 +4,11 @@
 
 本项目以 **中文命名实体识别（NER）** 为任务，核心教学目标是量化对比四套方案：
 
-| 方案                 | 实现方式                       | 教学价值                   |
-|--------------------|----------------------------|------------------------|
-| BERT + Linear      | 线性分类头，逐 token 独立预测         | BERT 序列建模基线，展示局限性      |
-| BERT + CRF         | 条件随机场，全局序列解码               | 量化 CRF 对序列合法性的保证       |
-| LLM API（qwen-plus） | zero-shot + few-shot 提示    | 揭示微调小模型 vs 大模型提示的差距    |
+| 方案                 | 实现方式                            | 教学价值                             |
+|----------------------|-------------------------------------|--------------------------------------|
+| BERT + Linear        | 线性分类头，逐 token 独立预测       | BERT 序列建模基线，展示局限性        |
+| BERT + CRF           | 条件随机场，全局序列解码            | 量化 CRF 对序列合法性的保证          |
+| LLM API（qwen-plus） | zero-shot + few-shot 提示           | 揭示微调小模型 vs 大模型提示的差距   |
 | LLM SFT（LoRA）      | 指令微调 Qwen2-0.5B，生成 JSON 实体 | 生成式 NER vs 序列标注；参数高效微调 |
 
 **数据集**：cluener2020，10 类细粒度实体，来源 CLUE benchmark，训练集 10,748 条，验证集 1,343 条。
@@ -81,7 +81,7 @@ src/compare_results.py   ← 汇总四套方案数字对比表
 - CRF 维护 `(num_labels × num_labels)` 的转移矩阵，学习哪些转移合法
 - 训练：前向-后向算法计算对数似然；推理：Viterbi 找全局最优路径
 
-**为什么 CRF 提升不多**：BERT 的双向注意力已能隐式建模上下文约束，CRF 的主要价值在于**数学保证合法性**，而非大幅提升 F1。
+**为什么 CRF 提升不多**：BERT 的双向注意力已能隐式建模上下文约束，CRF 的主要价值在于 **数学保证合法性**，而非大幅提升 F1。
 
 ### 3.3 训练：AdamW + 分层学习率
 
@@ -94,17 +94,17 @@ src/compare_results.py   ← 汇总四套方案数字对比表
 
 ### 3.4 统一评估体系
 
-本项目四套方案使用两种相互兼容的评估方式，**最终数字可以在同一量纲下比较**。
+本项目四套方案使用两种相互兼容的评估方式， **最终数字可以在同一量纲下比较**。
 
 **方式 A：seqeval entity-level F1**（BERT 方案，`evaluate.py`）
 
 BERT NER 输出 BIO 标签序列，每个 token 对应精确位置，可直接构成 (text, type, start, end) 4 元组。seqeval 要求 entity
 的类型和字符边界完全匹配才算 TP。
 
-**方式 B：span F1 + text.find() 近似定位**（LLM 方案，`llm_ner.py` 和 `evaluate_sft.py`）
+**方式 B：span F1 + text.find () 近似定位**（LLM 方案，`llm_ner.py` 和 `evaluate_sft.py`）
 
 LLM 输出 JSON 格式实体列表，JSON 中不包含位置信息。通过 `text.find(surface)` 在原文中定位起始字符，构成 (text, type, start,
-end) 4 元组，再与 gold 做集合交集计算 P/R/F1。`llm_ner.py` 和 `evaluate_sft.py` 使用完全相同的实现，**LLM API 和 SFT 的 F1
+end) 4 元组，再与 gold 做集合交集计算 P/R/F1。`llm_ner.py` 和 `evaluate_sft.py` 使用完全相同的实现， **LLM API 和 SFT 的 F1
 数字可直接比较**。
 
 **两种方式的差异**：仅在同一句子里同一实体多次出现时，`text.find()` 只取第一个，位置可能与 gold 不一致。实测同一样本集：两种方式的
@@ -115,7 +115,7 @@ F1 差 < 0.01，差异可忽略，四套方案的 F1 基本在同一量纲下。
 - 模型：`qwen-plus`（DashScope 兼容接口）
 - 输出格式：JSON `{"entities": [{"text": "...", "type": "..."}]}`
 - 正则提取 JSON 块，容错处理非标准输出
-- 评估：span F1 + text.find()（方式 B）
+- 评估：span F1 + text.find ()（方式 B）
 - 成本控制：验证集采样 100 条（分层采样，保证 10 类实体均有覆盖）
 
 ### 3.6 LLM SFT：LoRA 指令微调
@@ -132,12 +132,12 @@ TARGET: {"entities": [{"text": "浙商银行", "type": "company"},
 
 **与分类任务的关键差异**：
 
-| 维度             | 分类       | NER               |
-|----------------|----------|-------------------|
-| TARGET token 数 | 1~2（类别名） | 20~150（JSON 实体列表） |
-| loss 集中程度      | 极度集中     | 分散在整个 JSON        |
-| 生成控制难度         | 低（单词约束）  | 中（JSON 格式约束）      |
-| max_length     | 128      | 256（JSON 输出更长）    |
+| 维度            | 分类           | NER                     |
+|-----------------|----------------|-------------------------|
+| TARGET token 数 | 1~2（类别名）  | 20~150（JSON 实体列表） |
+| loss 集中程度   | 极度集中       | 分散在整个 JSON         |
+| 生成控制难度    | 低（单词约束） | 中（JSON 格式约束）     |
+| max_length      | 128            | 256（JSON 输出更长）    |
 
 #### Loss Masking
 
@@ -157,11 +157,11 @@ LoRA r=8，目标层：q_proj / k_proj / v_proj / o_proj
 
 #### 实测结果（全量数据 10748 条，1 epoch，RTX 4060）
 
-| 指标        | 数值              |
-|-----------|-----------------|
-| Precision | 0.6351          |
-| Recall    | 0.6295          |
-| **F1**    | **0.6323**      |
+| 指标          | 数值               |
+|---------------|--------------------|
+| Precision     | 0.6351             |
+| Recall        | 0.6295             |
+| **F1**        | **0.6323**         |
 | JSON 解析失败 | **0 条（0%）**     |
 | 训练时间      | 3303s（约 55 min） |
 | 推理速度      | 1.26s/条（GPU）    |
@@ -170,13 +170,13 @@ LoRA r=8，目标层：q_proj / k_proj / v_proj / o_proj
 
 ## 4. 实验结果
 
-| 方案                   | Entity F1  | 非法序列    | 评估方式          | 备注                      |
-|----------------------|------------|---------|---------------|-------------------------|
-| BERT + Linear        | ~0.79      | 10~30 条 | seqeval（方式 A） | 3 epoch；1 epoch ≈ 72.7% |
-| BERT + CRF           | **0.7254** | **0 条** | seqeval（方式 A） | 3 epoch；val 集实测         |
-| Qwen API zero-shot   | ~0.55      | -       | span F1（方式 B） | qwen-plus；100 条参考值      |
-| Qwen API few-shot    | ~0.63      | -       | span F1（方式 B） | qwen-plus；3 例参考值        |
-| Qwen2-0.5B SFT（LoRA） | **0.6323** | **0 条** | span F1（方式 B） | 1 epoch；全量数据；实测         |
+| 方案                   | Entity F1  | 非法序列 | 评估方式          | 备注                     |
+|------------------------|------------|----------|-------------------|--------------------------|
+| BERT + Linear          | ~0.79      | 10~30 条 | seqeval（方式 A） | 3 epoch；1 epoch ≈ 72.7% |
+| BERT + CRF             | **0.7254** | **0 条** | seqeval（方式 A） | 3 epoch；val 集实测      |
+| Qwen API zero-shot     | ~0.55      | -        | span F1（方式 B） | qwen-plus；100 条参考值  |
+| Qwen API few-shot      | ~0.63      | -        | span F1（方式 B） | qwen-plus；3 例参考值    |
+| Qwen2-0.5B SFT（LoRA） | **0.6323** | **0 条** | span F1（方式 B） | 1 epoch；全量数据；实测  |
 
 **主要结论**：
 
@@ -218,7 +218,7 @@ CRF 解码：O O B-address I-address B-company I-company B-name I-name O O O
 
 1. **过度识别**：把描述性词语也标记为实体（hallucination）
 2. **类型混淆**：`organization` vs `government` 分不清
-3. **边界偏移**：实体文本识别正确，但 text.find() 取到的是错误的出现位置（多次出现时）
+3. **边界偏移**：实体文本识别正确，但 text.find () 取到的是错误的出现位置（多次出现时）
 
 ---
 
@@ -249,18 +249,18 @@ CRF 解码：O O B-address I-address B-company I-company B-name I-name O O O
 
 ## 7. 关键工程决策与踩坑
 
-| 问题                                                        | 根因                                      | 解法                                               |
-|-----------------------------------------------------------|-----------------------------------------|--------------------------------------------------|
-| `hfl/cluener2020` 在 hf-mirror.com 不存在                     | 该数据集未被镜像收录                              | 改用 CLUE 官方 Google Storage URL 直接下载 zip           |
-| CLUE cluener2020 test 集标签未公开                              | CLUE 竞赛规则，test 集 label 字段缺失             | 评估统一使用 validation 集（1343 条）                      |
-| CRF 1 epoch 仍有非法序列                                        | 转移矩阵需充分训练才能学到强约束                        | 训练 3+ epoch 后非法序列趋近 0                            |
-| seqeval 对 O 标签的处理                                         | seqeval 要求字符串列表格式 O/B-X/I-X             | 预测 id 先用 `id2label` 转回字符串再传给 seqeval             |
-| CRF decode 返回变长列表                                         | `crf.decode()` 返回每条实际 token 数（不含 PAD）   | 用 `-100` 过滤 labels 时同步过滤 pred，保证长度对齐             |
-| Anaconda numpy 2.x 冲突                                     | scipy/numexpr/bottleneck 用 numpy 1.x 编译 | `pip install --upgrade scipy numexpr bottleneck` |
-| SFT `apply_chat_template(tokenize=True)` 返回 BatchEncoding | transformers 5.x 改变返回类型                 | 改用 `tokenize=False` + 单独 `tokenizer.encode()`    |
-| SFT `from_pretrained` 的 `torch_dtype` 废弃                  | transformers 5.x 将参数改名为 `dtype`         | 改用 `dtype=torch.float32`                         |
-| NER JSON 输出被截断                                            | 默认 `max_new_tokens` 过小；JSON 比单词长得多      | 评估设 `max_new_tokens=256`，训练设 `max_length=256`    |
-| 练习数据集 `nlpblogs/CMeEE` 国内无法访问                             | hf-mirror.com 未收录                       | 改用人民日报 NER，从 GitHub raw URL 下载 CoNLL 文件          |
+| 问题                                                        | 根因                                             | 解法                                                 |
+|-------------------------------------------------------------|--------------------------------------------------|------------------------------------------------------|
+| `hfl/cluener2020` 在 hf-mirror.com 不存在                   | 该数据集未被镜像收录                             | 改用 CLUE 官方 Google Storage URL 直接下载 zip       |
+| CLUE cluener2020 test 集标签未公开                          | CLUE 竞赛规则，test 集 label 字段缺失            | 评估统一使用 validation 集（1343 条）                |
+| CRF 1 epoch 仍有非法序列                                    | 转移矩阵需充分训练才能学到强约束                 | 训练 3+ epoch 后非法序列趋近 0                       |
+| seqeval 对 O 标签的处理                                     | seqeval 要求字符串列表格式 O/B-X/I-X             | 预测 id 先用 `id2label` 转回字符串再传给 seqeval     |
+| CRF decode 返回变长列表                                     | `crf.decode()` 返回每条实际 token 数（不含 PAD） | 用 `-100` 过滤 labels 时同步过滤 pred，保证长度对齐  |
+| Anaconda numpy 2.x 冲突                                     | scipy/numexpr/bottleneck 用 numpy 1.x 编译       | `pip install --upgrade scipy numexpr bottleneck`     |
+| SFT `apply_chat_template(tokenize=True)` 返回 BatchEncoding | transformers 5.x 改变返回类型                    | 改用 `tokenize=False` + 单独 `tokenizer.encode()`    |
+| SFT `from_pretrained` 的 `torch_dtype` 废弃                 | transformers 5.x 将参数改名为 `dtype`            | 改用 `dtype=torch.float32`                           |
+| NER JSON 输出被截断                                         | 默认 `max_new_tokens` 过小；JSON 比单词长得多    | 评估设 `max_new_tokens=256`，训练设 `max_length=256` |
+| 练习数据集 `nlpblogs/CMeEE` 国内无法访问                    | hf-mirror.com 未收录                             | 改用人民日报 NER，从 GitHub raw URL 下载 CoNLL 文件  |
 
 ---
 

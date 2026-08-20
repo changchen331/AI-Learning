@@ -20,7 +20,7 @@ import re
 from datetime import date
 from pathlib import Path
 
-from week_13_2026_07_26.Examples.agent_memory_system.src.llm_config import get_chat_client
+from src.llm_config import get_chat_client
 
 logger = logging.getLogger(__name__)
 

@@ -33,14 +33,14 @@ import json
 import os
 import sys
 import time
-from pathlib import Path
-
 from openai import OpenAI
+from pathlib import Path
 
 # 把项目根目录加入 sys.path，让 src 可 import（直接 python 运行本脚本也能找到）
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from week_11_2026_07_12.Examples.function_call_mcp_cli.src.rag_backend import search_annual_report, list_companies  # noqa: E402
+from week_11_2026_07_12.Examples.function_call_mcp_cli.src.rag_backend import search_annual_report, \
+    list_companies  # noqa: E402
 from week_11_2026_07_12.Examples.function_call_mcp_cli.src.weather_backend import get_weather  # noqa: E402
 
 # ── LLM 配置 ───────────────────────────────────────────────────────────────

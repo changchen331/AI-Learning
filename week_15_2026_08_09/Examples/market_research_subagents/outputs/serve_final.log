@@ -1,0 +1,9 @@
+INFO:     Started server process [11932]
+INFO:     Waiting for application startup.
+2026-08-05 10:26:16,751 [INFO] 市场调研 subagent 服务就绪
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8002 (Press CTRL+C to quit)
+INFO:     127.0.0.1:50934 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50936 - "POST /query HTTP/1.1" 200 OK
+2026-08-05 10:26:29,117 [INFO] HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2026-08-05 10:26:34,089 [INFO] HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"

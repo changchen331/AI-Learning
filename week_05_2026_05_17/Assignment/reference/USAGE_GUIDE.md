@@ -256,7 +256,7 @@ python train.py --batch_size 16 --seq_len 128
 ```
 
 **Q: PPL 不下降或下降很慢**
-A: 检查：(1) 数据量是否太小（`--max_tokens` 是否设置过小）；(2) 学习率是否合适（尝试 `--lr 1e-3` 或 `--lr 1e-4`）；(3) 确认
+A: 检查： (1) 数据量是否太小（`--max_tokens` 是否设置过小）； (2) 学习率是否合适（尝试 `--lr 1e-3` 或 `--lr 1e-4`）； (3) 确认
 loss 确实在下降（看 training_log.jsonl）。
 
 **Q: 生成文本出现大量 `[UNK]` 或乱码**

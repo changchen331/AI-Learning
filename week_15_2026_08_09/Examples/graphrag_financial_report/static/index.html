@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>GraphRAG · 年报知识图谱问答</title>
+    <style>
+        /* ====== 主流程 UI 样式（教学关注这里）====== */
+        body {
+            font-family: "Microsoft YaHei", Calibri, sans-serif;
+            margin: 0;
+            background: #f5f7fa;
+            color: #2D2D2D;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 18px;
+        }
+
+        h1 {
+            color: #1E3A5F;
+            margin: 0 0 4px;
+            font-size: 22px;
+        }
+
+        .sub {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 14px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #dedede;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .ctrl {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: #2E86AB;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        button:hover {
+            background: #1E3A5F;
+        }
+
+        button:disabled {
+            background: #aaa;
+            cursor: default;
+        }
+
+        .ex {
+            background: #EBF4FA;
+            color: #1E3A5F;
+            border: 1px solid #2E86AB;
+        }
+
+        .ex:hover {
+            background: #D6EAF8;
+        }
+
+        .mode {
+            display: flex;
+            gap: 4px;
+        }
+
+        .mode button {
+            background: #eee;
+            color: #333;
+        }
+
+        .mode button.on {
+            background: #1E3A5F;
+            color: #fff;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 3px solid #ddd;
+            border-top: #2E86AB;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .step {
+            border-left: 4px solid #2E86AB;
+            background: #fafafa;
+            margin: 8px 0;
+            border-radius: 4px;
+        }
+
+        .step-h {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .step-h .arrow {
+            transition: transform .2s;
+        }
+
+        .step.open .arrow {
+            transform: rotate(90deg);
+        }
+
+        .step-b {
+            padding: 10px 12px;
+            border-top: 1px solid #eee;
+            font-size: 13px;
+            display: none;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .step.open .step-b {
+            display: block;
+        }
+
+        .step.context {
+            border-left-color: #D4720A;
+        }
+
+        canvas {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .ans {
+            font-size: 15px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #1E3A5F;
+            color: #fff;
+            border-radius: 10px;
+            padding: 1px 8px;
+            font-size: 11px;
+            margin-left: 6px;
+        }
+
+        .err {
+            color: #C0392B;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>GraphRAG · 年报知识图谱问答</h1>
+    <div class="sub">15 份 A 股年报抽取建图 · Neo4j 存储 · Local / Global 双检索 · 调试接口逐步展示中间环节</div>
+
+    <!-- ── 顶部输入区 ── -->
+    <div class="card">
+        <textarea id="q" placeholder="输入问题，如：宁德时代有哪些子公司？茅台2022年董事长是谁？" rows="2"></textarea>
+        <div class="ctrl">
+            <div class="mode">
+                <button class="on" id="m-local" onclick="setMode('local')">Local 局部检索</button>
+                <button id="m-global" onclick="setMode('global')">Global 全局检索</button>
+            </div>
+            <button id="ask" onclick="ask()">提问</button>
+            <div class="spinner" id="spin"></div>
+        </div>
+        <div class="ctrl">
+            <span style="font-size:12px;color:#666">示例：</span>
+            <button class="ex" onclick="fill('宁德时代有哪些子公司？')">宁德子公司</button>
+            <button class="ex" onclick="fill('茅台2022年董事长是谁？')">茅台董事长</button>
+            <button class="ex" onclick="fill('海康威视的主要产品是什么？')">海康产品</button>
+            <button class="ex" onclick="fill('各家公司研发投入情况对比')">各公司研发对比(Global)</button>
+            <!-- 应拒绝回答的问题：演示幻觉控制。比亚迪不在图谱中，不应编造 -->
+            <button class="ex" onclick="fill('比亚迪2024年营业收入是多少？')">比亚迪营收(应拒绝)</button>
+        </div>
+    </div>
+
+    <!-- ── 中部流水线步骤卡片 ── -->
+    <div id="steps"></div>
+
+    <!-- ── 底部答案 + 来源 ── -->
+    <div class="card" id="ansCard" style="display:none">
+        <h3 style="margin:0 0 8px;color:#1E3A5F">最终答案</h3>
+        <div class="ans" id="ans"></div>
+    </div>
+</div>
+
+<!-- 可视化辅助代码（非教学重点，与主流程隔离） -->
+<script src="/static/viz/force_graph.js"></script>
+<script>
+    let mode = 'local';
+    let forceGraph = null;
+
+    function setMode(m) {
+        mode = m;
+        document.getElementById('m-local').classList.toggle('on', m === 'local');
+        document.getElementById('m-global').classList.toggle('on', m === 'global');
+    }
+
+    function fill(q) {
+        document.getElementById('q').value = q;
+    }
+
+    async function ask() {
+        const q = document.getElementById('q').value.trim();
+        if (!q) return;
+        const btn = document.getElementById('ask');
+        const spin = document.getElementById('spin');
+        btn.disabled = true;
+        spin.style.display = 'inline-block';
+        document.getElementById('ansCard').style.display = 'none';
+        document.getElementById('steps').innerHTML = '';
+        try {
+            const resp = await fetch('/query/debug', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({question: q, mode})
+            });
+            const data = await resp.json();
+            renderSteps(data);
+            document.getElementById('ans').textContent = data.answer;
+            document.getElementById('ansCard').style.display = 'block';
+        } catch (e) {
+            document.getElementById('steps').innerHTML = '<div class="card err">请求失败：' + e + '</div>';
+        } finally {
+            btn.disabled = false;
+            spin.style.display = 'none';
+        }
+    }
+
+    // 渲染各步骤卡片，context 步骤默认展开（CLAUDE.md 5.3）
+    function renderSteps(data) {
+        const box = document.getElementById('steps');
+        // final_context 卡片（喂给 LLM 的原文，默认展开）
+        if (data.final_context) {
+            box.appendChild(card('context', '上下文 · 喂给 LLM 的原始内容', data.final_context, true));
+        }
+        (data.steps || []).forEach(s => {
+            if (s.step === 'subgraph') {
+                // 子图步骤：渲染 force 可视化 + 数据
+                const c = card('subgraph', '子图提取 · Local Search', '', true);
+                box.appendChild(c);
+                renderForce(c.querySelector('.step-b'), s.data);
+            } else {
+                const txt = typeof s.data === 'string' ? s.data : JSON.stringify(s.data, null, 2);
+                box.appendChild(card('step', labelOf(s.step), txt, false));
+            }
+        });
+    }
+
+    function labelOf(step) {
+        return ({
+            entity_linking: '实体链接', context_build: '上下文构建',
+            pick_communities: '社区选择 · Global', map: 'Map 阶段',
+            reduce: 'Reduce 阶段', subgraph: '子图'
+        })[step] || step;
+    }
+
+    function card(cls, title, body, open) {
+        const d = document.createElement('div');
+        d.className = 'step ' + cls + (open ? ' open' : '');
+        d.innerHTML = `<div class="step-h"><span>${title}</span><span class="arrow">▶</span></div>
+                 <div class="step-b"></div>`;
+        d.querySelector('.step-h').onclick = () => d.classList.toggle('open');
+        d.querySelector('.step-b').textContent = body;
+        return d;
+    }
+
+    // 可视化辅助：把子图画到 canvas（用隔离的 force_graph.js）
+    function renderForce(host, data) {
+        host.innerHTML = '<canvas id="gcv" width="780" height="380"></canvas>';
+        const cv = document.getElementById('gcv');
+        if (!forceGraph) forceGraph = new ForceGraph(cv);
+        else {
+            forceGraph.canvas = cv;
+            forceGraph.ctx = cv.getContext('2d');
+            forceGraph.clear();
+        }
+        forceGraph.setData(data.nodes || [], data.edges || []);
+        forceGraph.start();
+        // 补一个统计行
+        const st = document.createElement('div');
+        st.style.cssText = 'font-size:12px;color:#666;margin-top:6px';
+        st.textContent = `节点 ${(data.nodes || []).length} · 边 ${(data.edges || []).length}（可拖拽节点）`;
+        host.appendChild(st);
+    }
+</script>
+</body>
+</html>

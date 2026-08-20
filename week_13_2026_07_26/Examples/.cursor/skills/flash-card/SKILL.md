@@ -13,6 +13,7 @@ description: >-
 ## 触发场景
 
 当用户说出类似下面的话时触发本 skill：
+
 - "给我做张 crazy 词的闪卡"
 - "给我做 crazy 的 flash card"
 - "做一个 resilient 的单词卡"
@@ -23,17 +24,17 @@ description: >-
 1. **识别单词**：从用户话语中提取目标英语单词（小写化作为文件名）。
 
 2. **生成 JSON 数据**：自己写出该单词的学习数据，字段如下，保存到 skill 的 `data/` 目录：
-   - 路径：`.cursor/skills/flash-card/data/<word>.json`
-   - `word`：单词
-   - `phonetic`：音标（如 `/rɪˈzɪliənt/`）
-   - `pos`：词性（如 `adj.`）
-   - `definition`：中文释义
-   - `examples`：**恰好 3 条**，每条含 `en`（英文例句）和 `zh`（中文翻译）
-   - `synonyms`：近义词列表（4-6 个为宜）
+    - 路径：`.cursor/skills/flash-card/data/<word>.json`
+    - `word`：单词
+    - `phonetic`：音标（如 `/rɪˈzɪliənt/`）
+    - `pos`：词性（如 `adj.`）
+    - `definition`：中文释义
+    - `examples`： **恰好 3 条**，每条含 `en`（英文例句）和 `zh`（中文翻译）
+    - `synonyms`：近义词列表（4-6 个为宜）
 
    例句要求：地道、长度适中、能体现该词典型用法；近义词要尽量贴近该词在释义下的核心含义。
 
-3. **生成 HTML**：运行脚本，HTML 输出到**当前工作目录**（不是 skill 目录）：
+3. **生成 HTML**：运行脚本，HTML 输出到 **当前工作目录**（不是 skill 目录）：
    ```bash
    python .cursor/skills/flash-card/scripts/make_flashcard.py .cursor/skills/flash-card/data/<word>.json
    ```

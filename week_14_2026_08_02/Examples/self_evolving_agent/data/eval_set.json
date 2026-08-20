@@ -1,0 +1,1014 @@
+{
+  "description": "云购商城客服评估集，60题，5类，关键词为政策专有数字/词汇",
+  "evaluation_rule": "required中所有词均出现在回答中，且forbidden中所有词均不出现，则判为正确",
+  "categories": {
+    "refund_basic": "基础退款（10题）：测试1.1节，初始Skill应能处理",
+    "vip_refund": "VIP退款特权（12题）：测试1.2节，初始Skill缺失，需进化",
+    "promotion_refund": "促销商品退款（12题）：测试1.3节，初始Skill完全缺失",
+    "digital_goods": "数字商品（12题）：测试1.4节，初始Skill完全缺失",
+    "logistics": "物流与取消（8题）：测试3.x节，初始Skill完全缺失",
+    "payment_account": "支付与账户（6题）：测试1.5/5.x节，初始Skill部分缺失"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "category": "refund_basic",
+      "difficulty": "easy",
+      "question": "我买了一件T恤，签收后第25天，商品没拆袋保持完好，可以退货退款吗？",
+      "ground_truth": {
+        "required": [
+          "可以"
+        ],
+        "forbidden": [
+          "不可以",
+          "不支持退"
+        ]
+      },
+      "initial_skill_handles": true,
+      "note": "基础退款场景，30天内完好可退"
+    },
+    {
+      "id": 2,
+      "category": "refund_basic",
+      "difficulty": "easy",
+      "question": "我签收商品已经35天了，现在想退货，还可以吗？",
+      "ground_truth": {
+        "required": [
+          "30天"
+        ],
+        "forbidden": [
+          "可以退货",
+          "可以申请退货",
+          "还可以退"
+        ]
+      },
+      "initial_skill_handles": true,
+      "note": "超30天不可退。required:30天证明引用了政策；forbidden排除'可以退'误判（注意不用'不'避免含在'不可以退'中导致误判）"
+    },
+    {
+      "id": 3,
+      "category": "refund_basic",
+      "difficulty": "easy",
+      "question": "退款会退到哪里？我是用微信支付的。",
+      "ground_truth": {
+        "required": [
+          "微信",
+          "1-3"
+        ],
+        "forbidden": [
+          "3-5"
+        ]
+      },
+      "initial_skill_handles": true,
+      "note": "微信退款1-3个工作日"
+    },
+    {
+      "id": 4,
+      "category": "refund_basic",
+      "difficulty": "easy",
+      "question": "退款多久到账？我用银行卡付款的。",
+      "ground_truth": {
+        "required": [
+          "3-5",
+          "工作日"
+        ],
+        "forbidden": [
+          "实时",
+          "1-3"
+        ]
+      },
+      "initial_skill_handles": true,
+      "note": "银行卡退款3-5个工作日"
+    },
+    {
+      "id": 5,
+      "category": "refund_basic",
+      "difficulty": "easy",
+      "question": "我用余额付款的订单申请了退款，多久能到账？",
+      "ground_truth": {
+        "required": [
+          "实时"
+        ],
+        "forbidden": [
+          "工作日"
+        ]
+      },
+      "initial_skill_handles": true,
+      "note": "余额退款实时到账"
+    },
+    {
+      "id": 6,
+      "category": "refund_basic",
+      "difficulty": "easy",
+      "question": "退货的时候运费谁来出？（我是普通用户，没有VIP）",
+      "ground_truth": {
+        "required": [
+          "自"
+        ],
+        "forbidden": [
+          "平台承担",
+          "免费"
+        ]
+      },
+      "initial_skill_handles": true,
+      "note": "明确普通用户身份，防止VIP规则patch后LLM回答'平台承担'导致回归"
+    },
+    {
+      "id": 7,
+      "category": "refund_basic",
+      "difficulty": "easy",
+      "question": "退货商品需要保持什么状态？",
+      "ground_truth": {
+        "required": [
+          "完好"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": true,
+      "note": "基础退货条件"
+    },
+    {
+      "id": 8,
+      "category": "refund_basic",
+      "difficulty": "easy",
+      "question": "商品有明显质量问题，收到后20天，可以退货吗？",
+      "ground_truth": {
+        "required": [
+          "可以"
+        ],
+        "forbidden": [
+          "不可以"
+        ]
+      },
+      "initial_skill_handles": true,
+      "note": "质量问题20天内可退"
+    },
+    {
+      "id": 9,
+      "category": "refund_basic",
+      "difficulty": "easy",
+      "question": "我用支付宝付的，退款能退回支付宝吗？多久到账？",
+      "ground_truth": {
+        "required": [
+          "支付宝",
+          "1-3"
+        ],
+        "forbidden": [
+          "3-5"
+        ]
+      },
+      "initial_skill_handles": true,
+      "note": "支付宝退款1-3个工作日"
+    },
+    {
+      "id": 10,
+      "category": "refund_basic",
+      "difficulty": "easy",
+      "question": "我混合支付的，一部分微信一部分余额，退款怎么退？",
+      "ground_truth": {
+        "required": [
+          "微信",
+          "余额",
+          "分别"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "混合支付分别退回，初始Skill未提及"
+    },
+    {
+      "id": 11,
+      "category": "vip_refund",
+      "difficulty": "medium",
+      "question": "我是银卡VIP，商品收到45天了，可以退货吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "60"
+        ],
+        "forbidden": [
+          "不可以",
+          "30天"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "银卡VIP享60天退货期，初始Skill未包含此规则"
+    },
+    {
+      "id": 12,
+      "category": "vip_refund",
+      "difficulty": "medium",
+      "question": "我是金卡VIP，退货期限是多少天？",
+      "ground_truth": {
+        "required": [
+          "90"
+        ],
+        "forbidden": [
+          "60天",
+          "30天"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "金卡VIP享90天"
+    },
+    {
+      "id": 13,
+      "category": "vip_refund",
+      "difficulty": "hard",
+      "question": "我是白卡VIP，商品收到35天了，想退货，可以吗？",
+      "ground_truth": {
+        "required": [
+          "30天",
+          "白卡"
+        ],
+        "forbidden": [
+          "60天",
+          "可以退货",
+          "可以申请退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "陷阱题：白卡不享退款延长，仍是30天，已超期。required含'白卡'确保Skill明确处理了白卡场景"
+    },
+    {
+      "id": 14,
+      "category": "vip_refund",
+      "difficulty": "medium",
+      "question": "我是银卡VIP，退货运费需要我自己付吗？",
+      "ground_truth": {
+        "_note": "required 从 '免' 改 '平台'：Agent 更常用'由平台承担'而非'免运费'",
+        "required": [
+          "平台"
+        ],
+        "forbidden": [
+          "自付",
+          "自己付"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "银卡及以上VIP退货运费平台承担"
+    },
+    {
+      "id": 15,
+      "category": "vip_refund",
+      "difficulty": "medium",
+      "question": "我是银卡VIP，商品有轻微使用痕迹，还能退货吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "轻微"
+        ],
+        "forbidden": [
+          "不可以"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "银卡及以上可接受轻微使用痕迹"
+    },
+    {
+      "id": 16,
+      "category": "vip_refund",
+      "difficulty": "hard",
+      "question": "我是白卡VIP，退货运费是平台出还是我自己出？",
+      "ground_truth": {
+        "_note": "去掉 forbidden：正确答案会说'白卡自付，银卡由平台承担'作对比，会误伤。required 有'自'即证明 Agent 识别了白卡要自付",
+        "required": [
+          "自",
+          "白卡"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "陷阱题：白卡无运费减免，需自付。required含'白卡'确保Skill明确处理了白卡运费场景"
+    },
+    {
+      "id": 17,
+      "category": "vip_refund",
+      "difficulty": "medium",
+      "question": "专属客服通道是哪个VIP等级才有？",
+      "ground_truth": {
+        "_note": "去掉 forbidden：正确答案会列举'白卡和银卡VIP没有'，原 forbidden 把正确的否定列举也误判为错",
+        "required": [
+          "金卡"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": true,
+      "note": "初始vip_benefits Skill有此条目"
+    },
+    {
+      "id": 18,
+      "category": "vip_refund",
+      "difficulty": "medium",
+      "question": "我是金卡VIP，商品收到65天了，能退货吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "90"
+        ],
+        "forbidden": [
+          "不可以"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "金卡90天，65天仍在期限内"
+    },
+    {
+      "id": 19,
+      "category": "vip_refund",
+      "difficulty": "hard",
+      "question": "我是银卡VIP，商品收到62天了，能退货吗？",
+      "ground_truth": {
+        "required": [
+          "60天"
+        ],
+        "forbidden": [
+          "可以退货",
+          "可以申请退",
+          "还可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "银卡60天，62天已超期"
+    },
+    {
+      "id": 20,
+      "category": "vip_refund",
+      "difficulty": "medium",
+      "question": "金卡VIP退货时商品允许有使用痕迹吗？",
+      "ground_truth": {
+        "required": [
+          "轻微",
+          "使用痕迹"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "金卡也可接受轻微使用痕迹（与银卡相同）"
+    },
+    {
+      "id": 21,
+      "category": "vip_refund",
+      "difficulty": "medium",
+      "question": "白卡VIP和普通用户的退款政策有什么区别？",
+      "ground_truth": {
+        "required": [
+          "30天",
+          "白卡"
+        ],
+        "forbidden": [
+          "60天",
+          "90天"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "白卡退款政策与普通用户相同（30天）"
+    },
+    {
+      "id": 22,
+      "category": "vip_refund",
+      "difficulty": "medium",
+      "question": "银卡VIP商品有轻微划痕，20天了，退货运费谁出？",
+      "ground_truth": {
+        "_note": "进一步去掉 '可以'：问题核心是'运费谁出'，只需确认'平台承担'，能不能退由 forbidden 排错",
+        "required": [
+          "平台"
+        ],
+        "forbidden": [
+          "自付",
+          "自己付"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "银卡：轻微痕迹可退+运费免"
+    },
+    {
+      "id": 23,
+      "category": "promotion_refund",
+      "difficulty": "medium",
+      "question": "我买的是限时特惠商品，普通用户，能退货吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "限时特惠普通用户不可退"
+    },
+    {
+      "id": 24,
+      "category": "promotion_refund",
+      "difficulty": "hard",
+      "question": "我是银卡VIP，买的限时特惠商品，收到后第5天，可以退货吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "7天"
+        ],
+        "forbidden": [
+          "不可以"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "关键交叉点：银卡VIP促销商品7天内可退"
+    },
+    {
+      "id": 25,
+      "category": "promotion_refund",
+      "difficulty": "hard",
+      "question": "我是金卡VIP，买的限时特惠商品，收到后第8天，还能退货吗？",
+      "ground_truth": {
+        "_note": "去掉 90天/60天：Agent 解释例外时需要引用原规则'金卡不延长至90天'，保留会误伤；'可以退'足以抓主要错误",
+        "required": [
+          "7天"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "陷阱题：金卡促销商品也只有7天，不延长至90天"
+    },
+    {
+      "id": 26,
+      "category": "promotion_refund",
+      "difficulty": "hard",
+      "question": "我是白卡VIP，买了限时特惠商品，收到后3天，能退吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退",
+          "7天"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "陷阱题：白卡不享有促销退货特权"
+    },
+    {
+      "id": 27,
+      "category": "promotion_refund",
+      "difficulty": "hard",
+      "question": "我是银卡VIP，限时特惠商品，收到后第9天，来得及退货吗？",
+      "ground_truth": {
+        "_note": "去掉单字 '不'：Agent 常用'无法退货/已超过'表达否定；'可以退'抓主要错误",
+        "required": [
+          "7天"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "超过7天，银卡也不可退"
+    },
+    {
+      "id": 28,
+      "category": "promotion_refund",
+      "difficulty": "hard",
+      "question": "我是金卡VIP，限时特惠商品，收到4天，退货运费谁出？",
+      "ground_truth": {
+        "_note": "去掉 '免'：同 Q14/Q22，Agent 更常用'平台承担'而非'免'字",
+        "required": [
+          "平台"
+        ],
+        "forbidden": [
+          "自付",
+          "自己付"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "金卡VIP退货运费免，即使是促销商品"
+    },
+    {
+      "id": 29,
+      "category": "promotion_refund",
+      "difficulty": "medium",
+      "question": "参加了满减活动，退了其中一件商品，需要补满减差价吗？",
+      "ground_truth": {
+        "_note": "去掉 '重新计算' 这个具体术语：Agent 常用'不再满足门槛'/'订单金额变化'等说法。forbidden 抓错误方向",
+        "required": [
+          "补"
+        ],
+        "forbidden": [
+          "不需要",
+          "不用补"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "部分退货需重新计算满减，可能补差价"
+    },
+    {
+      "id": 30,
+      "category": "promotion_refund",
+      "difficulty": "medium",
+      "question": "我用了新人券下单，退款之后券还会退给我吗？",
+      "ground_truth": {
+        "required": [
+          "不补发"
+        ],
+        "forbidden": [
+          "退还",
+          "补发"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "新人券退款不补发"
+    },
+    {
+      "id": 31,
+      "category": "promotion_refund",
+      "difficulty": "medium",
+      "question": "限时特惠商品可以叠加优惠券吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以叠加"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "限时特惠不可叠加任何券"
+    },
+    {
+      "id": 32,
+      "category": "promotion_refund",
+      "difficulty": "medium",
+      "question": "积分商城兑换的商品可以退款吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "积分兑换商品不可退"
+    },
+    {
+      "id": 33,
+      "category": "promotion_refund",
+      "difficulty": "hard",
+      "question": "银卡VIP买限时特惠，收到5天，有轻微划痕，能退吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "7天"
+        ],
+        "forbidden": [
+          "不可以"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "银卡+促销+轻微痕迹：多条件组合，均可退"
+    },
+    {
+      "id": 34,
+      "category": "promotion_refund",
+      "difficulty": "hard",
+      "question": "满599减80的活动，我买了800元的东西，退了400元的商品，需要补差价吗？",
+      "ground_truth": {
+        "_note": "去掉 '不满'：Agent 常说'不再满足'中间多个字就匹配不到。forbidden 抓错误方向",
+        "required": [
+          "补"
+        ],
+        "forbidden": [
+          "不需要",
+          "不用补"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "退后只剩400元，不满599，需补回满减差价"
+    },
+    {
+      "id": 35,
+      "category": "digital_goods",
+      "difficulty": "easy",
+      "question": "我买了一本电子书，想退款，可以吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "数字商品不可退，初始Skill完全没有这条规则"
+    },
+    {
+      "id": 36,
+      "category": "digital_goods",
+      "difficulty": "medium",
+      "question": "软件激活码买了但还没激活，可以退款吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退",
+          "可以"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "数字商品无论是否激活均不可退"
+    },
+    {
+      "id": 37,
+      "category": "digital_goods",
+      "difficulty": "hard",
+      "question": "我是金卡VIP，买了游戏点卡，VIP能享受退款特权吗？",
+      "ground_truth": {
+        "required": [
+          "不",
+          "数字商品"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "最重要陷阱题：数字商品规则优先于VIP特权"
+    },
+    {
+      "id": 38,
+      "category": "digital_goods",
+      "difficulty": "medium",
+      "question": "数字商品在什么情况下可以退款？",
+      "ground_truth": {
+        "required": [
+          "质量问题",
+          "工单",
+          "截图"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "唯一途径：质量问题提工单+截图"
+    },
+    {
+      "id": 39,
+      "category": "digital_goods",
+      "difficulty": "medium",
+      "question": "平台会员卡是数字商品吗？能退款吗？",
+      "ground_truth": {
+        "required": [
+          "数字",
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "平台会员卡属数字商品，不可退"
+    },
+    {
+      "id": 40,
+      "category": "digital_goods",
+      "difficulty": "medium",
+      "question": "买了电子书发现买错了，想退款怎么办？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "买错也不可退"
+    },
+    {
+      "id": 41,
+      "category": "digital_goods",
+      "difficulty": "medium",
+      "question": "软件激活码有质量问题，怎么申请退款？",
+      "ground_truth": {
+        "required": [
+          "工单",
+          "截图"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "质量问题走工单+截图流程"
+    },
+    {
+      "id": 42,
+      "category": "digital_goods",
+      "difficulty": "hard",
+      "question": "银卡VIP购买了电子书，声称有VIP60天退款特权，可以退吗？",
+      "ground_truth": {
+        "_note": "去掉 60天：Agent 会解释'虽然银卡享有60天退货期，但数字商品不支持'，保留会误伤；'可以退'足以抓主要错误",
+        "required": [
+          "不",
+          "数字商品"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "数字商品规则高于一切VIP特权"
+    },
+    {
+      "id": 43,
+      "category": "digital_goods",
+      "difficulty": "medium",
+      "question": "游戏点卡是数字商品吗？",
+      "ground_truth": {
+        "required": [
+          "数字商品",
+          "是"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "游戏点卡属数字商品"
+    },
+    {
+      "id": 44,
+      "category": "digital_goods",
+      "difficulty": "hard",
+      "question": "我金卡VIP，刚买的电子书30分钟前下单，能退吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退",
+          "30天",
+          "60天",
+          "90天"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "数字商品无时间例外，刚买也不可退（除非质量问题）"
+    },
+    {
+      "id": 45,
+      "category": "digital_goods",
+      "difficulty": "medium",
+      "question": "电子书激活了之后还能退款吗？",
+      "ground_truth": {
+        "required": [
+          "不"
+        ],
+        "forbidden": [
+          "可以退"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "激活后同样不可退"
+    },
+    {
+      "id": 46,
+      "category": "logistics",
+      "difficulty": "medium",
+      "question": "我刚付款2小时，订单还没发货，可以取消订单吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "24小时"
+        ],
+        "forbidden": [
+          "退款流程",
+          "退货"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "48小时内未发货可直接取消，24小时内退款"
+    },
+    {
+      "id": 47,
+      "category": "logistics",
+      "difficulty": "hard",
+      "question": "我付款3天了，订单还显示待发货，可以直接取消吗？",
+      "ground_truth": {
+        "required": [
+          "退货退款",
+          "48小时"
+        ],
+        "forbidden": [
+          "直接取消"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "超过48小时，只能走退货退款流程"
+    },
+    {
+      "id": 48,
+      "category": "logistics",
+      "difficulty": "easy",
+      "question": "标准配送需要几天可以收到？",
+      "ground_truth": {
+        "required": [
+          "3",
+          "7",
+          "工作日"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "标准配送3-7个工作日"
+    },
+    {
+      "id": 49,
+      "category": "logistics",
+      "difficulty": "medium",
+      "question": "次日达服务需要几点前下单？在哪些城市有？",
+      "ground_truth": {
+        "required": [
+          "14",
+          "北京",
+          "上海"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "14:00前，四大一线城市"
+    },
+    {
+      "id": 50,
+      "category": "logistics",
+      "difficulty": "medium",
+      "question": "我在新疆，可以选次日达吗？",
+      "ground_truth": {
+        "required": [
+          "不支持"
+        ],
+        "forbidden": [
+          "可以"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "偏远地区不支持次日达"
+    },
+    {
+      "id": 51,
+      "category": "logistics",
+      "difficulty": "medium",
+      "question": "取消未发货订单，退款多久到账？",
+      "ground_truth": {
+        "required": [
+          "24小时"
+        ],
+        "forbidden": [
+          "3-5",
+          "1-3"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "取消订单24小时内退款，区别于正常退款流程"
+    },
+    {
+      "id": 52,
+      "category": "logistics",
+      "difficulty": "medium",
+      "question": "付款后36小时，订单待发货，可以取消吗？",
+      "ground_truth": {
+        "required": [
+          "可以",
+          "48小时"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "36小时 < 48小时，仍在取消窗口内"
+    },
+    {
+      "id": 53,
+      "category": "logistics",
+      "difficulty": "easy",
+      "question": "满多少元可以免运费？",
+      "ground_truth": {
+        "required": [
+          "99"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "满99元免运费"
+    },
+    {
+      "id": 54,
+      "category": "payment_account",
+      "difficulty": "easy",
+      "question": "账户余额可以提现吗？",
+      "ground_truth": {
+        "required": [
+          "不支持"
+        ],
+        "forbidden": [
+          "可以提现"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "余额不支持提现"
+    },
+    {
+      "id": 55,
+      "category": "payment_account",
+      "difficulty": "medium",
+      "question": "余额可以转给朋友吗？每天有上限吗？",
+      "ground_truth": {
+        "required": [
+          "500",
+          "每日"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "转赠每日500元上限"
+    },
+    {
+      "id": 56,
+      "category": "payment_account",
+      "difficulty": "hard",
+      "question": "我的订单用积分抵扣了10元，退款的话会退回多少积分？",
+      "ground_truth": {
+        "required": [
+          "800",
+          "80"
+        ],
+        "forbidden": [
+          "1000",
+          "100积分"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "10元×80积分/元=800积分，不是1000积分"
+    },
+    {
+      "id": 57,
+      "category": "payment_account",
+      "difficulty": "hard",
+      "question": "我账户被冻结了，提交了退款申请，能被处理吗？",
+      "ground_truth": {
+        "required": [
+          "解冻",
+          "先"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "冻结期间无法处理退款，需先解冻"
+    },
+    {
+      "id": 58,
+      "category": "payment_account",
+      "difficulty": "hard",
+      "question": "积分抵扣了50元，其余100元用银行卡付，申请退款后怎么退？",
+      "ground_truth": {
+        "required": [
+          "4000",
+          "100",
+          "银行卡"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "50×80=4000积分+100元银行卡"
+    },
+    {
+      "id": 59,
+      "category": "payment_account",
+      "difficulty": "medium",
+      "question": "账户被冻结，VIP权益还能使用吗？",
+      "ground_truth": {
+        "_note": "去掉 '不'：Agent 常用'无法使用'。required 保留'冻结'证明 Agent 识别了场景，forbidden 抓错误方向",
+        "required": [
+          "冻结"
+        ],
+        "forbidden": [
+          "可以使用"
+        ]
+      },
+      "initial_skill_handles": false,
+      "note": "冻结期间VIP权益同步冻结"
+    },
+    {
+      "id": 60,
+      "category": "payment_account",
+      "difficulty": "medium",
+      "question": "账户被冻结了怎么解冻？需要多久？",
+      "ground_truth": {
+        "required": [
+          "客服",
+          "1-3",
+          "工作日"
+        ],
+        "forbidden": []
+      },
+      "initial_skill_handles": false,
+      "note": "联系客服提交身份验证，1-3工作日"
+    }
+  ]
+}

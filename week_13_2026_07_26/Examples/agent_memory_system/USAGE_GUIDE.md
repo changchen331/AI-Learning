@@ -9,15 +9,15 @@ cd agent_memory_system
 pip install -r requirements.txt
 ```
 
-| 包                   | 用途                           |
-|---------------------|------------------------------|
+| 包                  | 用途                               |
+|---------------------|------------------------------------|
 | openai>=1.0.0       | LLM + Embedding（OpenAI 兼容接口） |
-| faiss-cpu>=1.7.4    | Layer 4 语义记忆向量库              |
-| fastapi>=0.110.0    | Web 服务框架                     |
-| uvicorn>=0.29.0     | ASGI 服务器                     |
-| pydantic>=2.0.0     | 请求/响应数据验证                    |
-| numpy>=1.24.0       | 向量操作                         |
-| apscheduler>=3.10.0 | HEARTBEAT 定时调度器              |
+| faiss-cpu>=1.7.4    | Layer 4 语义记忆向量库             |
+| fastapi>=0.110.0    | Web 服务框架                       |
+| uvicorn>=0.29.0     | ASGI 服务器                        |
+| pydantic>=2.0.0     | 请求/响应数据验证                  |
+| numpy>=1.24.0       | 向量操作                           |
+| apscheduler>=3.10.0 | HEARTBEAT 定时调度器               |
 
 ### API Key 配置
 
@@ -65,13 +65,13 @@ python src/agent.py
 
 ### 内置命令
 
-| 命令        | 作用                             |
-|-----------|--------------------------------|
+| 命令      | 作用                                      |
+|-----------|-------------------------------------------|
 | `/flush`  | 手动触发 Memory Flush，打印三个 Pass 进度 |
-| `/memory` | 显示当前 USER.md 和 MEMORY.md 内容    |
-| `/layers` | 重新打印四层记忆加载情况                   |
-| `/new`    | 开始新会话（不触发 flush）               |
-| `/exit`   | 退出（自动触发 flush）                 |
+| `/memory` | 显示当前 USER.md 和 MEMORY.md 内容        |
+| `/layers` | 重新打印四层记忆加载情况                  |
+| `/new`    | 开始新会话（不触发 flush）                |
+| `/exit`   | 退出（自动触发 flush）                    |
 
 ### 预期输出
 
@@ -134,48 +134,48 @@ uvicorn src.serve:app --host 0.0.0.0 --port 8000
 
 在聊天输入框输入以下命令：
 
-| 命令        | 作用                             |
-|-----------|--------------------------------|
-| `/flush`  | 触发 Memory Flush，右侧面板实时展示进度     |
-| `/memory` | 展开并滚动到 USER.md / MEMORY.md 查看器 |
-| `/layers` | 展开并滚动到四层记忆加载面板                 |
-| `/new`    | 开始新会话                          |
-| `/reset`  | 回到出厂初始态（二次确认，清空所有记忆）           |
-| `/help`   | 显示命令列表                         |
+| 命令      | 作用                                     |
+|-----------|------------------------------------------|
+| `/flush`  | 触发 Memory Flush，右侧面板实时展示进度  |
+| `/memory` | 展开并滚动到 USER.md / MEMORY.md 查看器  |
+| `/layers` | 展开并滚动到四层记忆加载面板             |
+| `/new`    | 开始新会话                               |
+| `/reset`  | 回到出厂初始态（二次确认，清空所有记忆） |
+| `/help`   | 显示命令列表                             |
 
 ### SSE 事件类型（教学参考）
 
 **对话流（`/chat`）：**
 
-| 事件                 | 触发时机         | 内容                                        |
-|--------------------|--------------|-------------------------------------------|
+| 事件               | 触发时机         | 内容                                                    |
+|--------------------|------------------|---------------------------------------------------------|
 | `memory_load`      | 对话开始         | 四层加载结果（文件名 + 字符数）                         |
 | `semantic_search`  | Layer 4 检索完成 | Top-K 结果（类别/标题/内容/分数/来源 vector/bm25/both） |
-| `context_assembly` | Context 组装完成 | 总字符数、历史轮数                                 |
-| `token`            | LLM 流式输出     | 每个 token 片段                               |
-| `done`             | 回复完成         | 完整回复、消息计数                                 |
+| `context_assembly` | Context 组装完成 | 总字符数、历史轮数                                      |
+| `token`            | LLM 流式输出     | 每个 token 片段                                         |
+| `done`             | 回复完成         | 完整回复、消息计数                                      |
 
 **Flush 流（`/flush`）：**
 
-| 事件                 | 触发时机          | 内容                           |
-|--------------------|---------------|------------------------------|
-| `flush_start`      | Flush 开始      | 会话 ID、消息数                    |
-| `flush_pass1`      | Pass 1 完成     | USER.md 更新项列表                |
-| `flush_pass2`      | Pass 2 完成     | 新增记忆条目列表                     |
+| 事件               | 触发时机        | 内容                                          |
+|--------------------|-----------------|-----------------------------------------------|
+| `flush_start`      | Flush 开始      | 会话 ID、消息数                               |
+| `flush_pass1`      | Pass 1 完成     | USER.md 更新项列表                            |
+| `flush_pass2`      | Pass 2 完成     | 新增记忆条目列表                              |
 | `flush_pass3`      | Pass 3 完成     | 向量化条目数、FAISS 索引总数（同步写入 FTS5） |
-| `flush_compaction` | Compaction 触发 | 压缩前后条目数                      |
-| `flush_done`       | Flush 结束      | 完整摘要                         |
+| `flush_compaction` | Compaction 触发 | 压缩前后条目数                                |
+| `flush_done`       | Flush 结束      | 完整摘要                                      |
 
 **HEARTBEAT 广播流（`/stream`，持久连接）：**
 
-| 事件                         | 触发时机             | 内容              |
-|----------------------------|------------------|-----------------|
-| `heartbeat_connected`      | 页面建立连接时          | 当前任务列表          |
-| `heartbeat_task_added`     | 对话意图检测到新建任务      | 任务名/trigger/描述  |
-| `heartbeat_task_cancelled` | 对话意图检测到取消任务      | 被取消的任务名         |
+| 事件                       | 触发时机               | 内容                   |
+|----------------------------|------------------------|------------------------|
+| `heartbeat_connected`      | 页面建立连接时         | 当前任务列表           |
+| `heartbeat_task_added`     | 对话意图检测到新建任务 | 任务名/trigger/描述    |
+| `heartbeat_task_cancelled` | 对话意图检测到取消任务 | 被取消的任务名         |
 | `heartbeat_start`          | 定时任务触发           | 任务名/action/触发时间 |
 | `heartbeat_message`        | 任务执行完成           | LLM 生成的消息内容     |
-| `heartbeat_reloaded`       | HEARTBEAT.md 热重载 | 当前任务数           |
+| `heartbeat_reloaded`       | HEARTBEAT.md 热重载    | 当前任务数             |
 
 ---
 
@@ -187,7 +187,6 @@ uvicorn src.serve:app --host 0.0.0.0 --port 8000
 
 ```markdown
 ### TASK: test_task
-
 trigger: */1 * * * *
 enabled: true
 action: send_message
@@ -216,12 +215,12 @@ added: 2026-05-08
 
 ### 支持的 action 类型
 
-| action                 | 说明                               |
-|------------------------|----------------------------------|
+| action                 | 说明                                               |
+|------------------------|----------------------------------------------------|
 | `send_message`         | LLM 根据 `prompt` 和用户画像生成一条消息推送到前端 |
-| `summarize_sessions`   | 汇总今日对话，追加 MEMORY.md [event] 条目   |
-| `compact_memory`       | 触发 Memory Compaction，压缩旧记忆       |
-| `user_profile_refresh` | 重新分析全部记忆，刷新 USER.md              |
+| `summarize_sessions`   | 汇总今日对话，追加 MEMORY.md [event] 条目          |
+| `compact_memory`       | 触发 Memory Compaction，压缩旧记忆                 |
+| `user_profile_refresh` | 重新分析全部记忆，刷新 USER.md                     |
 
 ---
 
@@ -229,7 +228,6 @@ added: 2026-05-08
 
 ```python
 import sys
-
 sys.path.insert(0, "path/to/agent_memory_system")
 
 from src.session_db import SessionDB
@@ -243,8 +241,8 @@ db = SessionDB()
 loader = MemoryLoader()
 vs = VectorStore()
 fts = FTSStore()
-retriever = HybridRetriever(vs, fts)  # 向量 0.7 + BM25 0.3 混合
-flusher = MemoryFlusher()  # 内部已自建 vs + fts 并在 flush 中同步
+retriever = HybridRetriever(vs, fts)   # 向量 0.7 + BM25 0.3 混合
+flusher = MemoryFlusher()              # 内部已自建 vs + fts 并在 flush 中同步
 
 # 开始会话
 sid = db.new_session()
@@ -274,14 +272,14 @@ print(result.summary())
 
 ### 命令速查
 
-| 命令                                   | 作用              |
-|--------------------------------------|-----------------|
+| 命令                                 | 作用                           |
+|--------------------------------------|--------------------------------|
 | `python src/reset.py backup`         | 保存当前状态快照（时间戳命名） |
-| `python src/reset.py backup <名称>`    | 指定名称保存快照        |
-| `python src/reset.py restore`        | 恢复最近一次快照        |
-| `python src/reset.py restore <名称>`   | 恢复指定快照          |
-| `python src/reset.py restore --list` | 列出所有快照          |
-| `python src/reset.py factory`        | 回到出厂初始态         |
+| `python src/reset.py backup <名称>`  | 指定名称保存快照               |
+| `python src/reset.py restore`        | 恢复最近一次快照               |
+| `python src/reset.py restore <名称>` | 恢复指定快照                   |
+| `python src/reset.py restore --list` | 列出所有快照                   |
+| `python src/reset.py factory`        | 回到出厂初始态                 |
 
 ### 备份内容（7 项）
 

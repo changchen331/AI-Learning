@@ -7,21 +7,17 @@ library_name: peft
 
 <!-- Provide a quick summary of what the model is/does. -->
 
-
-
 ## Model Details
 
 ### Model Description
 
 <!-- Provide a longer summary of what this model is. -->
 
-
-
 - **Developed by:** [More Information Needed]
 - **Funded by [optional]:** [More Information Needed]
 - **Shared by [optional]:** [More Information Needed]
 - **Model type:** [More Information Needed]
-- **Language(s) (NLP):** [More Information Needed]
+- **Language (s) (NLP):** [More Information Needed]
 - **License:** [More Information Needed]
 - **Finetuned from model [optional]:** [More Information Needed]
 
@@ -65,7 +61,8 @@ library_name: peft
 
 <!-- This section is meant to convey recommendations with respect to the bias, risk, and technical limitations. -->
 
-Users (both direct and downstream) should be made aware of the risks, biases and limitations of the model. More information needed for further recommendations.
+Users (both direct and downstream) should be made aware of the risks, biases and limitations of the model. More
+information needed for further recommendations.
 
 ## How to Get Started with the Model
 
@@ -89,10 +86,10 @@ Use the code below to get started with the model.
 
 [More Information Needed]
 
-
 #### Training Hyperparameters
 
-- **Training regime:** [More Information Needed] <!--fp32, fp16 mixed precision, bf16 mixed precision, bf16 non-mixed precision, fp16 non-mixed precision, fp8 mixed precision -->
+- **Training
+  regime:** [More Information Needed] <!--fp32, fp16 mixed precision, bf16 mixed precision, bf16 non-mixed precision, fp16 non-mixed precision, fp8 mixed precision -->
 
 #### Speeds, Sizes, Times [optional]
 
@@ -130,8 +127,6 @@ Use the code below to get started with the model.
 
 #### Summary
 
-
-
 ## Model Examination [optional]
 
 <!-- Relevant interpretability work for the model goes here -->
@@ -142,7 +137,8 @@ Use the code below to get started with the model.
 
 <!-- Total emissions (in grams of CO2eq) and additional considerations, such as electricity usage, go here. Edit the suggested text below accordingly -->
 
-Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute) presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
+Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute)
+presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
 
 - **Hardware Type:** [More Information Needed]
 - **Hours used:** [More Information Needed]
@@ -197,6 +193,7 @@ Carbon emissions can be estimated using the [Machine Learning Impact calculator]
 ## Model Card Contact
 
 [More Information Needed]
+
 ### Framework versions
 
 - PEFT 0.15.0

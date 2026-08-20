@@ -1,0 +1,23 @@
+# ── GraphRAG 年报项目运行时依赖 ──────────────────────────────────────
+# LLM/Embedding 走 OpenAI 兼容接口，无需 provider SDK
+openai>=1.40.0
+numpy>=1.26.0
+
+# Neo4j 图数据库驱动
+neo4j>=5.14.0
+
+# 社区检测（Python 降级路线，不依赖 Neo4j GDS 插件）
+# ⚠️ 版本组合踩坑：leidenalg 0.12 要求 igraph>=1.0.0，但 find_partition 在
+#    igraph 1.0.0 下有 bug，须用 ModularityVertexPartition + Optimiser 显式路径
+networkx>=3.0
+igraph>=1.0.0
+leidenalg>=0.12.0
+
+# HTTP 服务
+fastapi>=0.110.0
+uvicorn>=0.27.0
+
+# 向量 RAG 对比基线（复用 rag_annual_report，这里只是声明运行时需要）
+faiss-cpu>=1.7.4
+rank_bm25>=0.2.2
+jieba>=0.42.1

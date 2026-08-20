@@ -27,10 +27,10 @@ from dataclasses import dataclass, field
 from datetime import datetime, date
 from pathlib import Path
 
-from week_13_2026_07_26.Examples.agent_memory_system.src.fts_store import FTSStore
-from week_13_2026_07_26.Examples.agent_memory_system.src.llm_config import get_chat_client
-from week_13_2026_07_26.Examples.agent_memory_system.src.memory_loader import MemoryLoader
-from week_13_2026_07_26.Examples.agent_memory_system.src.vector_store import VectorStore
+from src.fts_store import FTSStore
+from src.llm_config import get_chat_client
+from src.memory_loader import MemoryLoader
+from src.vector_store import VectorStore
 
 logger = logging.getLogger(__name__)
 
@@ -372,7 +372,7 @@ class MemoryFlusher:
         for i, block in enumerate(blocks):
             if not block.strip() or not block.startswith("### ["):
                 continue
-            m = re.match(r"### \[(\w+)]\s+(.+)\n记录时间：([^\n]+)\n\n([\s\S]+)", block.strip())
+            m = re.match(r"### \[(\w+)\]\s+(.+)\n记录时间：([^\n]+)\n\n([\s\S]+)", block.strip())
             if m:
                 entries.append({
                     "id": f"compact_{i}",
@@ -388,7 +388,7 @@ class MemoryFlusher:
         """容错 JSON 解析：去掉 markdown 代码块，提取第一个 JSON 数组"""
         text = MemoryFlusher._strip_code_fence(text)
         # 尝试找 [...] 数组
-        m = re.search(r"\[[\s\S]*]", text)
+        m = re.search(r"\[[\s\S]*\]", text)
         if m:
             try:
                 return json.loads(m.group())

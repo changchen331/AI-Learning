@@ -1,0 +1,653 @@
+[
+  {
+    "community_id": 0,
+    "size": 132,
+    "key_entities": [
+      {
+        "name": "宁德时代",
+        "type": "Company"
+      },
+      {
+        "name": "境内",
+        "type": "Region"
+      },
+      {
+        "name": "境外",
+        "type": "Region"
+      },
+      {
+        "name": "厦门时代新能源研究院",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "江苏研究院",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "厦门研究院",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "未来能源（上海）研究院",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "福建省宁德市蕉城区漳湾镇新港路2号",
+        "type": "Region"
+      },
+      {
+        "name": "福建省宁德市",
+        "type": "Region"
+      },
+      {
+        "name": "动力电池系统营业收入9149077.45万元",
+        "type": "Indicator"
+      },
+      {
+        "name": "境外营业收入13099214.99万元",
+        "type": "Indicator"
+      },
+      {
+        "name": "境内营业收入26992489.50万元",
+        "type": "Indicator"
+      },
+      {
+        "name": "电池矿产资源营业收入773415.09万元",
+        "type": "Indicator"
+      },
+      {
+        "name": "电池材料及回收营业收入3360228.41万元",
+        "type": "Indicator"
+      },
+      {
+        "name": "储能电池系统营业收入5990052.19万元",
+        "type": "Indicator"
+      }
+    ],
+    "summary": "该社区围绕宁德时代展开，聚焦其境内外业务布局及多家研究院，核心关系为母子公司与地域关联，主题是公司营收构成与研发机构分布。"
+  },
+  {
+    "community_id": 1,
+    "size": 131,
+    "key_entities": [
+      {
+        "name": "海康威视",
+        "type": "Company"
+      },
+      {
+        "name": "武汉海康存储技术有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "杭州海康慧影科技有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "杭州海康消防科技有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "杭州睿影科技有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "中电海康",
+        "type": "Company"
+      },
+      {
+        "name": "浙江省杭州市",
+        "type": "Region"
+      },
+      {
+        "name": "海康消防",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "杭州海康微影传感科技有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "杭州海康汽车技术有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "杭州海康机器人股份有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "杭州萤石网络股份有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "海康慧影",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "海康睿影",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "杭州",
+        "type": "Region"
+      }
+    ],
+    "summary": "该社区以海康威视及其在杭州的多家子公司为核心，涵盖消防、汽车、机器人、微影传感等业务，体现其多元化布局和地域集中性。"
+  },
+  {
+    "community_id": 2,
+    "size": 126,
+    "key_entities": [
+      {
+        "name": "贵州茅台",
+        "type": "Company"
+      },
+      {
+        "name": "贵州茅台集团财务有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "贵州茅台酒销售有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "贵州习酒股份有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "贵州茅台酒巴黎贸易有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "贵州茅台酱香酒营销有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "国酒茅台定制营销（贵州）有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "泰国",
+        "type": "Region"
+      },
+      {
+        "name": "国内",
+        "type": "Region"
+      },
+      {
+        "name": "国外",
+        "type": "Region"
+      },
+      {
+        "name": "营业收入106,190,154,843.76元",
+        "type": "Indicator"
+      },
+      {
+        "name": "投资支付的现金14817852800.00元",
+        "type": "Indicator"
+      },
+      {
+        "name": "购买商品、接受劳务支付的现金11029476036.21元",
+        "type": "Indicator"
+      },
+      {
+        "name": "研发投入合计621507535.87元",
+        "type": "Indicator"
+      },
+      {
+        "name": "财务费用-1,789,503,701.48元",
+        "type": "Indicator"
+      }
+    ],
+    "summary": "该社区以贵州茅台为核心，涵盖其多家子公司及国内外市场，主题为茅台集团的业务布局与财务运营，关键关系体现为母子公司关联及营收、投资、研发等核心经营指标。"
+  },
+  {
+    "community_id": 3,
+    "size": 103,
+    "key_entities": [
+      {
+        "name": "中国平安",
+        "type": "Company"
+      },
+      {
+        "name": "杨小平",
+        "type": "Person"
+      },
+      {
+        "name": "蔡浔",
+        "type": "Person"
+      },
+      {
+        "name": "深圳市投资控股有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "平安寿险",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "卜蜂集团有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "何建锋",
+        "type": "Person"
+      },
+      {
+        "name": "谢吉人",
+        "type": "Person"
+      },
+      {
+        "name": "黄伟",
+        "type": "Person"
+      },
+      {
+        "name": "刘宏",
+        "type": "Person"
+      },
+      {
+        "name": "金李",
+        "type": "Person"
+      },
+      {
+        "name": "洪嘉禧",
+        "type": "Person"
+      },
+      {
+        "name": "卜蜂集团",
+        "type": "Company"
+      },
+      {
+        "name": "深业集团有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "平安产险",
+        "type": "Subsidiary"
+      }
+    ],
+    "summary": "该社区围绕中国平安及其子公司平安寿险、平安产险展开，涉及深圳市投资控股、卜蜂集团、深业集团等股东方，以及杨小平、谢吉人等关联人物，核心主题是平安的股权结构与多方资本合作关系。"
+  },
+  {
+    "community_id": 4,
+    "size": 79,
+    "key_entities": [
+      {
+        "name": "五粮液",
+        "type": "Company"
+      },
+      {
+        "name": "宜发展集团",
+        "type": "Company"
+      },
+      {
+        "name": "曾从钦",
+        "type": "Person"
+      },
+      {
+        "name": "梁鹂",
+        "type": "Person"
+      },
+      {
+        "name": "许波",
+        "type": "Person"
+      },
+      {
+        "name": "肖浩",
+        "type": "Person"
+      },
+      {
+        "name": "章欣",
+        "type": "Person"
+      },
+      {
+        "name": "五粮液集团公司",
+        "type": "Company"
+      },
+      {
+        "name": "四川省宜宾五粮液集团有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "四川省宜宾普什集团有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "四川省宜宾环球集团有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "四川安吉物流集团有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "四川省宜宾五粮液集团财务有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "四川省宜宾五粮液集团进出口有限公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "宜宾五粮液创艺酒产业有限公司",
+        "type": "Subsidiary"
+      }
+    ],
+    "summary": "该社区围绕五粮液集团展开，核心是公司治理与高管人事关系，涵盖曾从钦等领导层及多家子公司，体现其多元化产业布局与集团管控体系。"
+  },
+  {
+    "community_id": 5,
+    "size": 26,
+    "key_entities": [
+      {
+        "name": "陈心颖",
+        "type": "Person"
+      },
+      {
+        "name": "张智淳",
+        "type": "Person"
+      },
+      {
+        "name": "谢永林",
+        "type": "Person"
+      },
+      {
+        "name": "姚波",
+        "type": "Person"
+      },
+      {
+        "name": "蔡方方",
+        "type": "Person"
+      },
+      {
+        "name": "邓斌",
+        "type": "Person"
+      },
+      {
+        "name": "平安寿险",
+        "type": "Company"
+      },
+      {
+        "name": "孙建平",
+        "type": "Person"
+      },
+      {
+        "name": "平安融资租赁",
+        "type": "Company"
+      },
+      {
+        "name": "平安银行",
+        "type": "Company"
+      },
+      {
+        "name": "平安产险",
+        "type": "Company"
+      },
+      {
+        "name": "王志良",
+        "type": "Person"
+      },
+      {
+        "name": "郭晓涛",
+        "type": "Person"
+      },
+      {
+        "name": "平安海外控股",
+        "type": "Company"
+      },
+      {
+        "name": "平安健康",
+        "type": "Company"
+      }
+    ],
+    "summary": "该社区围绕平安集团高管团队及其核心子公司展开，主题为平安系金融生态，关键关系是高管与寿险、银行、产险等公司间的管理关联。"
+  },
+  {
+    "community_id": 6,
+    "size": 17,
+    "key_entities": [
+      {
+        "name": "002415",
+        "type": "Company"
+      },
+      {
+        "name": "经营活动产生的现金流量净额-3285523507.64元",
+        "type": "Indicator"
+      },
+      {
+        "name": "归属于上市公司股东的净利润1811255388.03元",
+        "type": "Indicator"
+      },
+      {
+        "name": "营业收入16201189412.53元",
+        "type": "Indicator"
+      },
+      {
+        "name": "陈宗年",
+        "type": "Person"
+      },
+      {
+        "name": "归属于上市公司股东的扣除非经常性损益的净利润1554094332.67元",
+        "type": "Indicator"
+      },
+      {
+        "name": "归属于上市公司股东的净资产76354265540.14元",
+        "type": "Indicator"
+      },
+      {
+        "name": "总资产138848007548.55元",
+        "type": "Indicator"
+      },
+      {
+        "name": "加权平均净资产收益率19.64%",
+        "type": "Indicator"
+      },
+      {
+        "name": "稀释每股收益1.520元/股",
+        "type": "Indicator"
+      },
+      {
+        "name": "基本每股收益1.520元/股",
+        "type": "Indicator"
+      },
+      {
+        "name": "经营活动产生的现金流量净额16623254305.92元",
+        "type": "Indicator"
+      },
+      {
+        "name": "归属于上市公司股东的扣除非经常性损益的净利润13665962325.65元",
+        "type": "Indicator"
+      },
+      {
+        "name": "归属于上市公司股东的净利润14107621359.66元",
+        "type": "Indicator"
+      },
+      {
+        "name": "营业收入89339856855.68元",
+        "type": "Indicator"
+      }
+    ],
+    "summary": "该社区围绕上市公司002415的财务与经营状况展开，核心人物为陈宗年，关键关系涵盖营收、净利润、每股收益及现金流等指标，反映其盈利能力和资产规模。"
+  },
+  {
+    "community_id": 7,
+    "size": 9,
+    "key_entities": [
+      {
+        "name": "宜宾五粮液酒类销售有限责任公司",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "净利润21,444,587,912.50元",
+        "type": "Indicator"
+      },
+      {
+        "name": "营业收入61,829,117,337.04元",
+        "type": "Indicator"
+      },
+      {
+        "name": "净利润19,857,416,073.60元",
+        "type": "Indicator"
+      },
+      {
+        "name": "营业利润26,483,924,329.02元",
+        "type": "Indicator"
+      },
+      {
+        "name": "营业收入55,106,792,873.09元",
+        "type": "Indicator"
+      },
+      {
+        "name": "净利润16,925,376,124.29元",
+        "type": "Indicator"
+      },
+      {
+        "name": "营业利润22,559,094,728.31元",
+        "type": "Indicator"
+      },
+      {
+        "name": "营业收入58,718,765,149.19元",
+        "type": "Indicator"
+      }
+    ],
+    "summary": "该社区围绕宜宾五粮液酒类销售有限责任公司，聚焦其营业收入、营业利润和净利润等财务指标，反映公司近年经营业绩及增长趋势。"
+  },
+  {
+    "community_id": 8,
+    "size": 6,
+    "key_entities": [
+      {
+        "name": "伍成业",
+        "type": "Person"
+      },
+      {
+        "name": "恒生银行有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "汇丰银行（澳大利亚）有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "汇丰银行（越南）有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "香港大学亚洲国际金融法研究院",
+        "type": "Company"
+      },
+      {
+        "name": "香港总商会",
+        "type": "Company"
+      }
+    ],
+    "summary": "该社区围绕香港金融业展开，核心人物伍成业与恒生银行、汇丰系机构及香港大学金融法研究院、总商会紧密关联，体现银行业、法律研究与商业组织的协同网络。"
+  },
+  {
+    "community_id": 9,
+    "size": 6,
+    "key_entities": [
+      {
+        "name": "欧阳辉",
+        "type": "Person"
+      },
+      {
+        "name": "艾美疫苗股份有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "兑吧集团有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "鼎睿再保险有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "兴全基金管理有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "长江商学院",
+        "type": "Company"
+      }
+    ],
+    "summary": "该社区聚焦金融与商业领域，涵盖投资、保险、基金及教育机构，核心关系为欧阳辉与多家企业及长江商学院的职业或学术关联。"
+  },
+  {
+    "community_id": 10,
+    "size": 5,
+    "key_entities": [
+      {
+        "name": "蒋琳",
+        "type": "Person"
+      },
+      {
+        "name": "四川联合酒类交易所股份有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "四川银行股份有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "宜宾五粮液基金管理有限公司",
+        "type": "Company"
+      },
+      {
+        "name": "财务公司",
+        "type": "Company"
+      }
+    ],
+    "summary": "该社区围绕蒋琳展开，核心是四川联合酒类交易所、四川银行、五粮液基金及财务公司间的金融与酒类产业关联，体现产融结合特征。"
+  },
+  {
+    "community_id": 11,
+    "size": 5,
+    "key_entities": [
+      {
+        "name": "平安银行",
+        "type": "Subsidiary"
+      },
+      {
+        "name": "拨备覆盖率290.28%",
+        "type": "Indicator"
+      },
+      {
+        "name": "不良贷款率1.05%",
+        "type": "Indicator"
+      },
+      {
+        "name": "净利润455.16亿元",
+        "type": "Indicator"
+      },
+      {
+        "name": "营业收入1,798.95亿元",
+        "type": "Indicator"
+      }
+    ],
+    "summary": "该社区围绕平安银行的财务表现展开，核心关系为银行与其关键经营指标（拨备覆盖率、不良贷款率、净利润、营业收入）的隶属关联，主题聚焦于其资产质量与盈利能力。"
+  },
+  {
+    "community_id": 12,
+    "size": 4,
+    "key_entities": [
+      {
+        "name": "储一昀",
+        "type": "Person"
+      },
+      {
+        "name": "河北银行",
+        "type": "Company"
+      },
+      {
+        "name": "嘉兴银行",
+        "type": "Company"
+      },
+      {
+        "name": "环旭电子",
+        "type": "Company"
+      }
+    ],
+    "summary": "该社区围绕储一昀与河北银行、嘉兴银行、环旭电子等企业间的关联展开，主题为金融与电子行业中的个人职业网络及跨机构合作关系。"
+  }
+]

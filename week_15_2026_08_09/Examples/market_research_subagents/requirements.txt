@@ -1,0 +1,12 @@
+# ── 市场调研 Subagent 项目运行时依赖 ──────────────────────────────
+# LLM 走 OpenAI 兼容接口
+openai>=1.40.0
+
+# HTTP 服务 + SSE
+fastapi>=0.110.0
+uvicorn>=0.27.0
+
+# 联网搜索用 Tavily（本项目用标准库 urllib 调用，无需 tavily-python SDK）
+# 仅需环境变量 TAVILY_API_KEY
+
+# 无其他依赖：ReAct 引擎 + 拓扑可视化均为手写，零额外库

@@ -57,12 +57,12 @@
 
 ### 各层职责
 
-| 层级           | 内容                          | 持久化                            | 查询方式                       | 对应文件                                                        |
-|--------------|-----------------------------|--------------------------------|----------------------------|-------------------------------------------------------------|
-| Layer 1 工作记忆 | 当次 LLM 调用的完整 Context        | 否（随请求消失）                       | 直接注入                       | —                                                           |
-| Layer 2 短期记忆 | 当前会话对话历史（SQLite）+ 每日日志（今+昨） | 是（DB + `memory/YYYY-MM-DD.md`） | 顺序读取 / 日志全量注入              | `src/session_db.py`、`src/memory_loader.py`                  |
-| Layer 3 长期记忆 | Markdown 配置文件               | 是（.md 文件）                      | 全量注入（近期条目）                 | `src/memory_loader.py`                                      |
-| Layer 4 语义记忆 | FAISS 向量索引 + FTS5 全文索引      | 是（二进制 + SQLite FTS5）           | 混合检索：向量 0.7 + BM25 0.3，取并集 | `src/vector_store.py`、`src/fts_store.py`、`src/retrieval.py` |
+| 层级             | 内容                                          | 持久化                            | 查询方式                              | 对应文件                                                      |
+|------------------|-----------------------------------------------|-----------------------------------|---------------------------------------|---------------------------------------------------------------|
+| Layer 1 工作记忆 | 当次 LLM 调用的完整 Context                   | 否（随请求消失）                  | 直接注入                              | —                                                             |
+| Layer 2 短期记忆 | 当前会话对话历史（SQLite）+ 每日日志（今+昨） | 是（DB + `memory/YYYY-MM-DD.md`） | 顺序读取 / 日志全量注入               | `src/session_db.py`、`src/memory_loader.py`                   |
+| Layer 3 长期记忆 | Markdown 配置文件                             | 是（.md 文件）                    | 全量注入（近期条目）                  | `src/memory_loader.py`                                        |
+| Layer 4 语义记忆 | FAISS 向量索引 + FTS5 全文索引                | 是（二进制 + SQLite FTS5）        | 混合检索：向量 0.7 + BM25 0.3，取并集 | `src/vector_store.py`、`src/fts_store.py`、`src/retrieval.py` |
 
 ---
 
@@ -106,28 +106,27 @@
 
 ### 设计理念
 
-| 传统方式               | Markdown 方式           |
-|--------------------|-----------------------|
-| JSON/YAML 配置（人不友好） | 纯 Markdown（人类直接可读可编辑） |
-| 数据库存储（需要工具查看）      | 文件系统（Git 可追踪、可 diff）  |
-| 固定 Schema（改字段需改代码） | 自由格式（LLM 原生理解）        |
+| 传统方式                      | Markdown 方式                     |
+|-------------------------------|-----------------------------------|
+| JSON/YAML 配置（人不友好）    | 纯 Markdown（人类直接可读可编辑） |
+| 数据库存储（需要工具查看）    | 文件系统（Git 可追踪、可 diff）   |
+| 固定 Schema（改字段需改代码） | 自由格式（LLM 原生理解）          |
 
 ### 各文件职责
 
-| 文件              | 职责                                    | 更新方式                               |
-|-----------------|---------------------------------------|------------------------------------|
-| `SOUL.md`       | Agent 人格、沟通风格、能力边界声明                  | 仅手动编辑                              |
-| `USER.md`       | 用户画像（姓名/职业/偏好）                        | Memory Flush Pass 1 自动更新           |
-| `MEMORY.md`     | 跨会话持久记忆条目                             | Memory Flush Pass 2 自动追加           |
-| `AGENTS.md`     | 操作规范、记忆使用原则、Agent 能力声明                | 仅手动编辑                              |
-| `HEARTBEAT.md`  | 定时任务定义（cron 表达式 + action）             | 对话意图检测自动写入 + 手动编辑                  |
+| 文件            | 职责                                                     | 更新方式                                        |
+|-----------------|----------------------------------------------------------|-------------------------------------------------|
+| `SOUL.md`       | Agent 人格、沟通风格、能力边界声明                       | 仅手动编辑                                      |
+| `USER.md`       | 用户画像（姓名/职业/偏好）                               | Memory Flush Pass 1 自动更新                    |
+| `MEMORY.md`     | 跨会话持久记忆条目                                       | Memory Flush Pass 2 自动追加                    |
+| `AGENTS.md`     | 操作规范、记忆使用原则、Agent 能力声明                   | 仅手动编辑                                      |
+| `HEARTBEAT.md`  | 定时任务定义（cron 表达式 + action）                     | 对话意图检测自动写入 + 手动编辑                 |
 | `YYYY-MM-DD.md` | 每日日志（近端记忆）：当天 Flush 提取的条目，append-only | Memory Flush Pass 2 自动追加，会话启动加载今+昨 |
 
 ### MEMORY.md 条目格式
 
 ```markdown
 ### [category] 标题
-
 记录时间：YYYY-MM-DD HH:MM
 
 详细内容（2~4 句话）
@@ -178,9 +177,7 @@ serve.py              ← 意图检测触发入口 + /stream SSE 端点
 
 ```markdown
 <!-- TASKS_START -->
-
 ### TASK: morning_reminder
-
 trigger: 0 8 * * 1-5
 enabled: true
 action: send_message
@@ -290,27 +287,24 @@ keep-alive 超时（默认 5 秒）关闭连接。每个浏览器连接对应一
 ### 表结构
 
 ```sql
-CREATE TABLE sessions
-(
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    start_time TEXT NOT NULL,    -- 会话创建时间
-    end_time   TEXT,             -- 关闭时间（NULL = 当前活跃会话）
-    title      TEXT,             -- 取第一条消息前30字
-    flushed    INTEGER DEFAULT 0 -- 0=未Flush，1=已Flush
+CREATE TABLE sessions (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    start_time  TEXT NOT NULL,    -- 会话创建时间
+    end_time    TEXT,             -- 关闭时间（NULL = 当前活跃会话）
+    title       TEXT,             -- 取第一条消息前30字
+    flushed     INTEGER DEFAULT 0 -- 0=未Flush，1=已Flush
 );
 
-CREATE TABLE messages
-(
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id INTEGER NOT NULL REFERENCES sessions (id),
-    role       TEXT    NOT NULL, -- "user" 或 "assistant"
-    content    TEXT    NOT NULL,
-    timestamp  TEXT    NOT NULL
+CREATE TABLE messages (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id  INTEGER NOT NULL REFERENCES sessions(id),
+    role        TEXT NOT NULL,    -- "user" 或 "assistant"
+    content     TEXT NOT NULL,
+    timestamp   TEXT NOT NULL
 );
 
 -- Layer 4 关键词检索（FTS5 全文索引，由 fts_store.py 管理）
-CREATE
-VIRTUAL TABLE memory_fts USING fts5(
+CREATE VIRTUAL TABLE memory_fts USING fts5(
     entry_id UNINDEXED,          -- 与 FAISS metadata 的 id 对齐，用于混合并集
     title,                       -- 逐字分词后的标题（中文逐字空格分隔）
     content,                     -- 逐字分词后的正文
@@ -326,24 +320,24 @@ VIRTUAL TABLE memory_fts USING fts5(
 
 ### 写入时机
 
-| 操作                       | 位置                                     | 写入内容                                         |
-|--------------------------|----------------------------------------|----------------------------------------------|
-| 服务启动 / `/new` / `/reset` | `lifespan` / `/session/new` / `/reset` | `INSERT INTO sessions`，建空会话                  |
-| 每条对话完成                   | `/chat` Step 5                         | `INSERT INTO messages` × 2（user + assistant） |
-| 会话关闭                     | `close_session()`                      | `UPDATE sessions SET end_time, title`        |
-| Flush 完成                 | `/flush` 末尾                            | `UPDATE sessions SET flushed=1`              |
+| 操作                         | 位置                                   | 写入内容                                       |
+|------------------------------|----------------------------------------|------------------------------------------------|
+| 服务启动 / `/new` / `/reset` | `lifespan` / `/session/new` / `/reset` | `INSERT INTO sessions`，建空会话               |
+| 每条对话完成                 | `/chat` Step 5                         | `INSERT INTO messages` × 2（user + assistant） |
+| 会话关闭                     | `close_session()`                      | `UPDATE sessions SET end_time, title`          |
+| Flush 完成                   | `/flush` 末尾                          | `UPDATE sessions SET flushed=1`                |
 
 ### 查询时机
 
-| 查询方法                        | 调用位置                           | 用途                                       |
-|-----------------------------|--------------------------------|------------------------------------------|
-| `get_session_messages(sid)` | `/chat` 每次请求                   | 拼入 LLM messages 作为多轮历史（Layer 2）          |
-| `get_session_messages(sid)` | `/flush` 开始时                   | 传给 MemoryFlusher 做记忆提取                   |
-| `get_message_count(sid)`    | `/chat` 流结束时                   | 判断是否触发自动 Flush（≥20条）                     |
-| `get_today_messages()`      | scheduler `summarize_sessions` | 今日全部消息 → LLM 汇总                          |
-| `get_recent_sessions(5)`    | `GET /memories`                | 右侧面板历史会话数展示                              |
-| `retriever.search(query)`   | `/chat`、`/layers`、CLI 每轮       | Layer 4 混合检索 Top-K（向量 0.7 + BM25 0.3 并集） |
-| `fts_store.search(query)`   | `retriever` 内部调用               | BM25 关键词召回（中文逐字分词，min-max 归一）            |
+| 查询方法                    | 调用位置                       | 用途                                               |
+|-----------------------------|--------------------------------|----------------------------------------------------|
+| `get_session_messages(sid)` | `/chat` 每次请求               | 拼入 LLM messages 作为多轮历史（Layer 2）          |
+| `get_session_messages(sid)` | `/flush` 开始时                | 传给 MemoryFlusher 做记忆提取                      |
+| `get_message_count(sid)`    | `/chat` 流结束时               | 判断是否触发自动 Flush（≥20条）                    |
+| `get_today_messages()`      | scheduler `summarize_sessions` | 今日全部消息 → LLM 汇总                            |
+| `get_recent_sessions(5)`    | `GET /memories`                | 右侧面板历史会话数展示                             |
+| `retriever.search(query)`   | `/chat`、`/layers`、CLI 每轮   | Layer 4 混合检索 Top-K（向量 0.7 + BM25 0.3 并集） |
+| `fts_store.search(query)`   | `retriever` 内部调用           | BM25 关键词召回（中文逐字分词，min-max 归一）      |
 
 ### 连接方式
 
@@ -358,9 +352,9 @@ schema 清空数据。
 
 所有 LLM 对话调用通过 `src/llm_config.py` 统一管理，由环境变量 `LLM_PROVIDER` 切换。
 
-| 提供商       | 模型                  | 环境变量                | 默认 |
-|-----------|---------------------|---------------------|----|
-| DeepSeek  | `deepseek-v4-flash` | `DEEPSEEK_API_KEY`  | ✅  |
+| 提供商    | 模型                | 环境变量            | 默认 |
+|-----------|---------------------|---------------------|------|
+| DeepSeek  | `deepseek-v4-flash` | `DEEPSEEK_API_KEY`  | ✅   |
 | DashScope | `qwen-plus`         | `DASHSCOPE_API_KEY` | 备选 |
 
 Embedding 固定使用 DashScope `text-embedding-v3`（DeepSeek 无 Embedding API），切换 `LLM_PROVIDER` 不影响向量化流程。
@@ -369,35 +363,35 @@ Embedding 固定使用 DashScope `text-embedding-v3`（DeepSeek 无 Embedding AP
 
 ## 九、技术选型
 
-| 组件        | 选型                               | 理由                                         |
-|-----------|----------------------------------|--------------------------------------------|
-| 对话 LLM    | DeepSeek-v4-flash（默认）/ Qwen-plus | OpenAI 兼容接口，切换只改 base_url                  |
-| Embedding | DashScope text-embedding-v3      | 单批 ≤10 条，1536 维，质量稳定                       |
-| 向量库       | FAISS IndexFlatIP + L2 归一化       | 本地运行无需网络，内积 = 余弦相似度                        |
-| 全文索引      | SQLite FTS5 + bm25()             | 零依赖（stdlib自带），与 SQLite 同库，BM25 关键词检索互补向量语义 |
-| 会话存储      | SQLite                           | 零配置，单文件，教学场景够用                             |
-| 调度器       | APScheduler AsyncIOScheduler     | 嵌入 FastAPI 同一 event loop，无需额外进程            |
-| Web 框架    | FastAPI + uvicorn                | lifespan 管理单例，SSE 流式推送                     |
+| 组件      | 选型                                 | 理由                                                              |
+|-----------|--------------------------------------|-------------------------------------------------------------------|
+| 对话 LLM  | DeepSeek-v4-flash（默认）/ Qwen-plus | OpenAI 兼容接口，切换只改 base_url                                |
+| Embedding | DashScope text-embedding-v3          | 单批 ≤10 条，1536 维，质量稳定                                    |
+| 向量库    | FAISS IndexFlatIP + L2 归一化        | 本地运行无需网络，内积 = 余弦相似度                               |
+| 全文索引  | SQLite FTS5 + bm25()                 | 零依赖（stdlib自带），与 SQLite 同库，BM25 关键词检索互补向量语义 |
+| 会话存储  | SQLite                               | 零配置，单文件，教学场景够用                                      |
+| 调度器    | APScheduler AsyncIOScheduler         | 嵌入 FastAPI 同一 event loop，无需额外进程                        |
+| Web 框架  | FastAPI + uvicorn                    | lifespan 管理单例，SSE 流式推送                                   |
 
 ---
 
 ## 十、关键工程决策与踩坑
 
-| 问题                 | 根因                                             | 解法                                                                                               |
-|--------------------|------------------------------------------------|--------------------------------------------------------------------------------------------------|
-| Memory Flush 提取率低  | 规则提取只处理显式信息                                    | Two-Pass LLM：先提取结构化 JSON，再写文档                                                                    |
-| LLM 输出带代码块包裹       | Instruct 模型习惯 ` ```markdown ` 包裹               | `_strip_code_fence()` 写文件前去除包裹                                                                   |
-| JSON 解析失败          | LLM 输出夹杂解释文字                                   | 正则提取第一个 `{...}`，`json.loads` 兜底                                                                  |
-| FAISS 余弦相似度错误      | `IndexFlatIP` 做的是内积，非余弦                        | 向量写入前 L2 归一化，使内积 = 余弦相似度                                                                         |
-| Compaction 后索引过期   | MD 压缩但 FAISS/FTS5 未同步                          | Compaction 后调 `rebuild_from_entries()` 重建 FAISS + FTS5                                           |
-| SSE 长连接被断开         | Uvicorn keep-alive 超时默认 5 秒                    | 每 20 秒发 `: keepalive\n\n` 注释行保活                                                                  |
-| /reset 不停止定时任务     | 文件重置了，但 APScheduler job 在内存中                   | reset 后立即调 `hb_scheduler._load_tasks()`                                                          |
-| 调度意图被模型否认          | 模型系统提示里没有声明具有此能力                               | 在 AGENTS.md 中明确声明可设置/取消定时任务                                                                      |
-| Windows SQLite 文件锁 | `with conn` 不关闭句柄，服务运行时无法 unlink/清表            | `fts_store.py` 显式 `conn.close()`；`/reset` 用 `DELETE FROM messages/sessions/memory_fts` 保留 schema |
-| 中文 FTS5 召回失效       | `unicode61` 把整段中文当一个 token，`咖啡` 命中不了 `...美式咖啡` | 逐字空格分词（`用 户 ... 咖 啡`），每汉字独立 token，查询 `咖啡` 解析为 `咖` AND `啡`                                        |
-| BM25 与向量分不可比       | SQLite `bm25()` 返回负值，量纲与余弦不同                   | 取反后 min-max 归一到 [0,1]，再与向量按 0.7/0.3 加权取并集                                                        |
-| 混合检索降级             | FTS5 扩展可能未编译进 sqlite3                          | `fts_store.available=False` 时 `search` 返回 []，`HybridRetriever` 自动退化为纯向量                          |
-| Windows OpenMP 冲突  | torch/numpy 各自链接 libiomp5md.dll                | 所有脚本顶部加 `KMP_DUPLICATE_LIB_OK=TRUE`                                                              |
+| 问题                  | 根因                                                              | 解法                                                                                                   |
+|-----------------------|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| Memory Flush 提取率低 | 规则提取只处理显式信息                                            | Two-Pass LLM：先提取结构化 JSON，再写文档                                                              |
+| LLM 输出带代码块包裹  | Instruct 模型习惯 ` ```markdown ` 包裹                            | `_strip_code_fence()` 写文件前去除包裹                                                                 |
+| JSON 解析失败         | LLM 输出夹杂解释文字                                              | 正则提取第一个 `{...}`，`json.loads` 兜底                                                              |
+| FAISS 余弦相似度错误  | `IndexFlatIP` 做的是内积，非余弦                                  | 向量写入前 L2 归一化，使内积 = 余弦相似度                                                              |
+| Compaction 后索引过期 | MD 压缩但 FAISS/FTS5 未同步                                       | Compaction 后调 `rebuild_from_entries()` 重建 FAISS + FTS5                                             |
+| SSE 长连接被断开      | Uvicorn keep-alive 超时默认 5 秒                                  | 每 20 秒发 `: keepalive\n\n` 注释行保活                                                                |
+| /reset 不停止定时任务 | 文件重置了，但 APScheduler job 在内存中                           | reset 后立即调 `hb_scheduler._load_tasks()`                                                            |
+| 调度意图被模型否认    | 模型系统提示里没有声明具有此能力                                  | 在 AGENTS.md 中明确声明可设置/取消定时任务                                                             |
+| Windows SQLite 文件锁 | `with conn` 不关闭句柄，服务运行时无法 unlink/清表                | `fts_store.py` 显式 `conn.close()`；`/reset` 用 `DELETE FROM messages/sessions/memory_fts` 保留 schema |
+| 中文 FTS5 召回失效    | `unicode61` 把整段中文当一个 token，`咖啡` 命中不了 `...美式咖啡` | 逐字空格分词（`用 户 ... 咖 啡`），每汉字独立 token，查询 `咖啡` 解析为 `咖` AND `啡`                  |
+| BM25 与向量分不可比   | SQLite `bm25()` 返回负值，量纲与余弦不同                          | 取反后 min-max 归一到 [0,1]，再与向量按 0.7/0.3 加权取并集                                             |
+| 混合检索降级          | FTS5 扩展可能未编译进 sqlite3                                     | `fts_store.available=False` 时 `search` 返回 []，`HybridRetriever` 自动退化为纯向量                    |
+| Windows OpenMP 冲突   | torch/numpy 各自链接 libiomp5md.dll                               | 所有脚本顶部加 `KMP_DUPLICATE_LIB_OK=TRUE`                                                             |
 
 ---
 

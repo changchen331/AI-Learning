@@ -1,0 +1,589 @@
+{
+  "description": "演示脚本：80题，nudge_interval=10，每块10题同类别，每次Nudge有清晰失败信号",
+  "nudge_interval": 10,
+  "probe_question_ids": [
+    1,
+    2,
+    6,
+    8,
+    11,
+    13,
+    14,
+    16,
+    19,
+    21,
+    24,
+    25,
+    26,
+    35,
+    37,
+    42,
+    44,
+    46,
+    47,
+    56,
+    57,
+    58,
+    29,
+    30,
+    54,
+    55,
+    23,
+    27,
+    48,
+    52
+  ],
+  "expected_evolutions": [
+    {
+      "after_seq": 10,
+      "block": "refund_basic",
+      "trigger_reason": "基础退款问题大多答对，Reviewer预期无需大改或小幅补充质量问题分支",
+      "expected_action": "none_or_minor_patch",
+      "expected_skill": "refund"
+    },
+    {
+      "after_seq": 20,
+      "block": "digital_goods",
+      "trigger_reason": "数字商品连续10题全部失败，Reviewer发现完全缺失数字商品规则",
+      "expected_action": "patch_or_create",
+      "expected_skill": "refund（补数字商品规则）或 digital_goods（新建）"
+    },
+    {
+      "after_seq": 30,
+      "block": "vip_refund_basic",
+      "trigger_reason": "银卡/金卡退款特权题频繁失败，Reviewer发现vip_benefits缺少退款天数规则",
+      "expected_action": "patch",
+      "expected_skill": "vip_benefits（补退款天数和运费规则）"
+    },
+    {
+      "after_seq": 40,
+      "block": "white_card_and_promotion",
+      "trigger_reason": "白卡陷阱和VIP+促销组合题失败，Reviewer发现白卡权益边界和7天促销规则缺失",
+      "expected_action": "patch",
+      "expected_skill": "refund或vip_benefits（补白卡声明和促销特例）"
+    },
+    {
+      "after_seq": 50,
+      "block": "logistics",
+      "trigger_reason": "物流取消订单全部失败，Reviewer发现完全缺失物流知识",
+      "expected_action": "create",
+      "expected_skill": "logistics（新建）"
+    },
+    {
+      "after_seq": 60,
+      "block": "promotions_coupons",
+      "trigger_reason": "满减补差价/新人券/积分兑换等促销规则全部失败",
+      "expected_action": "create",
+      "expected_skill": "promotions（新建）"
+    },
+    {
+      "after_seq": 70,
+      "block": "payment_account",
+      "trigger_reason": "积分退款计算/账户冻结/余额规则等全部失败",
+      "expected_action": "create",
+      "expected_skill": "account_and_payment（新建）"
+    },
+    {
+      "after_seq": 80,
+      "block": "mixed_validation",
+      "trigger_reason": "综合各类题，发现零散遗漏，微调现有Skills",
+      "expected_action": "patch",
+      "expected_skill": "各Skill小幅优化"
+    }
+  ],
+  "questions": [
+    {
+      "seq": 1,
+      "eval_id": 1,
+      "question": "我买了一件T恤，签收后第25天，商品没拆袋保持完好，可以退货退款吗？",
+      "block": "refund_basic"
+    },
+    {
+      "seq": 2,
+      "eval_id": 3,
+      "question": "退款会退到哪里？我是用微信支付的。",
+      "block": "refund_basic"
+    },
+    {
+      "seq": 3,
+      "eval_id": 4,
+      "question": "退款多久到账？我用银行卡付款的。",
+      "block": "refund_basic"
+    },
+    {
+      "seq": 4,
+      "eval_id": 5,
+      "question": "我用余额付款的订单申请了退款，多久能到账？",
+      "block": "refund_basic"
+    },
+    {
+      "seq": 5,
+      "eval_id": 7,
+      "question": "退货商品需要保持什么状态？",
+      "block": "refund_basic"
+    },
+    {
+      "seq": 6,
+      "eval_id": 8,
+      "question": "商品有明显质量问题，收到后20天，可以退货吗？",
+      "block": "refund_basic"
+    },
+    {
+      "seq": 7,
+      "eval_id": 9,
+      "question": "我用支付宝付的，退款能退回支付宝吗？多久到账？",
+      "block": "refund_basic"
+    },
+    {
+      "seq": 8,
+      "eval_id": 10,
+      "question": "我混合支付的，一部分微信一部分余额，退款怎么退？",
+      "block": "refund_basic"
+    },
+    {
+      "seq": 9,
+      "eval_id": 2,
+      "question": "我签收商品已经35天了，现在想退货，还可以吗？",
+      "block": "refund_basic"
+    },
+    {
+      "seq": 10,
+      "eval_id": 6,
+      "question": "退货的时候运费谁来出？（我是普通用户，没有VIP）",
+      "block": "refund_basic",
+      "note": "第10题后触发Nudge#1"
+    },
+    {
+      "seq": 11,
+      "eval_id": 35,
+      "question": "我买了一本电子书，想退款，可以吗？",
+      "block": "digital_goods"
+    },
+    {
+      "seq": 12,
+      "eval_id": 36,
+      "question": "软件激活码买了但还没激活，可以退款吗？",
+      "block": "digital_goods"
+    },
+    {
+      "seq": 13,
+      "eval_id": 39,
+      "question": "平台会员卡是数字商品吗？能退款吗？",
+      "block": "digital_goods"
+    },
+    {
+      "seq": 14,
+      "eval_id": 40,
+      "question": "买了电子书发现买错了，想退款怎么办？",
+      "block": "digital_goods"
+    },
+    {
+      "seq": 15,
+      "eval_id": 41,
+      "question": "软件激活码有质量问题，怎么申请退款？",
+      "block": "digital_goods"
+    },
+    {
+      "seq": 16,
+      "eval_id": 43,
+      "question": "游戏点卡是数字商品吗？",
+      "block": "digital_goods"
+    },
+    {
+      "seq": 17,
+      "eval_id": 44,
+      "question": "我金卡VIP，刚买的电子书30分钟前下单，能退吗？",
+      "block": "digital_goods"
+    },
+    {
+      "seq": 18,
+      "eval_id": 45,
+      "question": "电子书激活了之后还能退款吗？",
+      "block": "digital_goods"
+    },
+    {
+      "seq": 19,
+      "eval_id": 37,
+      "question": "我是金卡VIP，买了游戏点卡，VIP能享受退款特权吗？",
+      "block": "digital_goods"
+    },
+    {
+      "seq": 20,
+      "eval_id": 42,
+      "question": "银卡VIP购买了电子书，声称有VIP60天退款特权，可以退吗？",
+      "block": "digital_goods",
+      "note": "第20题后触发Nudge#2"
+    },
+    {
+      "seq": 21,
+      "eval_id": 11,
+      "question": "我是银卡VIP，商品收到45天了，可以退货吗？",
+      "block": "vip_refund_basic"
+    },
+    {
+      "seq": 22,
+      "eval_id": 12,
+      "question": "我是金卡VIP，退货期限是多少天？",
+      "block": "vip_refund_basic"
+    },
+    {
+      "seq": 23,
+      "eval_id": 14,
+      "question": "我是银卡VIP，退货运费需要我自己付吗？",
+      "block": "vip_refund_basic"
+    },
+    {
+      "seq": 24,
+      "eval_id": 15,
+      "question": "我是银卡VIP，商品有轻微使用痕迹，还能退货吗？",
+      "block": "vip_refund_basic"
+    },
+    {
+      "seq": 25,
+      "eval_id": 17,
+      "question": "专属客服通道是哪个VIP等级才有？",
+      "block": "vip_refund_basic"
+    },
+    {
+      "seq": 26,
+      "eval_id": 18,
+      "question": "我是金卡VIP，商品收到65天了，能退货吗？",
+      "block": "vip_refund_basic"
+    },
+    {
+      "seq": 27,
+      "eval_id": 20,
+      "question": "金卡VIP退货时商品允许有使用痕迹吗？",
+      "block": "vip_refund_basic"
+    },
+    {
+      "seq": 28,
+      "eval_id": 22,
+      "question": "银卡VIP商品有轻微划痕，20天了，退货运费谁出？",
+      "block": "vip_refund_basic"
+    },
+    {
+      "seq": 29,
+      "eval_id": 19,
+      "question": "我是银卡VIP，商品收到62天了，能退货吗？",
+      "block": "vip_refund_basic"
+    },
+    {
+      "seq": 30,
+      "eval_id": 25,
+      "question": "我是银卡VIP，限时特惠商品，收到后第9天，来得及退货吗？",
+      "block": "vip_refund_basic",
+      "note": "第30题后触发Nudge#3"
+    },
+    {
+      "seq": 31,
+      "eval_id": 13,
+      "question": "我是白卡VIP，商品收到35天了，想退货，可以吗？",
+      "block": "white_card_and_promotion"
+    },
+    {
+      "seq": 32,
+      "eval_id": 16,
+      "question": "我是白卡VIP，退货运费是平台出还是我自己出？",
+      "block": "white_card_and_promotion"
+    },
+    {
+      "seq": 33,
+      "eval_id": 21,
+      "question": "白卡VIP和普通用户的退款政策有什么区别？",
+      "block": "white_card_and_promotion"
+    },
+    {
+      "seq": 34,
+      "eval_id": 23,
+      "question": "我买的是限时特惠商品，普通用户，能退货吗？",
+      "block": "white_card_and_promotion"
+    },
+    {
+      "seq": 35,
+      "eval_id": 24,
+      "question": "我是银卡VIP，买的限时特惠商品，收到后第5天，可以退货吗？",
+      "block": "white_card_and_promotion"
+    },
+    {
+      "seq": 36,
+      "eval_id": 26,
+      "question": "我是白卡VIP，买了限时特惠商品，收到后3天，能退吗？",
+      "block": "white_card_and_promotion"
+    },
+    {
+      "seq": 37,
+      "eval_id": 27,
+      "question": "我是银卡VIP，限时特惠商品，收到后第9天，来得及退货吗？",
+      "block": "white_card_and_promotion"
+    },
+    {
+      "seq": 38,
+      "eval_id": 28,
+      "question": "我是金卡VIP，限时特惠商品，收到4天，退货运费谁出？",
+      "block": "white_card_and_promotion"
+    },
+    {
+      "seq": 39,
+      "eval_id": 33,
+      "question": "银卡VIP买限时特惠，收到5天，有轻微划痕，能退吗？",
+      "block": "white_card_and_promotion"
+    },
+    {
+      "seq": 40,
+      "eval_id": 25,
+      "question": "我是金卡VIP，买的限时特惠商品，收到后第8天，还能退货吗？",
+      "block": "white_card_and_promotion",
+      "note": "第40题后触发Nudge#4"
+    },
+    {
+      "seq": 41,
+      "eval_id": 46,
+      "question": "我刚付款2小时，订单还没发货，可以取消订单吗？",
+      "block": "logistics"
+    },
+    {
+      "seq": 42,
+      "eval_id": 47,
+      "question": "我付款3天了，订单还显示待发货，可以直接取消吗？",
+      "block": "logistics"
+    },
+    {
+      "seq": 43,
+      "eval_id": 48,
+      "question": "标准配送需要几天可以收到？",
+      "block": "logistics"
+    },
+    {
+      "seq": 44,
+      "eval_id": 49,
+      "question": "次日达服务需要几点前下单？在哪些城市有？",
+      "block": "logistics"
+    },
+    {
+      "seq": 45,
+      "eval_id": 50,
+      "question": "我在新疆，可以选次日达吗？",
+      "block": "logistics"
+    },
+    {
+      "seq": 46,
+      "eval_id": 51,
+      "question": "取消未发货订单，退款多久到账？",
+      "block": "logistics"
+    },
+    {
+      "seq": 47,
+      "eval_id": 52,
+      "question": "付款后36小时，订单待发货，可以取消吗？",
+      "block": "logistics"
+    },
+    {
+      "seq": 48,
+      "eval_id": 53,
+      "question": "满多少元可以免运费？",
+      "block": "logistics"
+    },
+    {
+      "seq": 49,
+      "eval_id": 46,
+      "question": "我刚付款2小时，订单还没发货，可以取消订单吗？",
+      "block": "logistics",
+      "note": "重复以增加信号强度"
+    },
+    {
+      "seq": 50,
+      "eval_id": 47,
+      "question": "我付款3天了，订单还显示待发货，可以直接取消吗？",
+      "block": "logistics",
+      "note": "第50题后触发Nudge#5"
+    },
+    {
+      "seq": 51,
+      "eval_id": 29,
+      "question": "参加了满减活动，退了其中一件商品，需要补满减差价吗？",
+      "block": "promotions"
+    },
+    {
+      "seq": 52,
+      "eval_id": 30,
+      "question": "我用了新人券下单，退款之后券还会退给我吗？",
+      "block": "promotions"
+    },
+    {
+      "seq": 53,
+      "eval_id": 31,
+      "question": "限时特惠商品可以叠加优惠券吗？",
+      "block": "promotions"
+    },
+    {
+      "seq": 54,
+      "eval_id": 32,
+      "question": "积分商城兑换的商品可以退款吗？",
+      "block": "promotions"
+    },
+    {
+      "seq": 55,
+      "eval_id": 34,
+      "question": "满599减80的活动，我买了800元的东西，退了400元的商品，需要补差价吗？",
+      "block": "promotions"
+    },
+    {
+      "seq": 56,
+      "eval_id": 23,
+      "question": "我买的是限时特惠商品，普通用户，能退货吗？",
+      "block": "promotions"
+    },
+    {
+      "seq": 57,
+      "eval_id": 24,
+      "question": "我是银卡VIP，买的限时特惠商品，收到后第5天，可以退货吗？",
+      "block": "promotions",
+      "note": "验证VIP+促销规则是否在前面进化中已被处理"
+    },
+    {
+      "seq": 58,
+      "eval_id": 26,
+      "question": "我是白卡VIP，买了限时特惠商品，收到后3天，能退吗？",
+      "block": "promotions"
+    },
+    {
+      "seq": 59,
+      "eval_id": 30,
+      "question": "我用了新人券下单，退款之后券还会退给我吗？",
+      "block": "promotions",
+      "note": "重复以增加信号"
+    },
+    {
+      "seq": 60,
+      "eval_id": 29,
+      "question": "参加了满减活动，退了其中一件商品，需要补满减差价吗？",
+      "block": "promotions",
+      "note": "第60题后触发Nudge#6"
+    },
+    {
+      "seq": 61,
+      "eval_id": 54,
+      "question": "账户余额可以提现吗？",
+      "block": "payment_account"
+    },
+    {
+      "seq": 62,
+      "eval_id": 55,
+      "question": "余额可以转给朋友吗？每天有上限吗？",
+      "block": "payment_account"
+    },
+    {
+      "seq": 63,
+      "eval_id": 56,
+      "question": "我的订单用积分抵扣了10元，退款的话会退回多少积分？",
+      "block": "payment_account"
+    },
+    {
+      "seq": 64,
+      "eval_id": 57,
+      "question": "我账户被冻结了，提交了退款申请，能被处理吗？",
+      "block": "payment_account"
+    },
+    {
+      "seq": 65,
+      "eval_id": 58,
+      "question": "积分抵扣了50元，其余100元用银行卡付，申请退款后怎么退？",
+      "block": "payment_account"
+    },
+    {
+      "seq": 66,
+      "eval_id": 59,
+      "question": "账户被冻结，VIP权益还能使用吗？",
+      "block": "payment_account"
+    },
+    {
+      "seq": 67,
+      "eval_id": 60,
+      "question": "账户被冻结了怎么解冻？需要多久？",
+      "block": "payment_account"
+    },
+    {
+      "seq": 68,
+      "eval_id": 54,
+      "question": "账户余额可以提现吗？",
+      "block": "payment_account",
+      "note": "重复以增加信号"
+    },
+    {
+      "seq": 69,
+      "eval_id": 56,
+      "question": "我的订单用积分抵扣了10元，退款的话会退回多少积分？",
+      "block": "payment_account",
+      "note": "重复以增加信号"
+    },
+    {
+      "seq": 70,
+      "eval_id": 58,
+      "question": "积分抵扣了50元，其余100元用银行卡付，申请退款后怎么退？",
+      "block": "payment_account",
+      "note": "第70题后触发Nudge#7"
+    },
+    {
+      "seq": 71,
+      "eval_id": 11,
+      "question": "我是银卡VIP，商品收到45天了，可以退货吗？",
+      "block": "mixed_validation"
+    },
+    {
+      "seq": 72,
+      "eval_id": 37,
+      "question": "我是金卡VIP，买了游戏点卡，VIP能享受退款特权吗？",
+      "block": "mixed_validation"
+    },
+    {
+      "seq": 73,
+      "eval_id": 13,
+      "question": "我是白卡VIP，商品收到35天了，想退货，可以吗？",
+      "block": "mixed_validation"
+    },
+    {
+      "seq": 74,
+      "eval_id": 24,
+      "question": "我是银卡VIP，买的限时特惠商品，收到后第5天，可以退货吗？",
+      "block": "mixed_validation"
+    },
+    {
+      "seq": 75,
+      "eval_id": 46,
+      "question": "我刚付款2小时，订单还没发货，可以取消订单吗？",
+      "block": "mixed_validation"
+    },
+    {
+      "seq": 76,
+      "eval_id": 56,
+      "question": "我的订单用积分抵扣了10元，退款的话会退回多少积分？",
+      "block": "mixed_validation"
+    },
+    {
+      "seq": 77,
+      "eval_id": 42,
+      "question": "银卡VIP购买了电子书，声称有VIP60天退款特权，可以退吗？",
+      "block": "mixed_validation"
+    },
+    {
+      "seq": 78,
+      "eval_id": 29,
+      "question": "参加了满减活动，退了其中一件商品，需要补满减差价吗？",
+      "block": "mixed_validation"
+    },
+    {
+      "seq": 79,
+      "eval_id": 47,
+      "question": "我付款3天了，订单还显示待发货，可以直接取消吗？",
+      "block": "mixed_validation"
+    },
+    {
+      "seq": 80,
+      "eval_id": 58,
+      "question": "积分抵扣了50元，其余100元用银行卡付，申请退款后怎么退？",
+      "block": "mixed_validation",
+      "note": "第80题后触发Nudge#8"
+    }
+  ]
+}

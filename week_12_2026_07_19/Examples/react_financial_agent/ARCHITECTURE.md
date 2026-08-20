@@ -12,13 +12,13 @@
 
 ### 方案对比表
 
-| 维度          | 手写 Prompt 解析      | Function Calling API |
-|-------------|-------------------|----------------------|
-| Thought 可见性 | 完全可见，正则解析         | 模型内部，不可见             |
-| 格式稳定性       | 依赖 Prompt 工程，偶有漂移 | 原生结构化，格式稳定           |
-| 代码量         | ~150 行核心逻辑        | ~80 行核心逻辑            |
-| 可控性         | 高，可定制停止词和格式       | 低，依赖模型实现             |
-| 教学价值        | 高，学生能看见每一步        | 次之，适合生产场景            |
+| 维度           | 手写 Prompt 解析           | Function Calling API |
+|----------------|----------------------------|----------------------|
+| Thought 可见性 | 完全可见，正则解析         | 模型内部，不可见     |
+| 格式稳定性     | 依赖 Prompt 工程，偶有漂移 | 原生结构化，格式稳定 |
+| 代码量         | ~150 行核心逻辑            | ~80 行核心逻辑       |
+| 可控性         | 高，可定制停止词和格式     | 低，依赖模型实现     |
+| 教学价值       | 高，学生能看见每一步       | 次之，适合生产场景   |
 
 ---
 
@@ -59,13 +59,13 @@ Web UI 展示 / CLI 打印
 
 ### 3.1 工具一览
 
-| 工具名                   | 数据来源                               | 核心用途          | 典型参数                           |
-|-----------------------|------------------------------------|---------------|--------------------------------|
-| `company_lookup`      | 静态字典                               | 公司名→股票代码，防幻觉  | `name="贵州茅台"`                  |
-| `rag_search`          | FAISS + DashScope Embedding        | 年报语义检索，定性内容   | `query="茅台毛利率"`                |
-| `financial_indicator` | AkShare `stock_financial_abstract` | 近3年结构化财务指标    | `symbol="600519"`              |
+| 工具名                | 数据来源                           | 核心用途                | 典型参数                       |
+|-----------------------|------------------------------------|-------------------------|--------------------------------|
+| `company_lookup`      | 静态字典                           | 公司名→股票代码，防幻觉 | `name="贵州茅台"`              |
+| `rag_search`          | FAISS + DashScope Embedding        | 年报语义检索，定性内容  | `query="茅台毛利率"`           |
+| `financial_indicator` | AkShare `stock_financial_abstract` | 近3年结构化财务指标     | `symbol="600519"`              |
 | `stock_price`         | AkShare `stock_zh_a_hist`          | 历史股价与区间涨跌幅    | `symbol, start_date, end_date` |
-| `calculator`          | Python eval（受限沙箱）                  | 四则运算、百分比、CAGR | `expr="91.96-75.79"`           |
+| `calculator`          | Python eval（受限沙箱）            | 四则运算、百分比、CAGR  | `expr="91.96-75.79"`           |
 
 ### 3.2 工具设计原则
 
@@ -108,8 +108,7 @@ _ACTION_INPUT_RE = re.compile(r"Action Input:\s*(\{.+?\})", re.DOTALL)
 _FINAL_RE = re.compile(r"Final Answer:\s*(.+)", re.DOTALL)
 ```
 
-**优点**：Thought 完全可见，每步透明，适合教学。
-**缺点**：模型偶尔输出格式不规范，parse_errors > 0。
+**优点**：Thought 完全可见，每步透明，适合教学。 **缺点**：模型偶尔输出格式不规范，parse_errors > 0。
 
 ### 4.2 Function Calling 版（react_function_calling.py）
 
@@ -132,14 +131,14 @@ else:
 
 **问题**：贵州茅台和五粮液2023年的毛利率哪家更高？差多少个百分点？
 
-| 步骤    | Action                          | 关键 Observation    |
-|-------|---------------------------------|-------------------|
-| 1     | `company_lookup("贵州茅台")`        | 600519            |
-| 2     | `company_lookup("五粮液")`         | 000858            |
-| 3     | `financial_indicator("600519")` | 茅台2023毛利率 91.96%  |
-| 4     | `financial_indicator("000858")` | 五粮液2023毛利率 75.79% |
-| 5     | `calculator("91.96 - 75.79")`   | 16.17             |
-| Final | —                               | 茅台高出五粮液16.17个百分点  |
+| 步骤  | Action                          | 关键 Observation            |
+|-------|---------------------------------|-----------------------------|
+| 1     | `company_lookup("贵州茅台")`    | 600519                      |
+| 2     | `company_lookup("五粮液")`      | 000858                      |
+| 3     | `financial_indicator("600519")` | 茅台2023毛利率 91.96%       |
+| 4     | `financial_indicator("000858")` | 五粮液2023毛利率 75.79%     |
+| 5     | `calculator("91.96 - 75.79")`   | 16.17                       |
+| Final | —                               | 茅台高出五粮液16.17个百分点 |
 
 耗时约 67s，5步工具调用 + 1步 Final Answer。
 
@@ -147,23 +146,23 @@ else:
 
 ## 6. 消融方向建议
 
-| 实验                         | 操作                            | 观察点                     |
-|----------------------------|-------------------------------|-------------------------|
-| 去掉 `company_lookup`        | 直接传公司名给 AkShare               | Agent 会报错，观察错误恢复能力      |
-| 去掉 `stop=["Observation:"]` | 让模型自己编造 Observation           | 幻觉对比，教学价值高              |
-| 换 `qwen-turbo`             | 修改 `AGENT_MODEL` 环境变量         | 格式稳定性下降，parse_errors 增加 |
-| 换 `deepseek-v3`            | 修改 `base_url` 和 `AGENT_MODEL` | 与 qwen-max 对比格式稳定性      |
+| 实验                         | 操作                             | 观察点                            |
+|------------------------------|----------------------------------|-----------------------------------|
+| 去掉 `company_lookup`        | 直接传公司名给 AkShare           | Agent 会报错，观察错误恢复能力    |
+| 去掉 `stop=["Observation:"]` | 让模型自己编造 Observation       | 幻觉对比，教学价值高              |
+| 换 `qwen-turbo`              | 修改 `AGENT_MODEL` 环境变量      | 格式稳定性下降，parse_errors 增加 |
+| 换 `deepseek-v3`             | 修改 `base_url` 和 `AGENT_MODEL` | 与 qwen-max 对比格式稳定性        |
 
 ---
 
 ## 7. 关键工程决策与踩坑
 
-| 问题                                  | 根因                                                        | 解法                                                              |
-|-------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------------|
-| FAISS search 报 `assert d == self.d` | 索引用 DashScope text-embedding-v3（1024维），本地 bge-small 为512维 | rag_search 统一改用 DashScope embedding API，与建索引时保持一致               |
-| `akshare.stock_a_lg_indicator` 不存在  | AkShare 1.10+ 改名或移除了该接口                                   | 改用 `stock_financial_abstract`，字段更丰富，响应更快                        |
-| Windows OpenMP 冲突                   | torch 与 numpy 各自链接 libiomp5md.dll                         | 所有脚本顶部加 `os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")` |
-| Thought 为空字符串                       | qwen-max 在第2步后有时不输出 Thought，直接输出 Action                   | 正则解析容忍 Thought 缺失，不影响循环继续                                       |
+| 问题                                  | 根因                                                                 | 解法                                                                   |
+|---------------------------------------|----------------------------------------------------------------------|------------------------------------------------------------------------|
+| FAISS search 报 `assert d == self.d`  | 索引用 DashScope text-embedding-v3（1024维），本地 bge-small 为512维 | rag_search 统一改用 DashScope embedding API，与建索引时保持一致        |
+| `akshare.stock_a_lg_indicator` 不存在 | AkShare 1.10+ 改名或移除了该接口                                     | 改用 `stock_financial_abstract`，字段更丰富，响应更快                  |
+| Windows OpenMP 冲突                   | torch 与 numpy 各自链接 libiomp5md.dll                               | 所有脚本顶部加 `os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")` |
+| Thought 为空字符串                    | qwen-max 在第2步后有时不输出 Thought，直接输出 Action                | 正则解析容忍 Thought 缺失，不影响循环继续                              |
 
 ---
 

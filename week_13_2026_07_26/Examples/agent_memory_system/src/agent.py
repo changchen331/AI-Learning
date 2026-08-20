@@ -33,13 +33,13 @@ os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 # 让 src/ 内的模块可以相互 import
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from week_13_2026_07_26.Examples.agent_memory_system.src.session_db import SessionDB
-from week_13_2026_07_26.Examples.agent_memory_system.src.memory_loader import MemoryLoader
-from week_13_2026_07_26.Examples.agent_memory_system.src.vector_store import VectorStore
-from week_13_2026_07_26.Examples.agent_memory_system.src.fts_store import FTSStore
-from week_13_2026_07_26.Examples.agent_memory_system.src.retrieval import HybridRetriever
-from week_13_2026_07_26.Examples.agent_memory_system.src.memory_flush import MemoryFlusher
-from week_13_2026_07_26.Examples.agent_memory_system.src.llm_config import get_chat_client, current_model_info
+from src.session_db import SessionDB
+from src.memory_loader import MemoryLoader
+from src.vector_store import VectorStore
+from src.fts_store import FTSStore
+from src.retrieval import HybridRetriever
+from src.memory_flush import MemoryFlusher
+from src.llm_config import get_chat_client, current_model_info
 
 logging.basicConfig(level=logging.WARNING)
 

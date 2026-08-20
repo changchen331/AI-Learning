@@ -36,15 +36,15 @@ from fastapi import FastAPI
 from fastapi.responses import StreamingResponse, JSONResponse, FileResponse
 from pydantic import BaseModel
 
-from week_13_2026_07_26.Examples.agent_memory_system.src.session_db import SessionDB
-from week_13_2026_07_26.Examples.agent_memory_system.src.memory_loader import MemoryLoader
-from week_13_2026_07_26.Examples.agent_memory_system.src.vector_store import VectorStore
-from week_13_2026_07_26.Examples.agent_memory_system.src.fts_store import FTSStore
-from week_13_2026_07_26.Examples.agent_memory_system.src.retrieval import HybridRetriever
-from week_13_2026_07_26.Examples.agent_memory_system.src.memory_flush import MemoryFlusher
-from week_13_2026_07_26.Examples.agent_memory_system.src.llm_config import get_chat_client, current_model_info
-from week_13_2026_07_26.Examples.agent_memory_system.src.heartbeat_parser import HeartbeatParser
-from week_13_2026_07_26.Examples.agent_memory_system.src.scheduler import HeartbeatScheduler
+from src.session_db import SessionDB
+from src.memory_loader import MemoryLoader
+from src.vector_store import VectorStore
+from src.fts_store import FTSStore
+from src.retrieval import HybridRetriever
+from src.memory_flush import MemoryFlusher
+from src.llm_config import get_chat_client, current_model_info
+from src.heartbeat_parser import HeartbeatParser
+from src.scheduler import HeartbeatScheduler
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -386,8 +386,7 @@ def _do_factory_reset():
       3. 清空 SQLite 数据（DELETE 而非 DROP，保留 schema）
       4. 重新建表（db._init_db）确保 schema 完整
     """
-    from week_13_2026_07_26.Examples.agent_memory_system.src.reset import INITIAL_USER_MD, INITIAL_MEMORY_MD, \
-        INITIAL_HEARTBEAT_MD
+    from src.reset import INITIAL_USER_MD, INITIAL_MEMORY_MD, INITIAL_HEARTBEAT_MD
 
     mem_dir = loader.memory_dir
 

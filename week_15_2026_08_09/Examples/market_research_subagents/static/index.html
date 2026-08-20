@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>市场调研 Subagent · 并行调研可视化</title>
+    <style>
+        :root {
+            --bg: #060912;
+            --panel: rgba(20, 30, 55, 0.55);
+            --panel-solid: #0e1530;
+            --border: rgba(0, 212, 255, 0.18);
+            --cyan: #00d4ff;
+            --blue: #4f8cff;
+            --orange: #ffb020;
+            --green: #2ee6a0;
+            --red: #ff5c7a;
+            --text: #d6e2f5;
+            --muted: #7a8db5;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", Calibri, sans-serif;
+            margin: 0;
+            color: var(--text);
+            background: linear-gradient(135deg, #060912 0%, #0a1228 50%, #060912 100%);
+            min-height: 100vh;
+        }
+
+        .wrap {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        h1 {
+            margin: 0 0 2px;
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00d4ff, #4f8cff, #b4a0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: .5px;
+        }
+
+        .sub {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 0 24px rgba(0, 120, 200, 0.05) inset, 0 4px 18px rgba(0, 0, 0, .35);
+        }
+
+        textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 10px;
+            font-size: 14px;
+            background: rgba(8, 14, 30, 0.7);
+            color: var(--text);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, .15);
+        }
+
+        .ctrl {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #1b3a7a, #2a5cd6);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 7px 15px;
+            cursor: pointer;
+            font-size: 13px;
+            box-shadow: 0 0 12px rgba(79, 140, 255, .25);
+            transition: .2s;
+        }
+
+        button:hover {
+            box-shadow: 0 0 18px rgba(0, 212, 255, .5);
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            background: #2a3354;
+            box-shadow: none;
+            cursor: default;
+            opacity: .6;
+        }
+
+        .ex {
+            background: rgba(20, 40, 80, .6);
+            border: 1px solid var(--border);
+            color: var(--cyan);
+            box-shadow: none;
+        }
+
+        .ex:hover {
+            background: rgba(0, 90, 140, .4);
+        }
+
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(0, 212, 255, .2);
+            border-top: var(--cyan);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 12px;
+        }
+
+        .nodesel {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nodebtn {
+            font-size: 11px;
+            padding: 3px 9px;
+            margin: 2px;
+            border-radius: 10px;
+            background: rgba(30, 50, 90, .5);
+            color: var(--text);
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .nodebtn.on {
+            background: linear-gradient(135deg, #00d4ff, #4f8cff);
+            color: #06122a;
+            font-weight: 700;
+            box-shadow: 0 0 10px rgba(0, 212, 255, .5);
+        }
+
+        .feed {
+            max-height: 560px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .feed::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .feed::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, .3);
+            border-radius: 3px;
+        }
+
+        .step {
+            border-left: 3px solid var(--blue);
+            background: rgba(10, 18, 40, .6);
+            margin: 6px 0;
+            padding: 7px 11px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .step.main {
+            border-left-color: var(--cyan);
+        }
+
+        .step.done {
+            opacity: .85;
+        }
+
+        .step .nbadge {
+            display: inline-block;
+            font-size: 9px;
+            padding: 1px 7px;
+            border-radius: 8px;
+            background: rgba(0, 212, 255, .15);
+            color: var(--cyan);
+            margin-right: 6px;
+        }
+
+        .step.sub .nbadge {
+            background: rgba(79, 140, 255, .18);
+            color: var(--blue);
+        }
+
+        .step .thought {
+            color: #9fb4e0;
+            font-style: italic;
+            margin: 2px 0;
+        }
+
+        .step .act {
+            color: var(--orange);
+            font-weight: 700;
+            margin: 2px 0;
+        }
+
+        .step .obs {
+            color: #aab8d8;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 120px;
+            overflow-y: auto;
+            background: rgba(4, 8, 20, .5);
+            padding: 4px 6px;
+            border-radius: 3px;
+            margin-top: 3px;
+            font-family: Consolas, monospace;
+            font-size: 11px;
+        }
+
+        .step .fa {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .ans {
+            font-size: 14px;
+            line-height: 1.75;
+            white-space: pre-wrap;
+        }
+
+        .stats {
+            font-size: 12px;
+            color: var(--green);
+            margin-top: 8px;
+            padding: 6px 10px;
+            background: rgba(46, 230, 160, .08);
+            border-radius: 5px;
+            border: 1px solid rgba(46, 230, 160, .2);
+        }
+
+        .status-tag {
+            font-size: 10px;
+            padding: 1px 7px;
+            border-radius: 8px;
+            margin-left: 6px;
+        }
+
+        .status-running {
+            background: rgba(255, 176, 32, .18);
+            color: var(--orange);
+        }
+
+        .status-done {
+            background: rgba(46, 230, 160, .18);
+            color: var(--green);
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>▮ 市场调研 Subagent · 并行调研可视化</h1>
+    <div class="sub">主 agent 自主决策派发 · 左拓扑右实时过程流 · 凸显并行加速</div>
+
+    <div class="card">
+        <textarea id="q" rows="2">2024年中国新能源汽车市场调研：销量规模、主要厂商竞争格局、政策趋势</textarea>
+        <div class="ctrl">
+            <button id="ask" onclick="ask()">▶ 开始调研</button>
+            <div class="spinner" id="spin"></div>
+            <span style="font-size:12px;color:var(--muted)">示例：</span>
+            <button class="ex" onclick="fill('2024年中国新能源汽车市场调研：销量规模、主要厂商竞争格局、政策趋势')">
+                新能源车调研
+            </button>
+            <button class="ex" onclick="fill('中国咖啡市场调研：市场规模、主要品牌、消费趋势')">咖啡市场</button>
+            <button class="ex" onclick="fill('2024年比亚迪销量是多少')">单事实(不派发)</button>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h3 style="margin:0 0 8px;font-size:14px;color:var(--cyan)">◆ 调研拓扑</h3>
+            <div id="topo"></div>
+            <div class="stats" id="stats" style="display:none"></div>
+        </div>
+        <div class="card">
+            <div class="nodesel" id="nodesel"></div>
+            <div class="feed" id="feed"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin:0 0 8px;font-size:14px;color:var(--cyan)">◆ 最终调研报告</h3>
+        <div class="ans" id="ans">（执行后显示）</div>
+    </div>
+</div>
+
+<script src="/static/viz/topology.js"></script>
+<script>
+    let topo = null;
+    let allSteps = [];          // 全局有序步骤流：[{node, nodeType, step}]
+    let traces = {};            // {nodeId: [step]}
+    let nodeMeta = {};          // {id: {topic, status}}
+    let currentNode = 'all';    // 'all' 或某 node id
+    let autoFollow = true;      // 是否自动滚动到底
+    let subTopics = {};
+
+    function fill(q) {
+        document.getElementById('q').value = q;
+    }
+
+    async function ask() {
+        const q = document.getElementById('q').value.trim();
+        if (!q) return;
+        const btn = document.getElementById('ask'), spin = document.getElementById('spin');
+        btn.disabled = true;
+        spin.style.display = 'inline-block';
+        document.getElementById('ans').textContent = '（调研中…）';
+        document.getElementById('stats').style.display = 'none';
+        // 重置：整体换图 + 清空流
+        allSteps = [];
+        traces = {};
+        nodeMeta = {};
+        subTopics = {};
+        currentNode = 'all';
+        autoFollow = true;
+        topo = new TopoViz(document.getElementById('topo'));
+        topo.setMain();
+        topo.onClick(id => selectNode(id));
+        nodeMeta['main'] = {topic: '主 agent', status: 'idle'};
+        traces['main'] = [];
+        refreshNodeSel();
+        document.getElementById('feed').innerHTML = '';
+
+        try {
+            const resp = await fetch('/query', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({question: q})
+            });
+            const reader = resp.body.getReader();
+            const dec = new TextDecoder();
+            let buf = '';
+            while (true) {
+                const {done, value} = await reader.read();
+                if (done) break;
+                buf += dec.decode(value, {stream: true});
+                const lines = buf.split('\n\n');
+                buf = lines.pop();
+                for (const ln of lines) {
+                    if (!ln.startsWith('data:')) continue;
+                    const ev = JSON.parse(ln.slice(5).trim());
+                    handleEvent(ev);
+                }
+            }
+        } catch (e) {
+            appendStep('main', {action: 'error', observation: String(e), final: false});
+        } finally {
+            btn.disabled = false;
+            spin.style.display = 'none';
+        }
+    }
+
+    function handleEvent(ev) {
+        if (ev.type === 'main_step') {
+            pushStep('main', 'main', ev);
+            topo.markRunning('main');
+            nodeMeta['main'].status = ev.final ? 'done' : 'running';
+        } else if (ev.type === 'dispatch') {
+            ev.subagent_ids.forEach((id, i) => {
+                subTopics[id] = ev.subtopics[i] || id;
+                traces[id] = [];
+                nodeMeta[id] = {topic: subTopics[id], status: 'running'};
+                topo.addSubagent(id, subTopics[id]);
+                topo.markRunning(id);
+            });
+            refreshNodeSel();
+        } else if (ev.type === 'subagent_step') {
+            pushStep(ev.subagent_id, 'sub', ev);
+            topo.markRunning(ev.subagent_id);
+        } else if (ev.type === 'subagent_done') {
+            topo.markDone(ev.subagent_id);
+            if (nodeMeta[ev.subagent_id]) nodeMeta[ev.subagent_id].status = 'done';
+            refreshNodeSel();
+        } else if (ev.type === 'final') {
+            document.getElementById('ans').textContent = ev.answer || '(无)';
+            if (ev.parallel_stats && ev.parallel_stats.length) {
+                const s = ev.parallel_stats[ev.parallel_stats.length - 1];
+                const el = document.getElementById('stats');
+                el.innerHTML = `⚡ 并行：${s.n_subagents} 子agent · wall-clock <b style="color:var(--cyan)">${s.wall_clock}s</b> `
+                    + `vs 串行 ${s.serial_sum}s · 加速 <b style="color:var(--green)">${s.speedup}×</b>`;
+                el.style.display = 'block';
+            }
+            topo.markDone('main');
+            if (nodeMeta['main']) nodeMeta['main'].status = 'done';
+            refreshNodeSel();
+        }
+    }
+
+    function pushStep(node, nodeType, step) {
+        if (!traces[node]) {
+            traces[node] = [];
+            nodeMeta[node] = {topic: subTopics[node] || node, status: 'running'};
+        }
+        // ⚠️ 去重 by idx：pre-step(observation=null) 和 post-step(带 observation) 共享 idx，
+        //    post 到达时原地更新，不重复 append
+        const tIdx = traces[node].findIndex(s => s.idx === step.idx);
+        if (tIdx >= 0) traces[node][tIdx] = step; else traces[node].push(step);
+        const aIdx = allSteps.findIndex(s => s.node === node && s.step.idx === step.idx);
+        if (aIdx >= 0) allSteps[aIdx] = {node, nodeType, step};
+        else allSteps.push({node, nodeType, step});
+        renderFeed();
+    }
+
+    function selectNode(id) {
+        currentNode = id;
+        autoFollow = (id === 'all');
+        refreshNodeSel();
+        renderFeed();
+    }
+
+    function refreshNodeSel() {
+        const sel = document.getElementById('nodesel');
+        let html = '<span style="opacity:.6">节点：</span>';
+        html += `<button class="nodebtn${currentNode === 'all' ? ' on' : ''}" onclick="selectNode('all')">全部实时流</button>`;
+        const ids = ['main', ...Object.keys(subTopics)];
+        ids.forEach(id => {
+            const m = nodeMeta[id] || {};
+            const tag = m.status === 'done' ? '<span class="status-tag status-done">done</span>'
+                : m.status === 'running' ? '<span class="status-tag status-running">run</span>' : '';
+            const lbl = id === 'main' ? '主agent' : (m.topic || id).slice(0, 10);
+            html += `<button class="nodebtn${currentNode === id ? ' on' : ''}" onclick="selectNode('${id}')">${lbl}${tag}</button>`;
+        });
+        sel.innerHTML = html;
+    }
+
+    function renderFeed() {
+        const box = document.getElementById('feed');
+        let steps;
+        if (currentNode === 'all') steps = allSteps;
+        else steps = (traces[currentNode] || []).map(s => ({
+            node: currentNode,
+            nodeType: currentNode === 'main' ? 'main' : 'sub',
+            step: s
+        }));
+        let html = '';
+        steps.forEach(({node, nodeType, step: s}) => {
+            const isMain = nodeType === 'main';
+            const lbl = isMain ? '主agent' : (nodeMeta[node]?.topic || node);
+            const cls = isMain ? 'step main' : 'step sub';
+            const t = s.thought ? `<div class="thought">💭 ${s.thought}</div>` : '';
+            const a = s.action ? `<div class="act">🔧 ${s.action}${s.action_input ? '(' + s.action_input.slice(0, 55) + ')' : ''}</div>` : '';
+            const o = s.observation ? `<div class="obs">👁 ${s.observation}</div>`
+                : (!s.final ? '<div class="obs" style="color:var(--orange)">⏳ 执行中…</div>' : '');
+            const fa = s.final ? '<div class="fa">✓ Final Answer</div>' : '';
+            html += `<div class="${cls}"><span class="nbadge">${lbl}</span>${t}${a}${o}${fa}</div>`;
+        });
+        if (!steps.length) html = '<div style="color:var(--muted);font-size:12px;padding:8px">等待步骤流…（点左侧节点可只看该节点）</div>';
+        box.innerHTML = html;
+        if (autoFollow) box.scrollTop = box.scrollHeight;
+    }
+</script>
+</body>
+</html>
