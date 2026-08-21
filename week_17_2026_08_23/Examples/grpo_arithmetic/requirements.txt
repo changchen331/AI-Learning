@@ -1,0 +1,7 @@
+torch==2.6.0+cu126
+transformers==5.5.3
+trl==0.21.0
+peft==0.15.0
+accelerate==1.5.2
+datasets
+matplotlib
